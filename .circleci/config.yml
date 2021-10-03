@@ -4,106 +4,70 @@ orbs:
 
 jobs:
   install:
-    working_directory: ~/project-name
+    working_directory: ~/generator-sicarator
     docker:
-      - image: circleci/python:3.9.7
+      - image: circleci/node:16.12.0
     steps:
       - checkout
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - project-name-poetry-1.1.10-{{ checksum "poetry.lock" }}
-      - run:
-          name: Update Poetry to version 1.1.10
-          command: |
-            curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python - --version 1.1.10
+            - generator-sicarator-dependencies-{{ checksum "package-lock.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - generator-sicarator-dependencies-
       - run:
           name: Install dependencies
           command: |
-            source /home/circleci/.poetry/env
-            poetry run pip install --upgrade pip
-            poetry install
+            npm install
       - save_cache:
-          key: project-name-poetry-1.1.10-{{ checksum "poetry.lock" }}
+          key: generator-sicarator-dependencies-{{ checksum "package-lock.json" }}
           paths:
-            - /home/circleci/.cache/pypoetry/virtualenvs
-            - /home/circleci/.poetry/env
+            - node_modules
 
   test:
-    working_directory: ~/project-name
+    working_directory: ~/generator-sicarator
     docker:
-      - image: circleci/python:3.9.7
+      - image: circleci/node:16.12.0
     steps:
       - checkout
       - restore_cache:
-          key: project-name-poetry-1.1.10-{{ checksum "poetry.lock" }}
+          keys:
+            - generator-sicarator-dependencies-{{ checksum "package-lock.json" }}
+            - generator-sicarator-dependencies-
       - run:
-          name: run pytest
+          name: Run jest
           command: |
-            source /home/circleci/.poetry/env
-            make test
+            npm run test:ci
+          environment:
+                  JEST_JUNIT_OUTPUT_DIR: ./reports/junit/
       - store_test_results:
-          path: tests-results.xml
+          path: ./reports/junit/
       - store_artifacts:
-          path: htmlcov
-
-  black:
-    working_directory: ~/project-name
-    docker:
-      - image: circleci/python:3.9.7
-    steps:
-      - checkout
-      - restore_cache:
-          key: project-name-poetry-1.1.10-{{ checksum "poetry.lock" }}
-      - run:
-          name: run black
-          command: |
-            source /home/circleci/.poetry/env
-            make black
+          path: ./reports/junit
 
   lint:
-    working_directory: ~/project-name
+    working_directory: ~/generator-sicarator
     docker:
-      - image: circleci/python:3.9.7
+      - image: circleci/node:16.12.0
     steps:
       - checkout
       - restore_cache:
-          key: project-name-poetry-1.1.10-{{ checksum "poetry.lock" }}
+          keys:
+            - generator-sicarator-dependencies-{{ checksum "package-lock.json" }}
+            - generator-sicarator-dependencies-
       - run:
-          name: run pylint
+          name: Run eslint
           command: |
-            source /home/circleci/.poetry/env
-            make lint
-
-  isort:
-    working_directory: ~/project-name
-    docker:
-      - image: circleci/python:3.9.7
-    steps:
-      - checkout
-      - restore_cache:
-          key: project-name-poetry-1.1.10-{{ checksum "poetry.lock" }}
-      - run:
-          name: run isort
-          command: |
-            source /home/circleci/.poetry/env
-            make isort
-
+            npm run lint
 
 workflows:
   version: 2
-  project-name:
+  sicarator:
     jobs:
       - install
       - test:
           requires:
             - install
       - lint:
-          requires:
-            - install
-      - black:
-          requires:
-            - install
-      - isort:
           requires:
             - install

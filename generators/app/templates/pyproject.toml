@@ -1,7 +1,7 @@
 [tool.poetry]
-name = "project-name"
+name = "<%= projectName %>"
 version = "0.1.0"
-description = "Project description"
+description = "<%= projectDescription %>"
 authors = [
     "Yannick Wolff <yannickw@sicara.com>",
 ]

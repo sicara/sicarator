@@ -1,0 +1,109 @@
+version: 2.1
+
+orbs:
+
+jobs:
+  install:
+    working_directory: ~/<%= projectName %>
+    docker:
+      - image: circleci/python:3.9.7
+    steps:
+      - checkout
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - <%= projectName %>-poetry-1.1.10-{{ checksum "poetry.lock" }}
+      - run:
+          name: Update Poetry to version 1.1.10
+          command: |
+            curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python - --version 1.1.10
+      - run:
+          name: Install dependencies
+          command: |
+            source /home/circleci/.poetry/env
+            poetry run pip install --upgrade pip
+            poetry install
+      - save_cache:
+          key: <%= projectName %>-poetry-1.1.10-{{ checksum "poetry.lock" }}
+          paths:
+            - /home/circleci/.cache/pypoetry/virtualenvs
+            - /home/circleci/.poetry/env
+
+  test:
+    working_directory: ~/<%= projectName %>
+    docker:
+      - image: circleci/python:3.9.7
+    steps:
+      - checkout
+      - restore_cache:
+          key: <%= projectName %>-poetry-1.1.10-{{ checksum "poetry.lock" }}
+      - run:
+          name: run pytest
+          command: |
+            source /home/circleci/.poetry/env
+            make test
+      - store_test_results:
+          path: tests-results.xml
+      - store_artifacts:
+          path: htmlcov
+
+  black:
+    working_directory: ~/<%= projectName %>
+    docker:
+      - image: circleci/python:3.9.7
+    steps:
+      - checkout
+      - restore_cache:
+          key: <%= projectName %>-poetry-1.1.10-{{ checksum "poetry.lock" }}
+      - run:
+          name: run black
+          command: |
+            source /home/circleci/.poetry/env
+            make black
+
+  lint:
+    working_directory: ~/<%= projectName %>
+    docker:
+      - image: circleci/python:3.9.7
+    steps:
+      - checkout
+      - restore_cache:
+          key: <%= projectName %>-poetry-1.1.10-{{ checksum "poetry.lock" }}
+      - run:
+          name: run pylint
+          command: |
+            source /home/circleci/.poetry/env
+            make lint
+
+  isort:
+    working_directory: ~/<%= projectName %>
+    docker:
+      - image: circleci/python:3.9.7
+    steps:
+      - checkout
+      - restore_cache:
+          key: <%= projectName %>-poetry-1.1.10-{{ checksum "poetry.lock" }}
+      - run:
+          name: run isort
+          command: |
+            source /home/circleci/.poetry/env
+            make isort
+
+
+workflows:
+  version: 2
+  <%= projectName %>:
+    jobs:
+      - install
+      - test:
+          requires:
+            - install
+      - lint:
+          requires:
+            - install
+      - black:
+          requires:
+            - install
+      - isort:
+          requires:
+            - install
