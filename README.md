@@ -9,9 +9,9 @@
     npm install -g yo
     ```
 - Clone `sicarator` project and install it:
-    ```bas
+    ```bash
     git clone https://github.com/sicara/sicarator generator-sicarator
-    npm link generator-sicarator
+    cd generator-sicarator && npm link
     ```
     ⚠️ it has to be installed into a folder starting with `generator-` to be recognized as a generator by `Yeoman`
 
