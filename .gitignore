@@ -1,2 +1,9 @@
+# Node dependencies
 node_modules
-coverage
+
+# IDE
+.idea/
+.vscode/
+
+# macOS
+.DS_Store
