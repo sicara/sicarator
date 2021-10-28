@@ -27,6 +27,18 @@ module.exports = class extends Generator {
         message: "Describe it in one line:"
       },
       {
+        name: "authorName",
+        message: "The author's name?",
+        default: this.user.git.name(),
+        store: true
+      },
+      {
+        name: "authorEmail",
+        message: "The author's email?",
+        default: this.user.git.email(),
+        store: true
+      },
+      {
         name: "ci",
         message: "Which CI (Continuous Integration) tool do you want to use?",
         type: "list",
@@ -49,6 +61,16 @@ module.exports = class extends Generator {
     if (path.basename(this.destinationPath()) !== this.answers.projectName) {
       this.log(`${chalk.green("create folder")} ${this.answers.projectName}.`);
       mkdirp.sync(this.answers.projectName);
+      // A ".yo-rc.json" file may have been created during prompting step
+      if (this.fs.exists(this.destinationPath(".yo-rc.json"))) {
+        this.fs.move(
+          this.destinationPath(".yo-rc.json"),
+          this.destinationPath(
+            path.join(this.answers.projectName, ".yo-rc.json")
+          )
+        );
+      }
+
       this.destinationRoot(this.destinationPath(this.answers.projectName));
     }
   }
