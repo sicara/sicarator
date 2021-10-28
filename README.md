@@ -8,17 +8,19 @@
     ```bash
     npm install -g yo
     ```
-- Clone `sicarator` project and install it:
+- Install `Sicarator` via `npm` and `git`:
     ```bash
-    git clone https://github.com/sicara/sicarator generator-sicarator
-    cd generator-sicarator && npm link
+    npm install -g git+https://github.com/sicara/sicarator
     ```
-    ⚠️ it has to be installed into a folder starting with `generator-` to be recognized as a generator by `Yeoman`
 
 ## Usage
 
-Generate a new project with:
+- Before generating a new project, make sure to install last version from `Sicarator`:
+    ```bash
+    npm install -g git+https://github.com/sicara/sicarator
+    ```
 
-```bash
-yo sicarator
-```
+- Generate a new project with:
+    ```bash
+    yo sicarator
+    ```
