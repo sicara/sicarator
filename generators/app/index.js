@@ -6,7 +6,7 @@ const path = require("path");
 const mkdirp = require("mkdirp");
 
 module.exports = class extends Generator {
-  prompting() {
+  async prompting() {
     // Have Yeoman greet the user.
     this.log(
       yosay(
@@ -16,7 +16,7 @@ module.exports = class extends Generator {
       )
     );
 
-    const prompts = [
+    this.answers = await this.prompt([
       {
         name: "projectName",
         message: "What's the name of your project?",
@@ -25,32 +25,51 @@ module.exports = class extends Generator {
       {
         name: "projectDescription",
         message: "Describe it in one line:"
+      },
+      {
+        name: "ci",
+        message: "Which CI (Continuous Integration) tool do you want to use?",
+        type: "list",
+        default: ".circleci",
+        choices: [
+          {
+            name: "CircleCI",
+            value: ".circleci"
+          },
+          {
+            name: "None of these",
+            value: null
+          }
+        ]
       }
-    ];
-
-    return this.prompt(prompts).then(props => {
-      this.props = props;
-    });
+    ]);
   }
 
   default() {
-    if (path.basename(this.destinationPath()) !== this.props.projectName) {
-      this.log(`${chalk.green("create folder")} ${this.props.projectName}.`);
-      mkdirp.sync(this.props.projectName);
-      this.destinationRoot(this.destinationPath(this.props.projectName));
+    if (path.basename(this.destinationPath()) !== this.answers.projectName) {
+      this.log(`${chalk.green("create folder")} ${this.answers.projectName}.`);
+      mkdirp.sync(this.answers.projectName);
+      this.destinationRoot(this.destinationPath(this.answers.projectName));
     }
   }
 
   writing() {
     this.fs.copyTpl(
-      this.templatePath(),
+      this.templatePath("common"),
       this.destinationPath(),
-      {
-        projectName: this.props.projectName,
-        projectDescription: this.props.projectDescription
-      },
+      this.answers,
       {},
       { globOptions: { dot: true } }
     );
+
+    if (this.answers.ci !== null) {
+      this.fs.copyTpl(
+        this.templatePath(path.join("ci", this.answers.ci)),
+        this.destinationPath(this.answers.ci),
+        this.answers,
+        {},
+        { globOptions: { dot: true } }
+      );
+    }
   }
 };
