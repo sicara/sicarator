@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "<%= projectName %>"
 version = "0.1.0"
-description = "<%= projectDescription %>"
+description = "<%- projectDescription %>"
 authors = [
     "<%= authorName %> <<%= authorEmail %>>",
 ]

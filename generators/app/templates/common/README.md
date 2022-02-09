@@ -1,6 +1,6 @@
 # <%= projectName %>
 
-> <%= projectDescription %>
+> <%- projectDescription %>
 
 ## Installation
 
