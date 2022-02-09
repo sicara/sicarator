@@ -14,4 +14,8 @@ describe("generator-sicarator:app", () => {
   it("creates README.md", () => {
     assert.file(["README.md"]);
   });
+
+  it("creates .gitignore", () => {
+    assert.file([".gitignore"]);
+  });
 });
