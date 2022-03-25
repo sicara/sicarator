@@ -6,7 +6,7 @@ jobs:
   install:
     working_directory: ~/<%= projectName %>
     docker:
-      - image: circleci/python:3.9.7
+      - image: cimg/python:3.9.7
     steps:
       - checkout
       # Download and cache dependencies
@@ -32,7 +32,7 @@ jobs:
   test:
     working_directory: ~/<%= projectName %>
     docker:
-      - image: circleci/python:3.9.7
+      - image: cimg/python:3.9.7
     steps:
       - checkout
       - restore_cache:
@@ -50,7 +50,7 @@ jobs:
   black:
     working_directory: ~/<%= projectName %>
     docker:
-      - image: circleci/python:3.9.7
+      - image: cimg/python:3.9.7
     steps:
       - checkout
       - restore_cache:
@@ -64,7 +64,7 @@ jobs:
   lint:
     working_directory: ~/<%= projectName %>
     docker:
-      - image: circleci/python:3.9.7
+      - image: cimg/python:3.9.7
     steps:
       - checkout
       - restore_cache:
@@ -78,7 +78,7 @@ jobs:
   isort:
     working_directory: ~/<%= projectName %>
     docker:
-      - image: circleci/python:3.9.7
+      - image: cimg/python:3.9.7
     steps:
       - checkout
       - restore_cache:
@@ -89,6 +89,19 @@ jobs:
             source /home/circleci/.poetry/env
             make isort
 
+  mypy:
+    working_directory: ~/<%= projectName %>
+    docker:
+      - image: cimg/python:3.9.7
+    steps:
+      - checkout
+      - restore_cache:
+          key: <%= projectName %>-poetry-1.1.10-{{ checksum "poetry.lock" }}
+      - run:
+          name: run mypy
+          command: |
+            source /home/circleci/.poetry/env
+            make mypy
 
 workflows:
   version: 2
@@ -105,5 +118,8 @@ workflows:
           requires:
             - install
       - isort:
+          requires:
+            - install
+      - mypy:
           requires:
             - install
