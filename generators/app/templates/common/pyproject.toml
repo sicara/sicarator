@@ -48,6 +48,9 @@ profile = "black"
 multi_line_output = 3
 
 
+[tool.coverage.run]
+branch = true
+
 [tool.coverage.report]
 skip_empty = true
 fail_under = 70.00
