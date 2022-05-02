@@ -35,6 +35,10 @@ disable = [
     "wrong-import-position",
 ]
 
+[tool.pylint.similarities]
+ignore-signatures="yes"
+ignore-imports="yes"
+
 [tool.pylint.basic]
 no-docstring-rgx = "^_|^test_|^Test[A-Z]" # no docstrings for tests
 
