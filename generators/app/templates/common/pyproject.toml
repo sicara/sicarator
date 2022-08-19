@@ -22,10 +22,14 @@ mypy = "^0.942"
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
+# Packages configs
+
+## black
 
 [tool.black]
 target-version = ['py39']
 
+## pylint
 
 [tool.pylint.messages_control]
 disable = [
@@ -35,10 +39,25 @@ disable = [
     "wrong-import-position",
 ]
 
+[tool.pylint.similarities]
+ignore-signatures="yes"
+ignore-imports="yes"
+
 [tool.pylint.basic]
 no-docstring-rgx = "^_|^test_|^Test[A-Z]" # no docstrings for tests
 
+## isort
 
 [tool.isort]
 profile = "black"
 multi_line_output = 3
+
+## coverage
+
+[tool.coverage.run]
+branch = true
+
+[tool.coverage.report]
+skip_empty = true
+fail_under = 70.00
+precision = 2
