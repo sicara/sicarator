@@ -65,13 +65,16 @@ or
 make lint
 ```
 
-### Imports ordering
+### Order imports with `isort`
 
-To check imports ordering, run `isort` with:
-```bash
-poetry run isort . --check
-```
-or
+To check the imports order, run `isort` with:
 ```bash
 make isort
+```
+
+### Type checking with `mypy`
+
+To type check your code, run `mypy` with:
+```bash
+make mypy
 ```
