@@ -8,15 +8,22 @@ repos:
   - id: check-json
 - repo: local
   hooks:
-  - id: black
-    name: Formatting (black)
-    entry: poetry run black
-    language: system
-    types: [python]
-    stages: [commit]
   - id: lint
     name: Linter (pylint)
     entry: poetry run pylint
+    language: system
+    types: [python]
+    stages: [commit]
+  - id: mypy
+    name: Type checking (mypy)
+    entry: make mypy
+    pass_filenames: false
+    language: system
+    types: [python]
+    stages: [commit]
+  - id: black
+    name: Formatting (black)
+    entry: poetry run black
     language: system
     types: [python]
     stages: [commit]
