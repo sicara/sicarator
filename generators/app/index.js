@@ -84,10 +84,12 @@ module.exports = class extends Generator {
       { globOptions: { dot: true } }
     );
 
-    this.fs.move(
-      this.destinationPath("gitignore"),
-      this.destinationPath(".gitignore")
-    );
+    this.fs.commit([], () => {
+      this.fs.copy(
+        this.templatePath("common/gitignore"),
+        this.destinationPath(".gitignore")
+      );
+    });
 
     if (this.answers.ci !== null) {
       this.fs.copyTpl(
