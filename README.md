@@ -24,3 +24,14 @@
     ```bash
     yo sicarator
     ```
+
+## Contribute to the project
+
+- In order to run your version of the project, you can use the following command in your project directory :
+    ```bash
+  npm link
+    ```
+- For debugging, you can run :
+  ```bash
+  npx --node-options="--inspect" yo sicarator
+  ```
