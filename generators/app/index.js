@@ -24,7 +24,8 @@ module.exports = class extends Generator {
       },
       {
         name: "projectDescription",
-        message: "Describe it in one line:"
+        message: "Describe it in one line:",
+        store: true
       },
       {
         name: "authorName",
@@ -52,7 +53,8 @@ module.exports = class extends Generator {
             name: "None of these",
             value: null
           }
-        ]
+        ],
+        store: true
       }
     ]);
   }
