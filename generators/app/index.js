@@ -4,6 +4,7 @@ const chalk = require("chalk");
 const yosay = require("yosay");
 const path = require("path");
 const mkdirp = require("mkdirp");
+const fileSystem = require("fs");
 
 module.exports = class extends Generator {
   async prompting() {
@@ -62,7 +63,7 @@ module.exports = class extends Generator {
       this.log(`${chalk.green("create folder")} ${this.answers.projectName}.`);
       mkdirp.sync(this.answers.projectName);
       // A ".yo-rc.json" file may have been created during prompting step
-      if (this.fs.exists(this.destinationPath(".yo-rc.json"))) {
+      if (fileSystem.existsSync(this.destinationPath(".yo-rc.json"))) {
         this.fs.move(
           this.destinationPath(".yo-rc.json"),
           this.destinationPath(
