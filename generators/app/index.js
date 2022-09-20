@@ -116,6 +116,14 @@ module.exports = class extends Generator {
       this.destinationPath(".gitignore")
     );
 
+    this.fs.copyTpl(
+      this.templatePath("python_version/" + this.answers.pythonVersion),
+      this.destinationPath(),
+      this.answers,
+      {},
+      { globOptions: { dot: true } }
+    );
+
     if (this.answers.ci !== null) {
       this.fs.copyTpl(
         this.templatePath(path.join("ci", this.answers.ci)),
