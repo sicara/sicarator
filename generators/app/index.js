@@ -55,7 +55,7 @@ module.exports = class extends Generator {
           },
           {
             name: "3.9",
-            value: "3.9.7"
+            value: "3.9.13"
           },
           {
             name: "3.10",
