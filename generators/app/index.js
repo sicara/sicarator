@@ -60,7 +60,7 @@ module.exports = class extends Generator {
 
   default() {
     if (path.basename(this.destinationPath()) !== this.answers.projectName) {
-      this.log(`${chalk.green("create folder")} ${this.answers.projectName}.`);
+      this.log(`${chalk.green("create folder")} ${this.answers.projectName}`);
       mkdirp.sync(this.answers.projectName);
       // A ".yo-rc.json" file may have been created during prompting step
       if (fileSystem.existsSync(this.destinationPath(".yo-rc.json"))) {
