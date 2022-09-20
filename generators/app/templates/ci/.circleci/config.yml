@@ -16,7 +16,7 @@ jobs:
       - run:
           name: Update Poetry to version 1.1.10
           command: |
-            curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python - --version 1.1.10
+            curl -sSL https://install.python-poetry.org | python - --version 1.1.10
       - run:
           name: Install dependencies
           command: |
