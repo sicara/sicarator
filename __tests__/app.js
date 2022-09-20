@@ -26,4 +26,9 @@ describe("generator-sicarator:app", () => {
   it("creates .yo-rc.json", () => {
     assert.file([".yo-rc.json"]);
   });
+
+  it("creates correct poetry files", () => {
+    assert.file(["poetry.lock", "pyproject.toml"]);
+    assert.fileContent("pyproject.toml", 'python = "3.9.13"');
+  });
 });
