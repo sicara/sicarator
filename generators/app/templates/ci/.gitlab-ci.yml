@@ -1,0 +1,71 @@
+stages:
+  - build
+  - test
+
+default:
+  image: python:3.9.7
+
+build:
+  stage: build
+  script:
+    - echo "update poetry to version 1.1.10"
+    - curl -sSL https://install.python-poetry.org | python - --version 1.1.10
+    - export PATH="/root/.local/bin:$PATH"
+
+    - echo "create venv and install dependencies"
+    - poetry config virtualenvs.in-project true
+    - source .venv/bin/activate
+    - poetry run pip install --upgrade pip
+    - poetry install
+  cache:
+    key:
+      files:
+        - poetry.lock
+    paths:
+      - .venv
+
+.tests:
+  stage: test
+  cache:
+    key:
+      files:
+        - poetry.lock
+    paths:
+      - .venv
+  before_script:
+    #install poetry and activate venv
+    - curl -sSL https://install.python-poetry.org | python - --version 1.1.10
+    - export PATH="/root/.local/bin:$PATH"
+    - source .venv/bin/activate
+
+black:
+  extends: .tests
+  script:
+    - make black
+
+isort:
+  extends: .tests
+  script:
+    - make isort
+
+lint:
+  extends: .tests
+  script:
+    - make lint
+
+mypy:
+  extends: .tests
+  script:
+    - make mypy
+
+test:
+  extends: .tests
+  script:
+    - make test
+  artifacts:
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: ./tests-results.xml
+    paths:
+      - ./htmlcov
