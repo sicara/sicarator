@@ -1,6 +1,8 @@
 # Sicarator
 > Sicara's project generator
 
+![Demo GIF](./demo.gif)
+
 ## Installation
 
 - Install a stable version of [node.js](https://nodejs.org/) if you don't have one 
