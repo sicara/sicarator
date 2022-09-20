@@ -9,7 +9,8 @@ describe("generator-sicarator:app", () => {
       .run(path.join(__dirname, "../generators/app"))
       .withPrompts({
         projectName: "project-name",
-        projectDescription: "Project Description"
+        projectDescription: "Project Description",
+        pythonVersion: "3.9.13"
       })
       .withLocalConfig({});
   });
