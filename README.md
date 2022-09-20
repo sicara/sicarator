@@ -6,6 +6,12 @@
 ## Installation
 
 - Install a stable version of [Node.js](https://nodejs.org/) (v16.x.x) if you don't have one
+    
+    For linux:
+    ```bash 
+    curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash -
+    sudo apt-get install -y nodejs
+    ```
 - Install [Yeoman](http://yeoman.io) and `Sicarator` via `npm`:
     ```bash
     npm install -g yo sicara/sicarator
@@ -22,6 +28,37 @@
     ```bash
     yo sicarator
     ```
+
+## Troubleshooting
+
+### I don't have the correct permissions to install yeoman
+Example error:
+    
+```bash
+npm ERR! code EACCES
+npm ERR! syscall rename
+npm ERR! path /usr/lib/node_modules/generator-sicarator
+npm ERR! dest /usr/lib/node_modules/.generator-sicarator-cELCsz5l
+npm ERR! errno -13
+npm ERR! Error: EACCES: permission denied, rename '/usr/lib/node_modules/generator-sicarator' -> '/usr/lib/node_modules/.generator-sicarator-cELCsz5l'
+...
+
+```
+
+Solution: give yourself the ownership of npm and node_modules :
+```bash
+sudo chown -R $(whoami) ~/.npm
+sudo chown -R $(whoami) /usr/lib/node_modules # or /usr/local/lib/node_modules depending on where node modules are installed
+```
+### I have the correct git credentials, but installation is throwing a git error
+Example error:
+```bash
+git@github.com: Permission denied (publickey).
+fatal: Could not read from remote repository.
+```
+
+Solution: you are probably using `sudo` to run the installation, which doesn't use the same git credentials.
+See solution above to install the project with your current user profile.
 
 ## Contribute to the project
 
