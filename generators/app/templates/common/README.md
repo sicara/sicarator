@@ -4,7 +4,7 @@
 
 ## Installation
 
-To install this project, you need `Python 3.9.7`.
+To install this project, you need `Python <%= pythonVersion %>`.
 The recommended way to install it is using [pyenv](https://github.com/pyenv/pyenv).
 
 ### Install poetry
