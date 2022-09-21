@@ -2,11 +2,15 @@ version: 2.1
 
 orbs:
 
-jobs:
-  install:
+executors:
+  base-python:
     working_directory: ~/<%= projectName %>
     docker:
       - image: cimg/python:3.9.7
+
+jobs:
+  install:
+    executor: base-python
     steps:
       - checkout
       # Download and cache dependencies
@@ -30,9 +34,7 @@ jobs:
             - /home/circleci/.poetry/env
 
   test:
-    working_directory: ~/<%= projectName %>
-    docker:
-      - image: cimg/python:3.9.7
+    executor: base-python
     steps:
       - checkout
       - restore_cache:
@@ -48,9 +50,7 @@ jobs:
           path: htmlcov
 
   black:
-    working_directory: ~/<%= projectName %>
-    docker:
-      - image: cimg/python:3.9.7
+    executor: base-python
     steps:
       - checkout
       - restore_cache:
@@ -62,9 +62,7 @@ jobs:
             make black
 
   lint:
-    working_directory: ~/<%= projectName %>
-    docker:
-      - image: cimg/python:3.9.7
+    executor: base-python
     steps:
       - checkout
       - restore_cache:
@@ -76,9 +74,7 @@ jobs:
             make lint
 
   isort:
-    working_directory: ~/<%= projectName %>
-    docker:
-      - image: cimg/python:3.9.7
+    executor: base-python
     steps:
       - checkout
       - restore_cache:
@@ -90,9 +86,7 @@ jobs:
             make isort
 
   mypy:
-    working_directory: ~/<%= projectName %>
-    docker:
-      - image: cimg/python:3.9.7
+    executor: base-python
     steps:
       - checkout
       - restore_cache:
