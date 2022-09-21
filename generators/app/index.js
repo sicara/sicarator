@@ -46,19 +46,19 @@ module.exports = class extends Generator {
         default: "3.9",
         choices: [
           {
-            name: "3.7",
+            name: "3.7.13",
             value: "3.7.13"
           },
           {
-            name: "3.8",
+            name: "3.8.13",
             value: "3.8.13"
           },
           {
-            name: "3.9",
+            name: "3.9.13",
             value: "3.9.13"
           },
           {
-            name: "3.10",
+            name: "3.10.6",
             value: "3.10.6"
           }
         ]
