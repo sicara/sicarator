@@ -1,5 +1,5 @@
 test:
-	poetry run pytest tests --cov src --cov-report=html --junit-xml=tests-results.xml
+	poetry run pytest tests --cov src --cov-report=html --junit-xml=tests-results.xml --cov-fail-under=<%= minCoverage %>
 
 black:
 	poetry run black . --check

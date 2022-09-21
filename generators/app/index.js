@@ -59,6 +59,12 @@ module.exports = class extends Generator {
           }
         ],
         store: true
+      },
+      {
+        name: "minCoverage",
+        message: "What is the minimal unit test coverage (in %)?",
+        type: "number",
+        default: 70
       }
     ]);
   }
