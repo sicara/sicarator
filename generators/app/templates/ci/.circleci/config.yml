@@ -8,9 +8,8 @@ executors:
     docker:
       - image: cimg/python:3.9.7
 
-jobs:
-  install:
-    executor: base-python
+commands:
+  setup_venv:
     steps:
       - checkout
       # Download and cache dependencies
@@ -18,13 +17,21 @@ jobs:
           keys:
             - <%= projectName %>-poetry-1.1.10-{{ checksum "poetry.lock" }}
       - run:
+          name: activate_venv
+          command: source /home/circleci/.poetry/env
+
+jobs:
+  install:
+    executor: base-python
+    steps:
+      - setup_venv
+      - run:
           name: Update Poetry to version 1.1.10
           command: |
             curl -sSL https://install.python-poetry.org | python - --version 1.1.10
       - run:
           name: Install dependencies
           command: |
-            source /home/circleci/.poetry/env
             poetry run pip install --upgrade pip
             poetry install
       - save_cache:
@@ -36,14 +43,10 @@ jobs:
   test:
     executor: base-python
     steps:
-      - checkout
-      - restore_cache:
-          key: <%= projectName %>-poetry-1.1.10-{{ checksum "poetry.lock" }}
+      - setup_venv
       - run:
           name: run pytest
-          command: |
-            source /home/circleci/.poetry/env
-            make test
+          command: make test
       - store_test_results:
           path: tests-results.xml
       - store_artifacts:
@@ -52,50 +55,34 @@ jobs:
   black:
     executor: base-python
     steps:
-      - checkout
-      - restore_cache:
-          key: <%= projectName %>-poetry-1.1.10-{{ checksum "poetry.lock" }}
+      - setup_venv
       - run:
           name: run black
-          command: |
-            source /home/circleci/.poetry/env
-            make black
+          command: make black
 
   lint:
     executor: base-python
     steps:
-      - checkout
-      - restore_cache:
-          key: <%= projectName %>-poetry-1.1.10-{{ checksum "poetry.lock" }}
+      - setup_venv
       - run:
           name: run pylint
-          command: |
-            source /home/circleci/.poetry/env
-            make lint
+          command: make lint
 
   isort:
     executor: base-python
     steps:
-      - checkout
-      - restore_cache:
-          key: <%= projectName %>-poetry-1.1.10-{{ checksum "poetry.lock" }}
+      - setup_venv
       - run:
           name: run isort
-          command: |
-            source /home/circleci/.poetry/env
-            make isort
+          command: make isort
 
   mypy:
     executor: base-python
     steps:
-      - checkout
-      - restore_cache:
-          key: <%= projectName %>-poetry-1.1.10-{{ checksum "poetry.lock" }}
+      - setup_venv
       - run:
           name: run mypy
-          command: |
-            source /home/circleci/.poetry/env
-            make mypy
+          command: make mypy
 
 workflows:
   version: 2
