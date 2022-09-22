@@ -1,0 +1,55 @@
+trigger:
+  branches:
+    include:
+      - "*"
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: "3.9.7"
+  - script: |
+      curl -sSL https://install.python-poetry.org | python - --version 1.1.10
+      export PATH="/root/.local/bin:$PATH"
+    displayName: "Install poetry 1.1.10"
+  - script: |
+      poetry config virtualenvs.in-project true
+      poetry run pip install --upgrade pip
+      poetry install
+      echo $(Agent.HomeDirectory)/../../.cache/pypoetry
+    displayName: "Create venv and install dependencies"
+
+  - task: Cache@2
+    inputs:
+      key: '"poetry" | poetry.lock'
+      restoreKeys: "poetry"
+      path: $(Agent.HomeDirectory)/../../.cache/pypoetry
+    displayName: "Cache poetry dependencies"
+
+  - script: make black
+    displayName: "Run black"
+
+  - script: make isort
+    displayName: "Run isort"
+
+  - script: make lint
+    displayName: "Run linter"
+
+  - script: make mypy
+    displayName: "Run mypy"
+
+  - script: make test
+    displayName: "Run tests"
+
+  - task: PublishCodeCoverageResults@1
+    inputs:
+      codeCoverageTool: "Cobertura"
+      summaryFileLocation: htmlcov/index.html
+    displayName: "Publish code coverage"
+
+  - task: PublishTestResults@2
+    inputs:
+      testResultsFiles: tests-results.xml
+    displayName: "Publish test results"
