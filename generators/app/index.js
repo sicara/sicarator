@@ -50,7 +50,7 @@ module.exports = class extends Generator {
             value: ".circleci"
           },
           {
-            name: "Gitlab",
+            name: "Gitlab CI/CD",
             value: ".gitlab-ci.yml"
           },
           {

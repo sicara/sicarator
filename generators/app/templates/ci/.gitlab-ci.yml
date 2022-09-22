@@ -5,16 +5,16 @@ stages:
 default:
   image: python:3.9.7
 
-build:
+install:
   stage: build
   script:
-    - echo "update poetry to version 1.1.10"
+    - echo "Update poetry to version 1.1.10"
     - curl -sSL https://install.python-poetry.org | python - --version 1.1.10
     - export PATH="/root/.local/bin:$PATH"
 
-    - echo "create venv and install dependencies"
+    # create virtualenv in working directory to enable storage in cache with gitlab
+    - echo "Create venv and install dependencies"
     - poetry config virtualenvs.in-project true
-    - source .venv/bin/activate
     - poetry run pip install --upgrade pip
     - poetry install
   cache:
@@ -24,7 +24,7 @@ build:
     paths:
       - .venv
 
-.tests:
+.job_template:
   stage: test
   cache:
     key:
@@ -33,33 +33,32 @@ build:
     paths:
       - .venv
   before_script:
-    #install poetry and activate venv
+    - echo "Install poetry"
     - curl -sSL https://install.python-poetry.org | python - --version 1.1.10
     - export PATH="/root/.local/bin:$PATH"
-    - source .venv/bin/activate
 
 black:
-  extends: .tests
+  extends: .job_template
   script:
     - make black
 
 isort:
-  extends: .tests
+  extends: .job_template
   script:
     - make isort
 
 lint:
-  extends: .tests
+  extends: .job_template
   script:
     - make lint
 
 mypy:
-  extends: .tests
+  extends: .job_template
   script:
     - make mypy
 
 test:
-  extends: .tests
+  extends: .job_template
   script:
     - make test
   artifacts:

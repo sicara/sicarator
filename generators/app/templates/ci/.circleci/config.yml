@@ -9,22 +9,19 @@ executors:
       - image: cimg/python:3.9.7
 
 commands:
-  setup_venv:
+  get_code_and_cached_dependencies:
     steps:
       - checkout
       # Download and cache dependencies
       - restore_cache:
           keys:
             - <%= projectName %>-poetry-1.1.10-{{ checksum "poetry.lock" }}
-      - run:
-          name: activate_venv
-          command: source /home/circleci/.poetry/env
 
 jobs:
   install:
     executor: base-python
     steps:
-      - setup_venv
+      - get_code_and_cached_dependencies
       - run:
           name: Update Poetry to version 1.1.10
           command: |
@@ -43,7 +40,7 @@ jobs:
   test:
     executor: base-python
     steps:
-      - setup_venv
+      - get_code_and_cached_dependencies
       - run:
           name: run pytest
           command: make test
@@ -55,7 +52,7 @@ jobs:
   black:
     executor: base-python
     steps:
-      - setup_venv
+      - get_code_and_cached_dependencies
       - run:
           name: run black
           command: make black
@@ -63,7 +60,7 @@ jobs:
   lint:
     executor: base-python
     steps:
-      - setup_venv
+      - get_code_and_cached_dependencies
       - run:
           name: run pylint
           command: make lint
@@ -71,7 +68,7 @@ jobs:
   isort:
     executor: base-python
     steps:
-      - setup_venv
+      - get_code_and_cached_dependencies
       - run:
           name: run isort
           command: make isort
@@ -79,7 +76,7 @@ jobs:
   mypy:
     executor: base-python
     steps:
-      - setup_venv
+      - get_code_and_cached_dependencies
       - run:
           name: run mypy
           command: make mypy
