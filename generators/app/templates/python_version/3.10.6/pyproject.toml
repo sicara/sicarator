@@ -52,6 +52,7 @@ no-docstring-rgx = "^_|^test_|^Test[A-Z]" # no docstrings for tests
 [tool.isort]
 profile = "black"
 multi_line_output = 3
+py_version=310
 
 ## coverage
 
@@ -62,3 +63,7 @@ branch = true
 skip_empty = true
 fail_under = 70.00
 precision = 2
+
+## mypy
+[tool.mypy]
+python_version = 3.10
