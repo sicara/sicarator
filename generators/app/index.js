@@ -65,6 +65,13 @@ module.exports = class extends Generator {
         message: "What is the minimal unit test coverage (in %)?",
         type: "number",
         default: 70
+      },
+      {
+        name: "includeHelloWorld",
+        message:
+          "Include 'hello world' function and unit test? (warning: if 'no', CI testing step will fail due to empty tests)",
+        type: "confirm",
+        default: true
       }
     ]);
   }
@@ -99,6 +106,10 @@ module.exports = class extends Generator {
         {},
         { globOptions: { dot: true } }
       );
+    }
+
+    if (this.answers.includeHelloWorld) {
+      this.fs.copy(this.templatePath("hello_world"), this.destinationPath());
     }
   }
 
