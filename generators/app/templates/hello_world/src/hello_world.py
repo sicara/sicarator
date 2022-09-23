@@ -1,4 +1,4 @@
-"""Hello world example to show best coding and testing practices"""
+"""Hello world example to show some best coding and testing practices"""
 
 
 def hello_world() -> None:

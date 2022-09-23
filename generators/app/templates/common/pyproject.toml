@@ -59,5 +59,5 @@ branch = true
 
 [tool.coverage.report]
 skip_empty = true
-fail_under = <%= minCoverage %>
+fail_under = 70.00
 precision = 2
