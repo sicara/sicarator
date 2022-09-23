@@ -50,11 +50,22 @@ module.exports = class extends Generator {
             value: ".circleci"
           },
           {
+            name: "Gitlab CI/CD",
+            value: ".gitlab-ci.yml"
+          },
+          {
             name: "None of these",
             value: null
           }
         ],
         store: true
+      },
+      {
+        name: "includeHelloWorld",
+        message:
+          "Include 'hello world' function and unit test? (warning: if 'no', CI testing step will fail due to empty tests)",
+        type: "confirm",
+        default: true
       }
     ]);
   }
@@ -89,6 +100,10 @@ module.exports = class extends Generator {
         {},
         { globOptions: { dot: true } }
       );
+    }
+
+    if (this.answers.includeHelloWorld) {
+      this.fs.copy(this.templatePath("hello_world"), this.destinationPath());
     }
   }
 

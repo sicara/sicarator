@@ -2,25 +2,33 @@ version: 2.1
 
 orbs:
 
-jobs:
-  install:
+executors:
+  base-python:
     working_directory: ~/<%= projectName %>
     docker:
       - image: cimg/python:3.9.7
+
+commands:
+  get_code_and_cached_dependencies:
     steps:
       - checkout
       # Download and cache dependencies
       - restore_cache:
           keys:
             - <%= projectName %>-poetry-1.1.10-{{ checksum "poetry.lock" }}
+
+jobs:
+  install:
+    executor: base-python
+    steps:
+      - get_code_and_cached_dependencies
       - run:
           name: Update Poetry to version 1.1.10
           command: |
-            curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python - --version 1.1.10
+            curl -sSL https://install.python-poetry.org | python - --version 1.1.10
       - run:
           name: Install dependencies
           command: |
-            source /home/circleci/.poetry/env
             poetry run pip install --upgrade pip
             poetry install
       - save_cache:
@@ -30,78 +38,48 @@ jobs:
             - /home/circleci/.poetry/env
 
   test:
-    working_directory: ~/<%= projectName %>
-    docker:
-      - image: cimg/python:3.9.7
+    executor: base-python
     steps:
-      - checkout
-      - restore_cache:
-          key: <%= projectName %>-poetry-1.1.10-{{ checksum "poetry.lock" }}
+      - get_code_and_cached_dependencies
       - run:
           name: run pytest
-          command: |
-            source /home/circleci/.poetry/env
-            make test
+          command: make test
       - store_test_results:
           path: tests-results.xml
       - store_artifacts:
           path: htmlcov
 
   black:
-    working_directory: ~/<%= projectName %>
-    docker:
-      - image: cimg/python:3.9.7
+    executor: base-python
     steps:
-      - checkout
-      - restore_cache:
-          key: <%= projectName %>-poetry-1.1.10-{{ checksum "poetry.lock" }}
+      - get_code_and_cached_dependencies
       - run:
           name: run black
-          command: |
-            source /home/circleci/.poetry/env
-            make black
+          command: make black
 
   lint:
-    working_directory: ~/<%= projectName %>
-    docker:
-      - image: cimg/python:3.9.7
+    executor: base-python
     steps:
-      - checkout
-      - restore_cache:
-          key: <%= projectName %>-poetry-1.1.10-{{ checksum "poetry.lock" }}
+      - get_code_and_cached_dependencies
       - run:
           name: run pylint
-          command: |
-            source /home/circleci/.poetry/env
-            make lint
+          command: make lint
 
   isort:
-    working_directory: ~/<%= projectName %>
-    docker:
-      - image: cimg/python:3.9.7
+    executor: base-python
     steps:
-      - checkout
-      - restore_cache:
-          key: <%= projectName %>-poetry-1.1.10-{{ checksum "poetry.lock" }}
+      - get_code_and_cached_dependencies
       - run:
           name: run isort
-          command: |
-            source /home/circleci/.poetry/env
-            make isort
+          command: make isort
 
   mypy:
-    working_directory: ~/<%= projectName %>
-    docker:
-      - image: cimg/python:3.9.7
+    executor: base-python
     steps:
-      - checkout
-      - restore_cache:
-          key: <%= projectName %>-poetry-1.1.10-{{ checksum "poetry.lock" }}
+      - get_code_and_cached_dependencies
       - run:
           name: run mypy
-          command: |
-            source /home/circleci/.poetry/env
-            make mypy
+          command: make mypy
 
 workflows:
   version: 2
