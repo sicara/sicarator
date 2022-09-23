@@ -65,4 +65,4 @@ precision = 2
 
 ## mypy
 [tool.mypy]
-python_version = 3.8
+python_version = "3.8"
