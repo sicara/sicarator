@@ -43,7 +43,7 @@ module.exports = class extends Generator {
         name: "pythonVersion",
         message: "Which python version do yo want to use?",
         type: "list",
-        default: "3.9",
+        default: "3.9.13",
         choices: [
           {
             name: "3.7.13",
