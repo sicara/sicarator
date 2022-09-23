@@ -10,14 +10,25 @@ The recommended way to install it is using [pyenv](https://github.com/pyenv/pyen
 ### Install poetry
 
 ```bash
-python -m pip install --upgrade pip
-pip install poetry==1.1.10
+curl -sSL https://install.python-poetry.org | python3 -
+```
+### Create a virtual environment 
+Prerequisite : [pyenv](https://github.com/pyenv/pyenv)
+
+```bash
+pyenv virtualenv <%= pythonVersion %> <env name>
+pyenv local <env name>
 ```
 
 ### Install requirements through poetry
 
 ```bash
 poetry install --no-root
+```
+
+If you want to update the depencies : 
+```bash
+poetry update
 ```
 
 ### Install git hooks (running before commit and push commands)
