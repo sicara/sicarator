@@ -1,9 +1,9 @@
 [tool.poetry]
-name = "<%= projectName %>"
+name = "OnTEstLeREadme"
 version = "0.1.0"
-description = "<%- projectDescription %>"
+description = ""
 authors = [
-    "<%= authorName %> <<%= authorEmail %>>",
+    "Guillaume Delepoulle <delepoulle@telecom-paris.fr>",
 ]
 
 [tool.poetry.dependencies]
