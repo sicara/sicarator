@@ -10,13 +10,13 @@ authors = [
 python = "3.10.6"
 
 [tool.poetry.dev-dependencies]
-isort = "*"
-pre-commit = "*"
-pylint = "*"
-pytest = "*"
-pytest-cov = "*"
-mypy = "*"
-black = "*"
+isort = "^5"
+pre-commit = "^2"
+pylint = "^2"
+pytest = "^7"
+pytest-cov = "^3"
+mypy = "^0"
+black = "^22"
 
 
 [build-system]
