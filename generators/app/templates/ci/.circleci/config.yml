@@ -6,7 +6,7 @@ executors:
   base-python:
     working_directory: ~/<%= projectName %>
     docker:
-      - image: cimg/python:3.9.7
+      - image: cimg/python:<%= pythonVersion %>
 
 commands:
   get_code_and_cached_dependencies:
@@ -50,7 +50,13 @@ jobs:
           path: htmlcov
 
   black:
+<<<<<<< HEAD
     executor: base-python
+=======
+    working_directory: ~/<%= projectName %>
+    docker:
+      - image: cimg/python:<%= pythonVersion %>
+>>>>>>> 1324d90 (add variable in config file of ci to select python version)
     steps:
       - get_code_and_cached_dependencies
       - run:
