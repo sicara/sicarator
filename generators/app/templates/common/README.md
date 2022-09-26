@@ -13,22 +13,28 @@ The recommended way to install it is using [pyenv](https://github.com/pyenv/pyen
 curl -sSL https://install.python-poetry.org | python3 -
 ```
 ### Create a virtual environment 
-Prerequisite : [pyenv](https://github.com/pyenv/pyenv)
+
+Install [pyenv](https://github.com/pyenv/pyenv) to manage your Python versions and virtual environments.
+- If you are on MacOS and experiencing errors on python install with pyenv, follow this [comment](https://github.com/pyenv/pyenv/issues/1740#issuecomment-738749988)
+- Add these lines to your ~/.bashrc or ~/.zshrc to be able to activate pyenv virtualenvs:
+
+    ```bash
+    eval "$(pyenv init -)"
+    eval "$(pyenv virtualenv-init -)"
+    eval "$(pyenv init --path)"
+    ```
+
+Then create your virtual environment and configure it for your project :
 
 ```bash
 pyenv virtualenv <%= pythonVersion %> <env name>
 pyenv local <env name>
 ```
-
+Now, everytime you are in your project directory your env will be activated thanks to pyenv!
 ### Install requirements through poetry
 
 ```bash
 poetry install --no-root
-```
-
-If you want to update the depencies : 
-```bash
-poetry update
 ```
 
 ### Install git hooks (running before commit and push commands)
