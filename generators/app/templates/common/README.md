@@ -10,7 +10,7 @@ The recommended way to install it is using [pyenv](https://github.com/pyenv/pyen
 ### Install poetry
 
 ```bash
-curl -sSL https://install.python-poetry.org | python3 -
+curl -sSL https://install.python-poetry.org | python - --version 1.1.10
 ```
 ### Create a virtual environment 
 
@@ -98,7 +98,6 @@ make mypy
 
 
 ## Update dependencies
-From time to time, you might want to update the dependencies of the project. <br />
 :warning: Before doing so, remember you might create dependency breaks in the project. <br />
 You can use :
 ```bash
