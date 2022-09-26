@@ -95,3 +95,12 @@ To type check your code, run `mypy` with:
 ```bash
 make mypy
 ```
+
+
+## Update dependencies
+From time to time, you might want to update the dependencies of the project. <br />
+:warning: Before doing so, remember you might create dependency breaks in the project. <br />
+You can use :
+```bash
+poetry update
+```
