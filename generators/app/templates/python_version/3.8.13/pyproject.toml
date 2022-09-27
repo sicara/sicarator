@@ -1,0 +1,68 @@
+[tool.poetry]
+name = "<%= projectName %>"
+version = "0.1.0"
+description = "<%- projectDescription %>"
+authors = [
+    "<%= authorName %> <<%= authorEmail %>>",
+]
+
+[tool.poetry.dependencies]
+python = "3.8.13"
+
+[tool.poetry.dev-dependencies]
+isort = "^5"
+pre-commit = "^2"
+pylint = "^2"
+pytest = "^7"
+pytest-cov = "^3"
+mypy = "^0"
+black = "^22"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+# Packages configs
+
+## black
+
+[tool.black]
+target-version = ['py38']
+
+## pylint
+
+[tool.pylint.messages_control]
+disable = [
+    # already managed by isort:
+    "ungrouped-imports",
+    "wrong-import-order",
+    "wrong-import-position",
+]
+
+[tool.pylint.similarities]
+ignore-signatures="yes"
+ignore-imports="yes"
+
+[tool.pylint.basic]
+no-docstring-rgx = "^_|^test_|^Test[A-Z]" # no docstrings for tests
+
+## isort
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+py_version=38
+
+## coverage
+
+[tool.coverage.run]
+branch = true
+
+[tool.coverage.report]
+skip_empty = true
+fail_under = 70.00
+precision = 2
+
+## mypy
+[tool.mypy]
+python_version = "3.8"

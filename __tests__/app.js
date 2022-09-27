@@ -9,7 +9,8 @@ describe("generator-sicarator:app", () => {
       .run(path.join(__dirname, "../generators/app"))
       .withPrompts({
         projectName: "project-name",
-        projectDescription: "Project Description"
+        projectDescription: "Project Description",
+        pythonVersion: "3.9.13"
       })
       .withLocalConfig({});
   });
@@ -24,5 +25,10 @@ describe("generator-sicarator:app", () => {
 
   it("creates .yo-rc.json", () => {
     assert.file([".yo-rc.json"]);
+  });
+
+  it("creates correct poetry files", () => {
+    assert.file(["poetry.lock", "pyproject.toml"]);
+    assert.fileContent("pyproject.toml", 'python = "3.9.13"');
   });
 });

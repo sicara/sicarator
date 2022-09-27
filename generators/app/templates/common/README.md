@@ -4,16 +4,33 @@
 
 ## Installation
 
-To install this project, you need `Python 3.9.7`.
+To install this project, you need `Python <%= pythonVersion %>`.
 The recommended way to install it is using [pyenv](https://github.com/pyenv/pyenv).
 
 ### Install poetry
 
 ```bash
-python -m pip install --upgrade pip
-pip install poetry==1.1.10
+curl -sSL https://install.python-poetry.org | python - --version 1.1.10
 ```
+### Create a virtual environment 
 
+Install [pyenv](https://github.com/pyenv/pyenv) to manage your Python versions and virtual environments.
+- If you are on MacOS and experiencing errors on python install with pyenv, follow this [comment](https://github.com/pyenv/pyenv/issues/1740#issuecomment-738749988)
+- Add these lines to your ~/.bashrc or ~/.zshrc to be able to activate pyenv virtualenvs:
+
+    ```bash
+    eval "$(pyenv init -)"
+    eval "$(pyenv virtualenv-init -)"
+    eval "$(pyenv init --path)"
+    ```
+
+Then create your virtual environment and configure it for your project:
+
+```bash
+pyenv virtualenv <%= pythonVersion %> <env name>
+pyenv local <env name>
+```
+Now, every time you are in your project directory your env will be activated thanks to `pyenv`!
 ### Install requirements through poetry
 
 ```bash
@@ -77,4 +94,12 @@ make isort
 To type check your code, run `mypy` with:
 ```bash
 make mypy
+```
+
+
+## Update dependencies to the last compatible versions
+:warning: Before doing so, remember you might create dependency breaks in the project. <br />
+You can use :
+```bash
+poetry update
 ```

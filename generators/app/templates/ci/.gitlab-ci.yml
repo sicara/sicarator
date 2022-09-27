@@ -3,7 +3,7 @@ stages:
   - test
 
 default:
-  image: python:3.9.7
+  image: python:<%= pythonVersion %>
 
 install:
   stage: build

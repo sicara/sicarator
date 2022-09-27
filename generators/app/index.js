@@ -40,6 +40,30 @@ module.exports = class extends Generator {
         store: true
       },
       {
+        name: "pythonVersion",
+        message: "Which python version do yo want to use?",
+        type: "list",
+        default: "3.9.13",
+        choices: [
+          {
+            name: "3.7.13",
+            value: "3.7.13"
+          },
+          {
+            name: "3.8.13",
+            value: "3.8.13"
+          },
+          {
+            name: "3.9.13",
+            value: "3.9.13"
+          },
+          {
+            name: "3.10.6",
+            value: "3.10.6"
+          }
+        ]
+      },
+      {
         name: "ci",
         message: "Which CI (Continuous Integration) tool do you want to use?",
         type: "list",
@@ -90,6 +114,14 @@ module.exports = class extends Generator {
     this.fs.copy(
       this.templatePath("gitignore/gitignore"),
       this.destinationPath(".gitignore")
+    );
+
+    this.fs.copyTpl(
+      this.templatePath("python_version/" + this.answers.pythonVersion),
+      this.destinationPath(),
+      this.answers,
+      {},
+      { globOptions: { dot: true } }
     );
 
     if (this.answers.ci !== null) {
