@@ -30,7 +30,7 @@ Then create your virtual environment and configure it for your project:
 pyenv virtualenv <%= pythonVersion %> <env name>
 pyenv local <env name>
 ```
-Now, everytime you are in your project directory your env will be activated thanks to pyenv!
+Now, every time you are in your project directory your env will be activated thanks to `pyenv`!
 ### Install requirements through poetry
 
 ```bash
