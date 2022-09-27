@@ -24,7 +24,7 @@ Install [pyenv](https://github.com/pyenv/pyenv) to manage your Python versions a
     eval "$(pyenv init --path)"
     ```
 
-Then create your virtual environment and configure it for your project :
+Then create your virtual environment and configure it for your project:
 
 ```bash
 pyenv virtualenv <%= pythonVersion %> <env name>
