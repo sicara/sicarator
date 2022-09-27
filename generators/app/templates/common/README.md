@@ -97,7 +97,7 @@ make mypy
 ```
 
 
-## Update dependencies
+## Update dependencies to the last compatible versions
 :warning: Before doing so, remember you might create dependency breaks in the project. <br />
 You can use :
 ```bash
