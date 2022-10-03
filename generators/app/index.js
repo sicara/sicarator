@@ -78,6 +78,10 @@ module.exports = class extends Generator {
             value: ".gitlab-ci.yml"
           },
           {
+            name: "Azure Pipelines",
+            value: ".azure-pipelines.yml"
+          },
+          {
             name: "None of these",
             value: null
           }
