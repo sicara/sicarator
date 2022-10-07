@@ -147,6 +147,13 @@ module.exports = class extends Generator {
     if (this.answers.includeHelloWorld) {
       this.fs.copy(this.templatePath("hello_world"), this.destinationPath());
     }
+
+    this.spawnCommand("pyenv", ["global", this.answers.pythonVersion]);
+  }
+
+  install() {
+    this.spawnCommand("poetry", ["install"]);
+    this.spawnCommand("rm", ["-rf", "venv"]);
   }
 
   end() {
