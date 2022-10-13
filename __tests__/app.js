@@ -31,4 +31,7 @@ describe("generator-sicarator:app", () => {
     assert.file(["poetry.lock", "pyproject.toml"]);
     assert.fileContent("pyproject.toml", 'python = "3.9.13"');
   });
+  it("removes poetry env .venv created by the command poetry lock", () => {
+    assert.noFile([".venv"]);
+  });
 });
