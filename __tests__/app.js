@@ -10,7 +10,7 @@ describe("generator-sicarator:app", () => {
       .withPrompts({
         projectName: "project-name",
         projectDescription: "Project Description",
-        pythonVersion: "3.9.13"
+        pythonVersion: "3.9.13" // Python version depends on the docker image of CI
       })
       .withLocalConfig({});
   });
@@ -30,8 +30,5 @@ describe("generator-sicarator:app", () => {
   it("creates correct poetry files", () => {
     assert.file(["poetry.lock", "pyproject.toml"]);
     assert.fileContent("pyproject.toml", 'python = "3.9.13"');
-  });
-  it("removes poetry env .venv created by the command poetry lock", () => {
-    assert.noFile([".venv"]);
   });
 });

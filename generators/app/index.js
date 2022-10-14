@@ -151,8 +151,9 @@ module.exports = class extends Generator {
 
   install() {
     this.spawnCommandSync("pyenv", ["global", this.answers.pythonVersion]);
+    this.spawnCommandSync("poetry", ["config", "virtualenvs.create", "false"]);
     this.spawnCommandSync("poetry", ["lock"]);
-    this.spawnCommandSync("rm", ["-rf", ".venv"]);
+    this.spawnCommandSync("poetry", ["config", "virtualenvs.create", "true"]);
   }
 
   end() {
