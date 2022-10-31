@@ -43,12 +43,6 @@ steps:
   - script: make test
     displayName: "Run tests"
 
-  - task: PublishCodeCoverageResults@1
-    inputs:
-      codeCoverageTool: "Cobertura"
-      summaryFileLocation: htmlcov/index.html
-    displayName: "Publish code coverage"
-
   - task: PublishTestResults@2
     inputs:
       testResultsFiles: tests-results.xml
