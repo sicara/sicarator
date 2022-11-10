@@ -63,8 +63,9 @@ test:
     - make test
   artifacts:
     reports:
+      junit: ./tests-results.xml
       coverage_report:
         coverage_format: cobertura
-        path: ./tests-results.xml
+        path: ./coverage.xml
     paths:
       - ./htmlcov
