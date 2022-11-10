@@ -52,8 +52,7 @@ poetry install --no-root
 ### Install git hooks (running before commit and push commands)
 
 ```bash
-poetry run pre-commit install -t pre-commit
-poetry run pre-commit install -t pre-push
+poetry run pre-commit install
 ```
 
 ## Testing

@@ -1,6 +1,9 @@
+default_install_hook_types:
+- pre-commit
+- pre-push
 repos:
 - repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: v4.0.1
+  rev: v4.3.0
   hooks:
   - id: trailing-whitespace
   - id: end-of-file-fixer
@@ -10,7 +13,7 @@ repos:
   hooks:
   - id: lint
     name: Linter (pylint)
-    entry: poetry run pylint
+    entry: pylint
     language: system
     types: [python]
     stages: [commit]
@@ -23,13 +26,13 @@ repos:
     stages: [commit]
   - id: black
     name: Formatting (black)
-    entry: poetry run black
+    entry: black
     language: system
     types: [python]
     stages: [commit]
   - id: isort
     name: Ordering imports (isort)
-    entry: poetry run isort
+    entry: isort
     language: system
     types: [python]
     stages: [commit]
