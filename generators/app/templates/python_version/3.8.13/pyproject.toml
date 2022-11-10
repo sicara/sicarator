@@ -24,6 +24,16 @@ build-backend = "poetry.core.masonry.api"
 
 # Packages configs
 
+## coverage
+
+[tool.coverage.run]
+branch = true
+
+[tool.coverage.report]
+skip_empty = true
+fail_under = 70.00
+precision = 2
+
 ## black
 
 [tool.black]
@@ -53,16 +63,7 @@ profile = "black"
 multi_line_output = 3
 py_version=38
 
-## coverage
-
-[tool.coverage.run]
-branch = true
-
-[tool.coverage.report]
-skip_empty = true
-fail_under = 70.00
-precision = 2
-
 ## mypy
+
 [tool.mypy]
 python_version = "3.8"
