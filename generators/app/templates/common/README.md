@@ -28,7 +28,7 @@
 
 - Install [Poetry](https://python-poetry.org) to manage your dependencies and tooling configs:
   ```bash
-  curl -sSL https://install.python-poetry.org | python - --version 1.1.10
+  curl -sSL https://install.python-poetry.org | python - --version 1.2.2
   ```
 
 ## Installation

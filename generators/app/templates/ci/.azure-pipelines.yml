@@ -10,10 +10,12 @@ steps:
   - task: UsePythonVersion@0
     inputs:
       versionSpec: "<%= pythonVersion %>"
+
   - script: |
-      curl -sSL https://install.python-poetry.org | python - --version 1.1.10
+      curl -sSL https://install.python-poetry.org | python - --version 1.2.2
       export PATH="/root/.local/bin:$PATH"
-    displayName: "Install poetry 1.1.10"
+    displayName: "Install poetry"
+
   - script: |
       poetry config virtualenvs.in-project true
       poetry run pip install --upgrade pip
