@@ -8,8 +8,8 @@ default:
 install:
   stage: build
   script:
-    - echo "Update poetry to version 1.1.10"
-    - curl -sSL https://install.python-poetry.org | python - --version 1.1.10
+    - echo "Update poetry to right version"
+    - curl -sSL https://install.python-poetry.org | python - --version 1.2.2
     - export PATH="/root/.local/bin:$PATH"
 
     # create virtualenv in working directory to enable storage in cache with gitlab
@@ -34,7 +34,7 @@ install:
       - .venv
   before_script:
     - echo "Install poetry"
-    - curl -sSL https://install.python-poetry.org | python - --version 1.1.10
+    - curl -sSL https://install.python-poetry.org | python - --version 1.2.2
     - export PATH="/root/.local/bin:$PATH"
 
 black:
@@ -63,8 +63,7 @@ test:
     - make test
   artifacts:
     reports:
+      junit: ./tests-results.xml
       coverage_report:
         coverage_format: cobertura
-        path: ./tests-results.xml
-    paths:
-      - ./htmlcov
+        path: ./coverage.xml

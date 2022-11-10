@@ -2,36 +2,48 @@
 
 > <%- projectDescription %>
 
-## Installation
+## Project requirements
 
-To install this project, you need `Python <%= pythonVersion %>`.
-The recommended way to install it is using [pyenv](https://github.com/pyenv/pyenv).
+### Pyenv and `Python <%= pythonVersion %>`
+
+- Install [pyenv](https://github.com/pyenv/pyenv) to manage your Python versions and virtual environments:
+  ```bash
+  curl -sSL https://pyenv.run | bash
+  ```
+  - If you are on MacOS and experiencing errors on python install with pyenv, follow this [comment](https://github.com/pyenv/pyenv/issues/1740#issuecomment-738749988)
+  - Add these lines to your `~/.bashrc` or `~/.zshrc` to be able to activate `pyenv virtualenv`:
+      ```bash
+      eval "$(pyenv init -)"
+      eval "$(pyenv virtualenv-init -)"
+      eval "$(pyenv init --path)"
+      ```
+  - Restart your shell
+
+- Install the right version of `Python` with `pyenv`:
+  ```bash
+  pyenv install <%= pythonVersion %>
+  ```
 
 ### Install poetry
 
-```bash
-curl -sSL https://install.python-poetry.org | python - --version 1.1.10
-```
-### Create a virtual environment 
+- Install [Poetry](https://python-poetry.org) to manage your dependencies and tooling configs:
+  ```bash
+  curl -sSL https://install.python-poetry.org | python - --version 1.2.2
+  ```
 
-Install [pyenv](https://github.com/pyenv/pyenv) to manage your Python versions and virtual environments.
-- If you are on MacOS and experiencing errors on python install with pyenv, follow this [comment](https://github.com/pyenv/pyenv/issues/1740#issuecomment-738749988)
-- Add these lines to your ~/.bashrc or ~/.zshrc to be able to activate pyenv virtualenvs:
+## Installation
 
-    ```bash
-    eval "$(pyenv init -)"
-    eval "$(pyenv virtualenv-init -)"
-    eval "$(pyenv init --path)"
-    ```
+### Create a virtual environment
 
-Then create your virtual environment and configure it for your project:
+Create your virtual environment and link it to your project folder:
 
 ```bash
-pyenv virtualenv <%= pythonVersion %> <env name>
-pyenv local <env name>
+pyenv virtualenv <%= pythonVersion %> <%= projectName %>
+pyenv local <%= projectName %>
 ```
-Now, every time you are in your project directory your env will be activated thanks to `pyenv`!
-### Install requirements through poetry
+Now, every time you are in your project directory your virtualenv will be activated thanks to `pyenv`!
+
+### Install Python dependencies through poetry
 
 ```bash
 poetry install --no-root
@@ -40,15 +52,14 @@ poetry install --no-root
 ### Install git hooks (running before commit and push commands)
 
 ```bash
-poetry run pre-commit install -t pre-commit
-poetry run pre-commit install -t pre-push
+poetry run pre-commit install
 ```
 
 ## Testing
 
 To run unit tests, run `pytest` with:
 ```bash
-poetry run pytest tests --cov src
+pytest tests --cov src
 ```
 or
 ```bash
@@ -61,7 +72,7 @@ make test
 
 To check code formatting, run `black` with:
 ```bash
-poetry run black . --check
+black . --check
 ```
 or
 ```bash
@@ -71,11 +82,11 @@ make black
 You can also [integrate it to your IDE](https://black.readthedocs.io/en/stable/integrations/editors.html) to reformat
 your code each time you save a file.
 
-### Static analysis
+### Static analysis with `pylint`
 
 To run static analysis, run `pylint` with:
 ```bash
-poetry run pylint src tests
+pylint src tests
 ```
 or
 ```bash
@@ -86,6 +97,10 @@ make lint
 
 To check the imports order, run `isort` with:
 ```bash
+isort . --check
+```
+or
+```bash
 make isort
 ```
 
@@ -93,13 +108,9 @@ make isort
 
 To type check your code, run `mypy` with:
 ```bash
-make mypy
+mypy src --explicit-package-bases --namespace-packages
 ```
-
-
-## Update dependencies to the last compatible versions
-:warning: Before doing so, remember you might create dependency breaks in the project. <br />
-You can use :
+or
 ```bash
-poetry update
+make mypy
 ```
