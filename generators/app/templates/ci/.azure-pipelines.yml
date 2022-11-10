@@ -49,3 +49,9 @@ steps:
     inputs:
       testResultsFiles: tests-results.xml
     displayName: "Publish test results"
+
+  - task: PublishCodeCoverageResults@1
+    inputs:
+      codeCoverageTool: "Cobertura"
+      summaryFileLocation: coverage.xml
+    displayName: "Publish code coverage"
