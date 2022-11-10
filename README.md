@@ -42,7 +42,6 @@ npm ERR! dest /usr/lib/node_modules/.generator-sicarator-cELCsz5l
 npm ERR! errno -13
 npm ERR! Error: EACCES: permission denied, rename '/usr/lib/node_modules/generator-sicarator' -> '/usr/lib/node_modules/.generator-sicarator-cELCsz5l'
 ...
-
 ```
 
 Solution: give yourself the ownership of npm and node_modules :
