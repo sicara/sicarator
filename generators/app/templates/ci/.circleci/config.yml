@@ -12,6 +12,7 @@ commands:
   get_code_and_cached_dependencies:
     steps:
       - checkout
+      - run: curl -sSL https://install.python-poetry.org | python - --version 1.2.2
       # Download and cache dependencies
       - restore_cache:
           keys:
