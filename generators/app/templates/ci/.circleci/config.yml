@@ -9,7 +9,7 @@ executors:
       - image: cimg/python:<%= pythonVersion %>
 
 commands:
-  get_code_and_cached_dependencies:
+  get_code_and_cached_dependencies_and_install_poetry_1_2_2:
     steps:
       - checkout
       - run: curl -sSL https://install.python-poetry.org | python - --version 1.2.2
@@ -22,11 +22,7 @@ jobs:
   install:
     executor: base-python
     steps:
-      - get_code_and_cached_dependencies
-      - run:
-          name: Update Poetry to right version
-          command: |
-            curl -sSL https://install.python-poetry.org | python - --version 1.2.2
+      - get_code_and_cached_dependencies_and_install_poetry_1_2_2
       - run:
           name: Install dependencies
           command: |
@@ -41,7 +37,7 @@ jobs:
   test:
     executor: base-python
     steps:
-      - get_code_and_cached_dependencies
+      - get_code_and_cached_dependencies_and_install_poetry_1_2_2
       - run:
           name: run pytest
           command: make test
@@ -53,7 +49,7 @@ jobs:
   black:
     executor: base-python
     steps:
-      - get_code_and_cached_dependencies
+      - get_code_and_cached_dependencies_and_install_poetry_1_2_2
       - run:
           name: run black
           command: make black
@@ -61,7 +57,7 @@ jobs:
   lint:
     executor: base-python
     steps:
-      - get_code_and_cached_dependencies
+      - get_code_and_cached_dependencies_and_install_poetry_1_2_2
       - run:
           name: run pylint
           command: make lint
@@ -69,7 +65,7 @@ jobs:
   isort:
     executor: base-python
     steps:
-      - get_code_and_cached_dependencies
+      - get_code_and_cached_dependencies_and_install_poetry_1_2_2
       - run:
           name: run isort
           command: make isort
@@ -77,7 +73,7 @@ jobs:
   mypy:
     executor: base-python
     steps:
-      - get_code_and_cached_dependencies
+      - get_code_and_cached_dependencies_and_install_poetry_1_2_2
       - run:
           name: run mypy
           command: make mypy
