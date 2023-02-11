@@ -1,0 +1,53 @@
+name: Tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    - cron: "0 4 * * *"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.head_ref || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/workflows/actions/install_dependencies
+
+  checks:
+    needs: setup
+    runs-on: ubuntu-latest
+    name: ${{ matrix.quality-command }}
+    strategy:
+      matrix:
+        quality-command:
+          - test
+          - black
+          - lint
+          - isort
+          - mypy
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/workflows/actions/install_dependencies
+      - name: run ${{ matrix.quality-command }}
+        run: make ${{ matrix.quality-command }}
+
+# Deal with test coverage
+#      - store_test_results:
+#          path: tests-results.xml
+#      - store_artifacts:
+#          path: htmlcov
+
+
+  all_checks_passed:
+    # Used to easy force requirements checks in GitHub
+    needs: checks
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "All checks passed"
