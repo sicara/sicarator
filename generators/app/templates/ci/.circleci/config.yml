@@ -9,27 +9,42 @@ executors:
       - image: cimg/python:<%= pythonVersion %>
 
 commands:
-  get_code_and_cached_dependencies_and_install_poetry_1_2_2:
+  get_code_and_cache:
     steps:
       - checkout
-      - run: curl -sSL https://install.python-poetry.org | python - --version 1.2.2
-      # Download and cache dependencies
+      # Restore cached poetry
+      - run:
+          name: Remove docker image default poetry installation (so that right version can be restored from cache)
+          command: |
+            rm -rf /home/circleci/.local/share/pypoetry
       - restore_cache:
           keys:
-            - <%= projectName %>-poetry-1.2.2-{{ checksum "poetry.lock" }}
+            - poetry-1.2.2
+      # Restore cached dependencies
+      - restore_cache:
+          keys:
+            - <%= projectName %>-dependencies-poetry-1.2.2-{{ checksum "poetry.lock" }}
 
 jobs:
   install:
     executor: base-python
     steps:
-      - get_code_and_cached_dependencies_and_install_poetry_1_2_2
+      - get_code_and_cache
+      - run:
+          name: Install Poetry right version (if not already restored from cache)
+          command: |
+            [ -d "/home/circleci/.local/share/pypoetry" ] || curl -sSL https://install.python-poetry.org | python - --version 1.2.2
+      - save_cache:
+          key: poetry-1.2.2
+          paths:
+            - /home/circleci/.local/share/pypoetry
       - run:
           name: Install dependencies
           command: |
             poetry run pip install --upgrade pip
             poetry install
       - save_cache:
-          key: <%= projectName %>-poetry-1.2.2-{{ checksum "poetry.lock" }}
+          key: <%= projectName %>-dependencies-poetry-1.2.2-{{ checksum "poetry.lock" }}
           paths:
             - /home/circleci/.cache/pypoetry/virtualenvs
             - /home/circleci/.poetry/env
@@ -37,7 +52,7 @@ jobs:
   test:
     executor: base-python
     steps:
-      - get_code_and_cached_dependencies_and_install_poetry_1_2_2
+      - get_code_and_cache
       - run:
           name: run pytest
           command: make test
@@ -49,7 +64,7 @@ jobs:
   black:
     executor: base-python
     steps:
-      - get_code_and_cached_dependencies_and_install_poetry_1_2_2
+      - get_code_and_cache
       - run:
           name: run black
           command: make black
@@ -57,7 +72,7 @@ jobs:
   lint:
     executor: base-python
     steps:
-      - get_code_and_cached_dependencies_and_install_poetry_1_2_2
+      - get_code_and_cache
       - run:
           name: run pylint
           command: make lint
@@ -65,7 +80,7 @@ jobs:
   isort:
     executor: base-python
     steps:
-      - get_code_and_cached_dependencies_and_install_poetry_1_2_2
+      - get_code_and_cache
       - run:
           name: run isort
           command: make isort
@@ -73,7 +88,7 @@ jobs:
   mypy:
     executor: base-python
     steps:
-      - get_code_and_cached_dependencies_and_install_poetry_1_2_2
+      - get_code_and_cache
       - run:
           name: run mypy
           command: make mypy
