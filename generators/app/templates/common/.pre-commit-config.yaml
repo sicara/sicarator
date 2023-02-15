@@ -11,6 +11,18 @@ repos:
   - id: check-json
 - repo: local
   hooks:
+  - id: black
+    name: Formatting (black)
+    entry: black
+    language: system
+    types: [python]
+    stages: [commit]
+  - id: isort
+    name: Ordering imports (isort)
+    entry: isort
+    language: system
+    types: [python]
+    stages: [commit]
   - id: lint
     name: Linter (pylint)
     entry: pylint
@@ -21,18 +33,6 @@ repos:
     name: Type checking (mypy)
     entry: make mypy
     pass_filenames: false
-    language: system
-    types: [python]
-    stages: [commit]
-  - id: black
-    name: Formatting (black)
-    entry: black
-    language: system
-    types: [python]
-    stages: [commit]
-  - id: isort
-    name: Ordering imports (isort)
-    entry: isort
     language: system
     types: [python]
     stages: [commit]
