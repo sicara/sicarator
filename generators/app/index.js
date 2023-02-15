@@ -41,28 +41,27 @@ module.exports = class extends Generator {
       },
       {
         name: "pythonVersion",
-        message: "Which python version do yo want to use?",
+        message: `Which python version do yo want to use?\n${chalk.yellow(
+          "/!\\"
+        )} Older versions are not recommended unless your project has some specific requirements.`,
         type: "list",
         default: "3.10.6",
         choices: [
           {
-            name:
-              "3.7.13 (Prefer newer versions if your project does not have a specific requirement for this version)",
-            value: "3.7.13"
+            name: "3.10.6",
+            value: "3.10.6"
           },
           {
-            name:
-              "3.8.13 (Prefer newer versions if your project does not have a specific requirement for this version)",
-            value: "3.8.13"
-          },
-          {
-            name:
-              "3.9.13 (Prefer newer versions if your project does not have a specific requirement for this version)",
+            name: "3.9.13 (not recommended)",
             value: "3.9.13"
           },
           {
-            name: "3.10.6",
-            value: "3.10.6"
+            name: "3.8.13 (not recommended)",
+            value: "3.8.13"
+          },
+          {
+            name: "3.7.13 (not recommended)",
+            value: "3.7.13"
           }
         ]
       },
