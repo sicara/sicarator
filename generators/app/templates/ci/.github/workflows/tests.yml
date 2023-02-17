@@ -42,15 +42,23 @@ jobs:
       - uses: ./.github/workflows/actions/install_dependencies
       - name: run test
         run: make test
-
-  # Deal with test coverage
-  #      - store_test_results:
-  #          path: tests-results.xml
-  #      - store_artifacts:
-  #          path: htmlcov
+      # Run even if make test fails for coverage reports
+      # TODO: select a better xml results displayer
+      - name: Archive test results coverage results
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: test_results
+          path: tests-results.xml
+      - name: Archive code coverage results
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: code-coverage-report
+          path: htmlcov/
 
   all_checks_passed:
-    # Used to easy force requirements checks in GitHub
+    # Used to easily force requirements checks in GitHub
     needs:
       - checks
       - test
