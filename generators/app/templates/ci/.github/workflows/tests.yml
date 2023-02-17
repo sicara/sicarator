@@ -2,13 +2,12 @@ name: Tests
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.head_ref || github.ref }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
-
 
 jobs:
   setup:
@@ -24,7 +23,6 @@ jobs:
     strategy:
       matrix:
         quality-command:
-          - test
           - black
           - lint
           - isort
@@ -35,16 +33,27 @@ jobs:
       - name: run ${{ matrix.quality-command }}
         run: make ${{ matrix.quality-command }}
 
-# Deal with test coverage
-#      - store_test_results:
-#          path: tests-results.xml
-#      - store_artifacts:
-#          path: htmlcov
+  test:
+    needs: setup
+    runs-on: ubuntu-latest
+    name: test
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/workflows/actions/install_dependencies
+      - name: run test
+        run: make test
 
+  # Deal with test coverage
+  #      - store_test_results:
+  #          path: tests-results.xml
+  #      - store_artifacts:
+  #          path: htmlcov
 
   all_checks_passed:
     # Used to easy force requirements checks in GitHub
-    needs: checks
+    needs:
+      - checks
+      - test
     runs-on: ubuntu-latest
     steps:
       - run: echo "All checks passed"
