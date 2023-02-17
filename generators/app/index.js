@@ -78,7 +78,7 @@ module.exports = class extends Generator {
             value: ".gitlab-ci.yml"
           },
           {
-            name: "Github Actions",
+            name: "GitHub Actions",
             value: ".github"
           },
           {
