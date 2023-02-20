@@ -42,7 +42,7 @@ jobs:
           name: Install dependencies
           command: |
             poetry run pip install --upgrade pip
-            poetry install
+            poetry install --no-root
       - save_cache:
           key: <%= projectName %>-dependencies-poetry-1.2.2-{{ checksum "poetry.lock" }}
           paths:

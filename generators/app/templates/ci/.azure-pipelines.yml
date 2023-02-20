@@ -19,7 +19,7 @@ steps:
   - script: |
       poetry config virtualenvs.in-project true
       poetry run pip install --upgrade pip
-      poetry install
+      poetry install --no-root
       echo $(Agent.HomeDirectory)/../../.cache/pypoetry
     displayName: "Create venv and install dependencies"
 
