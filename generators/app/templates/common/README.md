@@ -30,7 +30,7 @@
   ```bash
   curl -sSL https://install.python-poetry.org | python - --version 1.2.2
   ```
-  *If you had no python version installed previously, you may have to set your global python version to install poetry :*
+  *If you have not previously installed any Python version, you may need to set your global Python version before installing Poetry:*
     ```bash
     pyenv global <%= pythonVersion %>
     ```
