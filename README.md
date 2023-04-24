@@ -16,6 +16,10 @@
     ```bash
     npm install -g yo sicara/sicarator
     ```
+- Install [Pyenv](https://github.com/pyenv/pyenv):
+    ```bash
+  curl https://pyenv.run | bash
+  ```  
 
 ## Usage
 

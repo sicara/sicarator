@@ -66,6 +66,12 @@ module.exports = class extends Generator {
         ]
       },
       {
+        name: "installPython",
+        message: "Do you want to install this python version using pyenv?",
+        type: "confirm",
+        store: true
+      },
+      {
         name: "ci",
         message: "Which CI (Continuous Integration) tool do you want to use?",
         type: "list",
@@ -150,10 +156,16 @@ module.exports = class extends Generator {
   }
 
   install() {
-    this.spawnCommandSync("pyenv", ["global", this.answers.pythonVersion]);
-    this.spawnCommandSync("poetry", ["config", "virtualenvs.create", "false"]);
+    if (this.answers.installPython) {
+      this.spawnCommandSync("pyenv", [
+        "install",
+        this.answers.pythonVersion,
+        "--skip-existing"
+      ]);
+    }
+
+    this.spawnCommandSync("pyenv", ["local", this.answers.pythonVersion]);
     this.spawnCommandSync("poetry", ["lock"]);
-    this.spawnCommandSync("poetry", ["config", "virtualenvs.create", "true"]);
   }
 
   end() {
