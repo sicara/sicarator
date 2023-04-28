@@ -41,9 +41,9 @@ module.exports = class extends Generator {
       },
       {
         name: "pythonVersion",
-        message: `Which python version do yo want to use?\n${chalk.yellow(
-          "/!\\"
-        )} Older versions are not recommended unless your project has some specific requirements.`,
+        message: `Which python version do yo want to use?
+💡 If the chosen version is not installed on your machine, it will be automatically installed by PyEnv.
+🚨️ Older versions are not recommended unless your project has some specific requirements.`,
         type: "list",
         default: "3.10.6",
         choices: [
@@ -64,13 +64,6 @@ module.exports = class extends Generator {
             value: "3.7.13"
           }
         ]
-      },
-      {
-        name: "installPython",
-        message: "Do you want to install this python version using pyenv?",
-        type: "confirm",
-        default: true,
-        store: true
       },
       {
         name: "ci",
