@@ -113,10 +113,16 @@ module.exports = class extends Generator {
   }
 
   writing() {
+    let pythonMajorVersion = this.answers.pythonVersion
+      .split(".")
+      .slice(0, 2)
+      .join(".");
+    let pythonMajorVersionShortcut = pythonMajorVersion.replace(".", "");
+
     this.fs.copyTpl(
       this.templatePath("common"),
       this.destinationPath(),
-      this.answers,
+      { ...this.answers, pythonMajorVersion, pythonMajorVersionShortcut },
       {},
       { globOptions: { dot: true } }
     );
@@ -124,14 +130,6 @@ module.exports = class extends Generator {
     this.fs.copy(
       this.templatePath("gitignore/gitignore"),
       this.destinationPath(".gitignore")
-    );
-
-    this.fs.copyTpl(
-      this.templatePath("python_version/" + this.answers.pythonVersion),
-      this.destinationPath(),
-      this.answers,
-      {},
-      { globOptions: { dot: true } }
     );
 
     if (this.answers.ci !== null) {
