@@ -7,7 +7,7 @@ authors = [
 ]
 
 [tool.poetry.dependencies]
-python = "3.9.13"
+python = "<%= pythonVersion %>"
 
 [tool.poetry.dev-dependencies]
 isort = "^5"
@@ -17,6 +17,7 @@ pytest = "^7"
 pytest-cov = "^3"
 mypy = "^0"
 black = "^22"
+
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
@@ -37,7 +38,7 @@ precision = 2
 ## black
 
 [tool.black]
-target-version = ['py39']
+target-version = ['py<%= pythonMajorVersionShortcut %>']
 
 ## pylint
 
@@ -61,9 +62,9 @@ no-docstring-rgx = "^_|^test_|^Test[A-Z]" # no docstrings for tests
 [tool.isort]
 profile = "black"
 multi_line_output = 3
-py_version=39
+py_version=<%= pythonMajorVersionShortcut %>
 
 ## mypy
 
 [tool.mypy]
-python_version = "3.9"
+python_version = "<%= pythonMajorVersion %>"

@@ -3,19 +3,45 @@
 
 ![Demo GIF](./demo.gif)
 
-## Installation
+## Requirements
 
-- Install a stable version of [Node.js](https://nodejs.org/) (v16.x.x) if you don't have one
+### Pyenv
+
+Install [pyenv](https://github.com/pyenv/pyenv) to manage your Python versions and virtual environments:
+  ```bash
+  curl -sSL https://pyenv.run | bash
+  ```
+*If you are on MacOS and experiencing errors on python install with pyenv, follow this [comment](https://github.com/pyenv/pyenv/issues/1740#issuecomment-738749988)*
+
+### Poetry
+
+Install [Poetry](https://python-poetry.org) to manage your dependencies and tooling configs:
+  ```bash
+  curl -sSL https://install.python-poetry.org | python - --version 1.4.2
+  ```
+*If you have not previously installed any Python version, you may need to install one and set it as your default Python version before installing Poetry:*
+  ```bash
+  pyenv install 3.10.6 # or any recent version
+  pyenv global 3.10.6
+  ```
+
+### Node.js
+
+Install a stable version of [Node.js](https://nodejs.org/) (v16.x.x) if you don't have one.
+The Sicarator is indeed a [Yeoman](https://yeoman.io/) generator, which is a `Node.js` module.
     
-    For linux:
-    ```bash 
-    curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash -
-    sudo apt-get install -y nodejs
-    ```
-- Install [Yeoman](http://yeoman.io) and `Sicarator` via `npm`:
-    ```bash
-    npm install -g yo sicara/sicarator
-    ```
+For linux:
+  ```bash
+  curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash -
+  sudo apt-get install -y nodejs
+  ```
+
+### Yeoman
+
+Install [Yeoman](http://yeoman.io):
+  ```bash
+  npm install -g yo
+  ```
 
 ## Usage
 

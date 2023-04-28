@@ -41,9 +41,9 @@ module.exports = class extends Generator {
       },
       {
         name: "pythonVersion",
-        message: `Which python version do yo want to use?\n${chalk.yellow(
-          "/!\\"
-        )} Older versions are not recommended unless your project has some specific requirements.`,
+        message: `Which python version do yo want to use?
+💡 If the chosen version is not installed on your machine, it will be automatically installed by PyEnv.
+🚨️ Older versions are not recommended unless your project has some specific requirements.`,
         type: "list",
         default: "3.10.6",
         choices: [
@@ -113,10 +113,16 @@ module.exports = class extends Generator {
   }
 
   writing() {
+    let pythonMajorVersion = this.answers.pythonVersion
+      .split(".")
+      .slice(0, 2)
+      .join(".");
+    let pythonMajorVersionShortcut = pythonMajorVersion.replace(".", "");
+
     this.fs.copyTpl(
       this.templatePath("common"),
       this.destinationPath(),
-      this.answers,
+      { ...this.answers, pythonMajorVersion, pythonMajorVersionShortcut },
       {},
       { globOptions: { dot: true } }
     );
@@ -124,14 +130,6 @@ module.exports = class extends Generator {
     this.fs.copy(
       this.templatePath("gitignore/gitignore"),
       this.destinationPath(".gitignore")
-    );
-
-    this.fs.copyTpl(
-      this.templatePath("python_version/" + this.answers.pythonVersion),
-      this.destinationPath(),
-      this.answers,
-      {},
-      { globOptions: { dot: true } }
     );
 
     if (this.answers.ci !== null) {
@@ -147,6 +145,18 @@ module.exports = class extends Generator {
     if (this.answers.includeHelloWorld) {
       this.fs.copy(this.templatePath("hello_world"), this.destinationPath());
     }
+  }
+
+  install() {
+    if (this.answers.installPython) {
+      this.spawnCommandSync("pyenv", [
+        "install",
+        this.answers.pythonVersion,
+        "--skip-existing"
+      ]);
+    }
+
+    this.spawnCommandSync("poetry", ["lock"]);
   }
 
   end() {
