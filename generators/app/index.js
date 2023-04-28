@@ -158,7 +158,6 @@ module.exports = class extends Generator {
       ]);
     }
 
-    this.spawnCommandSync("pyenv", ["local", this.answers.pythonVersion]);
     this.spawnCommandSync("poetry", ["lock"]);
   }
 
