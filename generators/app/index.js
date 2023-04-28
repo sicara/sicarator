@@ -69,6 +69,7 @@ module.exports = class extends Generator {
         name: "installPython",
         message: "Do you want to install this python version using pyenv?",
         type: "confirm",
+        default: true,
         store: true
       },
       {
