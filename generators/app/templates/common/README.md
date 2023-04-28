@@ -24,11 +24,11 @@
   pyenv install <%= pythonVersion %>
   ```
 
-### Install poetry
+### Poetry
 
 - Install [Poetry](https://python-poetry.org) to manage your dependencies and tooling configs:
   ```bash
-  curl -sSL https://install.python-poetry.org | python - --version 1.2.2
+  curl -sSL https://install.python-poetry.org | python - --version 1.4.2
   ```
   *If you have not previously installed any Python version, you may need to set your global Python version before installing Poetry:*
     ```bash
