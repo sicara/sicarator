@@ -44,36 +44,11 @@ precision = 2
 [tool.black]
 target-version = ['py<%= pythonMajorVersionShortcut %>']
 
-## pylint
+## ruff
 
-<% if (includeApi) { %>
-[tool.pylint.MASTER]
-extension-pkg-whitelist = [
-    "pydantic"
-]
-<% } %>
-
-[tool.pylint.messages_control]
-disable = [
-    # already managed by isort:
-    "ungrouped-imports",
-    "wrong-import-order",
-    "wrong-import-position",
-]
-
-[tool.pylint.similarities]
-ignore-signatures="yes"
-ignore-imports="yes"
-
-[tool.pylint.basic]
-no-docstring-rgx = "^_|^test_|^Test[A-Z]" # no docstrings for tests
-
-## isort
-
-[tool.isort]
-profile = "black"
-multi_line_output = 3
-py_version=<%= pythonMajorVersionShortcut %>
+[tool.ruff]
+select = ["E", "F", "D4", "PT", "PL", "I"]
+ignore = []
 
 ## mypy
 
