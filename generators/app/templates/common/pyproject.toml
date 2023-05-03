@@ -68,7 +68,14 @@ py_version=<%= pythonMajorVersionShortcut %>
 
 [tool.mypy]
 python_version = "<%= pythonMajorVersion %>"
-strict = true # Enables all optional error checking flags, providing stricter type checking
-disallow_any_unimported = true # Disallows using types from unfollowed imports, forcing proper import handling
-check_untyped_defs = true # Type-checks the interiors of functions without type annotations
-explicit_package_bases = true # Makes __init__.py file optional for package definitions
+# Enable all optional error checking flags, providing stricter type checking; see https://mypy.readthedocs.io/en/stable/getting_started.html#strict-mode-and-configuration
+strict = true
+
+# Disallow using types from unfollowed imports, forcing proper import handling; if missing, types from unfollowed imports will be treated as 'Any'
+disallow_any_unimported = true
+
+# Type-check the interiors of functions without type annotations; if missing, mypy won't check function bodies without type hints, for instance those coming from third-party libraries
+check_untyped_defs = true
+
+# Make __init__.py file optional for package definitions; if missing, mypy requires __init__.py at packages roots, see https://mypy.readthedocs.io/en/stable/running_mypy.html#mapping-file-paths-to-modules
+explicit_package_bases = true
