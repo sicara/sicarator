@@ -15,7 +15,7 @@ pre-commit = "^2"
 pylint = "^2"
 pytest = "^7"
 pytest-cov = "^3"
-mypy = "^0"
+mypy = "^1.2"
 black = "^22"
 
 
@@ -68,3 +68,11 @@ py_version=<%= pythonMajorVersionShortcut %>
 
 [tool.mypy]
 python_version = "<%= pythonMajorVersion %>"
+# Enable all optional error checking flags, providing stricter type checking; see https://mypy.readthedocs.io/en/stable/getting_started.html#strict-mode-and-configuration
+strict = true
+
+# Type-check the interiors of functions without type annotations; if missing, mypy won't check function bodies without type hints, for instance those coming from third-party libraries
+check_untyped_defs = true
+
+# Make __init__.py file optional for package definitions; if missing, mypy requires __init__.py at packages roots, see https://mypy.readthedocs.io/en/stable/running_mypy.html#mapping-file-paths-to-modules
+explicit_package_bases = true
