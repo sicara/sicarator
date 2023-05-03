@@ -4,11 +4,11 @@ test:
 black:
 	poetry run black . --check
 
-lint:
-	poetry run pylint src tests
+ruff:
+	poetry run ruff check src tests
 
-isort:
-	poetry run isort . --check
+fix-ruff:
+	poetry run ruff check src tests --fix
 
 mypy:
 	poetry run mypy src
