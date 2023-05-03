@@ -14,7 +14,6 @@ loguru = "^0.7.0"
 <% } %>
 
 [tool.poetry.dev-dependencies]
-isort = "^5"
 pre-commit = "^2"
 ruff = "^0"
 pytest = "^7"
