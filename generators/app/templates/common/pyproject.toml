@@ -68,3 +68,9 @@ py_version=<%= pythonMajorVersionShortcut %>
 
 [tool.mypy]
 python_version = "<%= pythonMajorVersion %>"
+strict = True
+disallow_any_unimported = True
+check_untyped_defs = True
+warn_unused_ignores = True
+explicit_package_bases = True
+--explicit-package-bases --namespace-packages

@@ -11,4 +11,4 @@ isort:
 	poetry run isort . --check
 
 mypy:
-	poetry run mypy src --explicit-package-bases --namespace-packages
+	poetry run mypy src
