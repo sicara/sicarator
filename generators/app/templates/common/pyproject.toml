@@ -68,9 +68,7 @@ py_version=<%= pythonMajorVersionShortcut %>
 
 [tool.mypy]
 python_version = "<%= pythonMajorVersion %>"
-strict = True
-disallow_any_unimported = True
-check_untyped_defs = True
-warn_unused_ignores = True
-explicit_package_bases = True
---explicit-package-bases --namespace-packages
+strict = true # Enables all optional error checking flags, providing stricter type checking
+disallow_any_unimported = true # Disallows using types from unfollowed imports, forcing proper import handling
+check_untyped_defs = true # Type-checks the interiors of functions without type annotations
+explicit_package_bases = true # Makes __init__.py file optional for package definitions
