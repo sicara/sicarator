@@ -34,7 +34,7 @@ steps:
     displayName: "Run black"
 
   - script: make ruff
-    displayName: "Run linter (ruff)"
+    displayName: "Run ruff"
 
   - script: make mypy
     displayName: "Run mypy"

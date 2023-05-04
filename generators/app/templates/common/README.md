@@ -97,6 +97,10 @@ or
 make ruff
 ```
 
+To run static analysis and to apply auto-fixes, run `ruff` with:
+```bash
+make fix-ruff
+```
 ### Type checking with `mypy`
 
 To type check your code, run `mypy` with:
