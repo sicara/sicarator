@@ -46,13 +46,7 @@ target-version = ['py<%= pythonMajorVersionShortcut %>']
 ## ruff
 
 [tool.ruff]
-#"E" : pycodestyle issues, see https://beta.ruff.rs/docs/rules/#pycodestyle-e-w,
-#"F" : pyflakes issues, see https://beta.ruff.rs/docs/rules/#pyflakes-f,
-#"D4" : PyDocStyle Docstring Content issues, see https://beta.ruff.rs/docs/rules/#pydocstyle-d,
-#"PT" : Flake8 Pytest Style issues, see https://beta.ruff.rs/docs/rules/#flake8-pytest-style-pt,
-#"PL" : Pylint issues, see https://beta.ruff.rs/docs/rules/#pylint-pl,
-#"I" : isort issues, see https://beta.ruff.rs/docs/rules/#isort-i
-
+target-version = ['py<%= pythonMajorVersionShortcut %>']
 select = ["E", "F", "D4", "PT", "PL", "I"]
 
 ## mypy
