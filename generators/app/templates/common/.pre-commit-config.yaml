@@ -1,6 +1,6 @@
+default_install_hook_types:
 # Mandatory to install both pre-commit and pre-push hooks (see https://pre-commit.com/#top_level-default_install_hook_types)
 # Add new hook types here to ensure automatic installation when running `pre-commit install`
-default_install_hook_types:
 - pre-commit
 - pre-push
 repos:
