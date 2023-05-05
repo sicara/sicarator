@@ -5,11 +5,12 @@ import uuid
 from fastapi import FastAPI
 from loguru import logger
 
-from src.api.types import HelloWorldRouteInput, HelloWorldRouteOutput, HealthRouteOutput
+from src.api.types import HealthRouteOutput, HelloWorldRouteInput, HelloWorldRouteOutput
 
 # Remove pre-configured logging handler
 logger.remove(0)
-# Create a new logging handler same as the pre-configured one but with the extra attribute `request_id`
+# Create a new logging handler same as the pre-configured one but with the extra
+# attribute `request_id`
 logger.add(
     sys.stdout,
     level="INFO",

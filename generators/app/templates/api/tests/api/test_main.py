@@ -1,6 +1,6 @@
 """Tests for `api/main.py`."""
-from src.api.types import HelloWorldRouteInput, HelloWorldRouteOutput, HealthRouteOutput
-from src.api.main import hello_world, health_check_route
+from src.api.main import health_check_route, hello_world
+from src.api.types import HealthRouteOutput, HelloWorldRouteInput, HelloWorldRouteOutput
 
 
 def test_health_check_route() -> None:

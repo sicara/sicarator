@@ -1,4 +1,4 @@
-"""Tests for `hello_world.py`"""
+"""Tests for `hello_world.py`."""
 
 from unittest.mock import patch
 
