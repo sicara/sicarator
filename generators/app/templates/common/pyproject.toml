@@ -8,6 +8,10 @@ authors = [
 
 [tool.poetry.dependencies]
 python = "<%= pythonVersion %>"
+<% if (includeApi) { %>
+fastapi = {extras = ["all"], version = "^0.95.1"}
+loguru = "^0.7.0"
+<% } %>
 
 [tool.poetry.dev-dependencies]
 isort = "^5"
@@ -41,6 +45,13 @@ precision = 2
 target-version = ['py<%= pythonMajorVersionShortcut %>']
 
 ## pylint
+
+<% if (includeApi) { %>
+[tool.pylint.MASTER]
+extension-pkg-whitelist = [
+    "pydantic"
+]
+<% } %>
 
 [tool.pylint.messages_control]
 disable = [

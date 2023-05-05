@@ -12,3 +12,8 @@ isort:
 
 mypy:
 	poetry run mypy src
+
+<% if (includeApi) { %>
+start-api:
+	poetry run uvicorn src.api.main:app --reload
+<% } %>

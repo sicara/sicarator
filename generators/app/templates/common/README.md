@@ -118,3 +118,17 @@ or
 ```bash
 make mypy
 ```
+
+<% if (includeApi) { %>
+## API
+The **<%= projectName %>** project comes with a FastAPI, its code can be found at `src/api`!
+
+To start the API, run the `start-api` Make command:
+```bash
+make start-api
+```
+You can test the `hello_world` route by [importing the Postman collection](https://learning.postman.com/docs/getting-started/importing-and-exporting-data/#importing-postman-data) at `postman`.
+
+For more details on the API routes, check the automatically generated [swagger](https://learning.postman.com/docs/getting-started/importing-and-exporting-data/#importing-postman-data) at the `/docs` url!
+
+<% } %>
