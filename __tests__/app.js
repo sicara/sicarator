@@ -10,8 +10,7 @@ describe("generator-sicarator:app", () => {
       .withPrompts({
         projectName: "project-name",
         projectDescription: "Project Description",
-        pythonVersion: "3.9.13", // Python version depends on the docker image of CI
-        installPython: false
+        pythonVersion: "3.9.13" // Python version depends on the docker image of CI
       })
       .withLocalConfig({});
   });
