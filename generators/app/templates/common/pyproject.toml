@@ -42,8 +42,8 @@ precision = 2
 target-version = ['py<%= pythonMajorVersionShortcut %>']
 
 ## ruff
-## This is the first version of the ruff config. It is based on the 
-## Polars config. It will be updated as we go along. 
+## This is the first version of the ruff config. 
+## It will be updated as we go along. 
 [tool.ruff]
 target-version = ['py<%= pythonMajorVersionShortcut %>']
 
@@ -67,13 +67,14 @@ select = [
 ignore = [
     # Line length regulated by black
     "E501",
-    # pydocstyle: http://www.pydocstyle.org/en/stable/error_codes.html
     # flake8-pytest-style:
-    "PT011", # pytest.raises({exception}) is too broad, set the match parameter or use a more specific exception
+    ## PT011: pytest.raises() should specify expected exception -> we ignore this
+    ## because it would imply to update tests every time you update exception message 
+    "PT011",
     # flake8-simplify
-    "SIM102", # Use a single `if` statement instead of nested `if` statements
-    # ruff
-    "RUF005", # unpack-instead-of-concatenating-to-collection-literal
+    ## SIM102: Use a single `if` statement instead of nested `if` statements -> we ignore this
+    ## because it is too restrictive and we want to keep the code readable
+    "SIM102",
 ]
 
 [tool.ruff.pydocstyle]
