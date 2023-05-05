@@ -42,10 +42,10 @@ precision = 2
 target-version = ['py<%= pythonMajorVersionShortcut %>']
 
 ## ruff
-## This is the first version of the ruff config. 
-## It will be updated as we go along. 
+## This is the first version of the ruff config.
+## It will be updated as we go along.
 [tool.ruff]
-target-version = ['py<%= pythonMajorVersionShortcut %>']
+target-version = 'py<%= pythonMajorVersionShortcut %>'
 
 select = [
     "E",   # pycodestyle
@@ -69,7 +69,7 @@ ignore = [
     "E501",
     # flake8-pytest-style:
     ## PT011: pytest.raises() should specify expected exception -> we ignore this
-    ## because it would imply to update tests every time you update exception message 
+    ## because it would imply to update tests every time you update exception message
     "PT011",
     # flake8-simplify
     ## SIM102: Use a single `if` statement instead of nested `if` statements -> we ignore this
