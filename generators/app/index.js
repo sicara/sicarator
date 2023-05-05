@@ -148,13 +148,11 @@ module.exports = class extends Generator {
   }
 
   install() {
-    if (this.answers.installPython) {
-      this.spawnCommandSync("pyenv", [
-        "install",
-        this.answers.pythonVersion,
-        "--skip-existing"
-      ]);
-    }
+    this.spawnCommandSync("pyenv", [
+      "install",
+      this.answers.pythonVersion,
+      "--skip-existing"
+    ]);
 
     this.spawnCommandSync("poetry", ["lock"]);
   }
