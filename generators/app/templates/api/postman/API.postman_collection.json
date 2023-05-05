@@ -1,0 +1,34 @@
+{
+  "info": {
+    "_postman_id": "22b873bf-fe2d-4389-8dc2-d8c68aa58e20",
+    "name": "API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "26416788"
+  },
+  "item": [
+    {
+      "name": "Hello World",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"name\": \"<%= projectName %>\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://127.0.0.1:8000/hello-world",
+          "protocol": "http",
+          "host": ["127", "0", "0", "1"],
+          "port": "8000",
+          "path": ["hello-world"]
+        }
+      },
+      "response": []
+    }
+  ]
+}

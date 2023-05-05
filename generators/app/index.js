@@ -95,13 +95,33 @@ module.exports = class extends Generator {
         store: true
       },
       {
-        name: "includeHelloWorld",
-        message:
-          "Include 'hello world' function and unit test? (warning: if 'no', CI testing step will fail due to empty tests)",
+        name: "includeApi",
+        message: "Include an API? (it will be built with FastAPI)",
         type: "confirm",
-        default: true
+        default: false,
+        store: true
       }
     ]);
+    if (this.answers.includeApi) {
+      this.answers = {
+        ...this.answers,
+        includeHelloWorld: false
+      };
+    } else {
+      this.answers = {
+        ...this.answers,
+        ...(await this.prompt([
+          {
+            name: "includeHelloWorld",
+            message:
+              "Include 'hello world' function and unit test? (warning: if 'no', CI testing step will fail due to empty tests)",
+            type: "confirm",
+            default: true,
+            store: true
+          }
+        ]))
+      };
+    }
   }
 
   default() {
@@ -136,6 +156,16 @@ module.exports = class extends Generator {
       this.fs.copyTpl(
         this.templatePath(path.join("ci", this.answers.ci)),
         this.destinationPath(this.answers.ci),
+        this.answers,
+        {},
+        { globOptions: { dot: true } }
+      );
+    }
+
+    if (this.answers.includeApi) {
+      this.fs.copyTpl(
+        this.templatePath("api"),
+        this.destinationPath(),
         this.answers,
         {},
         { globOptions: { dot: true } }
