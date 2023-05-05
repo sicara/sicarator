@@ -2,9 +2,9 @@
 import sys
 import uuid
 
+from fastapi import FastAPI
 from loguru import logger
 
-from src.api.fastapi_app import app
 from src.api.types import HelloWorldRouteInput, HelloWorldRouteOutput, HealthRouteOutput
 
 # Remove pre-configured logging handler
@@ -20,6 +20,8 @@ logger.add(
         "ID: {extra[request_id]} - <level>{message}</level>"
     ),
 )
+
+app = FastAPI()
 
 
 @app.get("/health")
