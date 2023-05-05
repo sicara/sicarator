@@ -1,20 +1,31 @@
 {
   "info": {
-    "_postman_id": "2a4df656-3137-4800-9229-91556ba27a19",
+    "_postman_id": "22b873bf-fe2d-4389-8dc2-d8c68aa58e20",
     "name": "API",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "_exporter_id": "12548796"
+    "_exporter_id": "26416788"
   },
   "item": [
     {
-      "name": "call api",
+      "name": "Hello World",
       "request": {
-        "method": "GET",
+        "method": "POST",
         "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"name\": \"Sicarator\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
         "url": {
-          "raw": "localhost/dummy-route",
-          "host": ["localhost"],
-          "path": ["dummy-route"]
+          "raw": "http://127.0.0.1:8000/hello-world",
+          "protocol": "http",
+          "host": ["127", "0", "0", "1"],
+          "port": "8000",
+          "path": ["hello-world"]
         }
       },
       "response": []
