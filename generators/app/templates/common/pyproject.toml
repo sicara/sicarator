@@ -42,8 +42,7 @@ precision = 2
 target-version = ['py<%= pythonMajorVersionShortcut %>']
 
 ## ruff
-## This is the first version of the ruff config.
-## It will be updated as we go along.
+# Recommended ruff config for now, to be updated as we go along.
 [tool.ruff]
 target-version = 'py<%= pythonMajorVersionShortcut %>'
 
@@ -66,21 +65,16 @@ select = [
 ]
 
 ignore = [
-    # Line length regulated by black
-    "E501",
-    # flake8-pytest-style:
-    ## PT011: pytest.raises() should specify expected exception -> we ignore this
-    ## because it would imply to update tests every time you update exception message
-    "PT011",
-    # flake8-simplify
-    ## SIM102: Use a single `if` statement instead of nested `if` statements -> we ignore this
-    ## because it is too restrictive and we want to keep the code readable
-    "SIM102",
+    "E501", # "Line too long"
+    # -> line length already regulated by black
+    "PT011", # "pytest.raises() should specify expected exception"
+    # -> would imply to update tests every time you update exception message
+    "SIM102", # "Use a single `if` statement instead of nested `if` statements"
+    # -> too restrictive
 ]
 
 [tool.ruff.pydocstyle]
-## Automatically disable rules that are incompatible with google
-## convention
+# Automatically disable rules that are incompatible with Google docstring convention
 convention = "google"
 
 [tool.ruff.pycodestyle]
@@ -93,6 +87,7 @@ ban-relative-imports = "all"
 strict = true
 
 [tool.ruff.per-file-ignores]
+# Allow missing docstrings for tests
 "tests/**/*.py" = ["D100", "D103", "B018"]
 
 ## mypy
