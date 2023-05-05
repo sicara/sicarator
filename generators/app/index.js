@@ -163,7 +163,13 @@ module.exports = class extends Generator {
     }
 
     if (this.answers.includeApi) {
-      this.fs.copy(this.templatePath("api"), this.destinationPath());
+      this.fs.copyTpl(
+        this.templatePath("api"),
+        this.destinationPath(),
+        this.answers,
+        {},
+        { globOptions: { dot: true } }
+      );
     }
 
     if (this.answers.includeHelloWorld) {

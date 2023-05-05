@@ -13,7 +13,7 @@
         "header": [],
         "body": {
           "mode": "raw",
-          "raw": "{\n    \"name\": \"Sicarator\"\n}",
+          "raw": "{\n    \"name\": \"<%= projectName %>\"\n}",
           "options": {
             "raw": {
               "language": "json"

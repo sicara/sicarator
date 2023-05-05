@@ -1,4 +1,4 @@
-"""Tests for `api/main.py`"""
+"""Tests for `api/main.py`."""
 from src.api.types import HelloWorldRouteInput, HelloWorldRouteOutput, HealthRouteOutput
 from src.api.main import hello_world, health_check_route
 
@@ -9,6 +9,6 @@ def test_health_check_route() -> None:
 
 def test_hello_world() -> None:
     assert (
-        hello_world(HelloWorldRouteInput(name="Sicarator"))
-        == HelloWorldRouteOutput(message="Hello, Sicarator!")
+        hello_world(HelloWorldRouteInput(name="<%= projectName %>"))
+        == HelloWorldRouteOutput(message="Hello, <%= projectName %>!")
     )

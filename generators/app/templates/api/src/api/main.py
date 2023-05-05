@@ -1,4 +1,4 @@
-"""Logger configuration and main API routes."""
+"""FastAPI app creation, logger configuration and main API routes."""
 import sys
 import uuid
 
