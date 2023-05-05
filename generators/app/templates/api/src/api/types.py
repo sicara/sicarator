@@ -1,6 +1,20 @@
-from pydantic import BaseModel  # pylint:disable=no-name-in-module # false positive
+"""Types for the API."""
+from pydantic import BaseModel
 
 
-class ExampleAPIInput(BaseModel):
-    dummy: str
+class HealthRouteOutput(BaseModel):
+    """Model for the health route output."""
 
+    status: str
+
+
+class HelloWorldRouteInput(BaseModel):
+    """Model for the hello world route input."""
+
+    name: str
+
+
+class HelloWorldRouteOutput(BaseModel):
+    """Model for the hello world route output."""
+
+    message: str
