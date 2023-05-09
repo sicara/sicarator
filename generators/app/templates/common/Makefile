@@ -16,4 +16,10 @@ mypy:
 <% if (includeApi) { %>
 start-api:
 	poetry run uvicorn src.api.main:app --reload
+
+build-api-image:
+	docker build -t <%= projectName %>_api .
+
+start-api-image:
+	docker run -d -p 8000:8000 <%= projectName %>_api
 <% } %>
