@@ -17,7 +17,8 @@ const HELLO_WORLD_FILES_PATHS = [
 const API_FILES_PATHS = [
   "src/api/main.py",
   "src/api/types.py",
-  "tests/api/test_main.py"
+  "tests/api/test_main.py",
+  "Dockerfile"
 ];
 
 describe("generator-sicarator:app", () => {
