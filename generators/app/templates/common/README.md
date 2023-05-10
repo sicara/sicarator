@@ -126,22 +126,16 @@ make mypy
 
 <% if (includeApi) { %>
 ## API
-The **<%= projectName %>** project includes an API built with [FastAPI](https://fastapi.tiangolo.com/). Its code can be found at `src/api`!
+The **<%= projectName %>** project includes an API built with [FastAPI](https://fastapi.tiangolo.com/). Its code can be found at `src/api`.
 
-To start the API, run the `start-api` Makefile command:
+The API is containerized using a [Docker](https://docs.docker.com/get-started/) image, built from the `Dockerfile` at the root.
+
+To build and start the image, use the following Makefile commands:
 ```bash
+make build-api-image
 make start-api
 ```
 You can test the `hello_world` route by [importing the Postman collection](https://learning.postman.com/docs/getting-started/importing-and-exporting-data/#importing-postman-data) at `postman`.
 
 For more details on the API routes, check the automatically generated [swagger](https://learning.postman.com/docs/getting-started/importing-and-exporting-data/#importing-postman-data) at the `/docs` url.
-
-### API Docker Image
-The API is also available in a [Docker](https://docs.docker.com/get-started/) image using the Dockerfile at the root.
-To build and start the image, use the following Makefile commands:
-```bash
-make build-api-image
-make start-api-image
-```
-You can test your image by using the same Postman collection above at `postman`.
 <% } %>
