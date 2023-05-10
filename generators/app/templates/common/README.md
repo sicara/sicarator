@@ -35,6 +35,11 @@
     pyenv global <%= pythonVersion %>
     ```
 
+<% if (includeApi) { %>
+### Docker Engine
+Install [Docker Engine](https://docs.docker.com/engine/install/) to build and run the API's Docker image locally.
+<% } %>
+
 ## Installation
 
 ### Create a virtual environment
@@ -131,4 +136,12 @@ You can test the `hello_world` route by [importing the Postman collection](https
 
 For more details on the API routes, check the automatically generated [swagger](https://learning.postman.com/docs/getting-started/importing-and-exporting-data/#importing-postman-data) at the `/docs` url.
 
+### API Docker Image
+The API is also available in a [Docker](https://docs.docker.com/get-started/) image using the Dockerfile at the root.
+To build and start the image, use the following Makefile commands:
+```bash
+make build-api-image
+make start-api-image
+```
+You can test your image by using the same Postman collection above at `postman`.
 <% } %>
