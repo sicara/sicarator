@@ -18,6 +18,9 @@ FROM python:<%= pythonVersion %>-slim-buster
 
 WORKDIR /code
 
+# Install curl for healthcheck
+RUN apt-get -y update; apt-get -y install curl
+
 # Install dependencies with pip from exported requirements.txt
 COPY --from=requirements-stage /tmp/requirements.txt /code/requirements.txt
 RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
@@ -30,7 +33,7 @@ RUN useradd appuser
 USER appuser
 
 # Start FastAPI
-CMD ["uvicorn", "src.api.main:app", "--host", "0.0.0.0", "--port", "80"]
+CMD ["uvicorn", "src.api.main:app", "--host", "0.0.0.0"]
 
 # Healthcheck
-HEALTHCHECK CMD http://localhost/health
+HEALTHCHECK --interval=10s --timeout=1s --retries=3 CMD curl --fail http://localhost/health || exit 1

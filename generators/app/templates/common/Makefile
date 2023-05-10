@@ -14,9 +14,6 @@ mypy:
 	poetry run mypy src
 
 <% if (includeApi) { %>
-build-api-image:
-	docker build -t <%= projectName %>_api .
-
 start-api:
-	docker run -d -p 8000:80 <%= projectName %>_api
+	docker compose up -d
 <% } %>

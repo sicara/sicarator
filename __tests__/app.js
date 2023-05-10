@@ -18,7 +18,8 @@ const API_FILES_PATHS = [
   "src/api/main.py",
   "src/api/types.py",
   "tests/api/test_main.py",
-  "Dockerfile"
+  "Dockerfile",
+  "docker-compose.yml"
 ];
 
 describe("generator-sicarator:app", () => {
@@ -29,7 +30,9 @@ describe("generator-sicarator:app", () => {
         .withPrompts({
           projectName: "project-name",
           projectDescription: "Project Description",
-          pythonVersion: "3.9.13" // Python version depends on the docker image of CI
+          pythonVersion: "3.9.13", // Python version depends on the docker image of CI
+          includeApi: false,
+          includeHelloWorld: true
         })
         .withLocalConfig({});
     });
