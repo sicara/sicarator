@@ -86,28 +86,21 @@ make black
 You can also [integrate it to your IDE](https://black.readthedocs.io/en/stable/integrations/editors.html) to reformat
 your code each time you save a file.
 
-### Static analysis with `pylint`
+### Static analysis with `ruff`
 
-To run static analysis, run `pylint` with:
+To run static analysis, run `ruff` with:
 ```bash
-pylint src tests
+ruff check src tests
 ```
 or
 ```bash
-make lint
+make ruff
 ```
 
-### Order imports with `isort`
-
-To check the imports order, run `isort` with:
+To run static analysis and to apply auto-fixes, run `ruff` with:
 ```bash
-isort . --check
+make fix-ruff
 ```
-or
-```bash
-make isort
-```
-
 ### Type checking with `mypy`
 
 To type check your code, run `mypy` with:

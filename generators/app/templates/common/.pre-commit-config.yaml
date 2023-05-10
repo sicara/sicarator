@@ -19,15 +19,9 @@ repos:
     language: system
     types: [python]
     stages: [commit]
-  - id: isort
-    name: Ordering imports (isort)
-    entry: isort
-    language: system
-    types: [python]
-    stages: [commit]
-  - id: lint
-    name: Linter (pylint)
-    entry: pylint
+  - id: ruff
+    name: Linter (ruff)
+    entry: ruff
     language: system
     types: [python]
     stages: [commit]

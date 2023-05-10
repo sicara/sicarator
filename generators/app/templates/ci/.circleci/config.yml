@@ -69,21 +69,13 @@ jobs:
           name: run black
           command: make black
 
-  lint:
+  ruff:
     executor: base-python
     steps:
       - get_code_and_cache
       - run:
-          name: run pylint
-          command: make lint
-
-  isort:
-    executor: base-python
-    steps:
-      - get_code_and_cache
-      - run:
-          name: run isort
-          command: make isort
+          name: run ruff
+          command: make ruff
 
   mypy:
     executor: base-python
@@ -101,13 +93,10 @@ workflows:
       - test:
           requires:
             - install
-      - lint:
+      - ruff:
           requires:
             - install
       - black:
-          requires:
-            - install
-      - isort:
           requires:
             - install
       - mypy:

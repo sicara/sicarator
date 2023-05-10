@@ -24,8 +24,7 @@ jobs:
       matrix:
         quality-command:
           - black
-          - lint
-          - isort
+          - ruff
           - mypy
     steps:
       - uses: actions/checkout@v3

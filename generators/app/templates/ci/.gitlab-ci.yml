@@ -42,15 +42,10 @@ black:
   script:
     - make black
 
-isort:
+ruff:
   extends: .job_template
   script:
-    - make isort
-
-lint:
-  extends: .job_template
-  script:
-    - make lint
+    - make ruff
 
 mypy:
   extends: .job_template

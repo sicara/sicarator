@@ -33,11 +33,8 @@ steps:
   - script: make black
     displayName: "Run black"
 
-  - script: make isort
-    displayName: "Run isort"
-
-  - script: make lint
-    displayName: "Run linter"
+  - script: make ruff
+    displayName: "Run ruff"
 
   - script: make mypy
     displayName: "Run mypy"
