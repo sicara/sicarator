@@ -4,6 +4,7 @@ const chalk = require("chalk");
 const yosay = require("yosay");
 const path = require("path");
 const mkdirp = require("mkdirp");
+const slugify = require("slugify");
 
 module.exports = class extends Generator {
   async prompting() {
@@ -106,11 +107,22 @@ module.exports = class extends Generator {
     if (this.answers.includeApi) {
       this.answers = {
         ...this.answers,
-        includeHelloWorld: false
+        includeHelloWorld: false,
+        ...(await this.prompt([
+          {
+            name: "includeAWSTerraformCodeForApi",
+            message:
+              "Include Terraform code to deploy API on AWS (stack main components: ESG, ECS, EC2)?",
+            type: "confirm",
+            default: false,
+            store: true
+          }
+        ]))
       };
     } else {
       this.answers = {
         ...this.answers,
+        includeAWSTerraformCodeForApi: false,
         ...(await this.prompt([
           {
             name: "includeHelloWorld",
@@ -119,6 +131,29 @@ module.exports = class extends Generator {
             type: "confirm",
             default: true,
             store: true
+          }
+        ]))
+      };
+    }
+
+    if (this.answers.includeAWSTerraformCodeForApi) {
+      this.answers = {
+        ...this.answers,
+        ...(await this.prompt([
+          {
+            name: "terraformBackendBucketName",
+            message:
+              "What is the name of the S3 bucket that will be used to store Terraform state? (you can create it later)",
+            default: `${slugify(this.answers.projectName, {
+              lower: true
+            })}-terraform-state`
+          },
+          {
+            name: "terraformAwsRegion",
+            message:
+              "In which AWS region do you want to deploy your infrastructure?",
+            store: true,
+            default: "eu-west-3"
           }
         ]))
       };
@@ -171,6 +206,15 @@ module.exports = class extends Generator {
         {},
         { globOptions: { dot: true } }
       );
+      if (this.answers.includeAWSTerraformCodeForApi) {
+        this.fs.copyTpl(
+          this.templatePath("terraform"),
+          this.destinationPath(),
+          this.answers,
+          {},
+          { globOptions: { dot: true } }
+        );
+      }
     }
 
     if (this.answers.includeHelloWorld) {

@@ -1,6 +1,6 @@
 # API infrastructure
 
-Terraform code for the infrastructure of the API
+Terraform code for the infrastructure of the API of <%= projectName %>
 
 ### Setup
 - [Install terraform](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli)

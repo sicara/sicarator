@@ -15,7 +15,7 @@ variable "aws_region" {
 variable "backend_bucket_name" {
   description = "Name of the backend bucket"
   type        = string
-  default     = "XXXXXXXXXXX"
+  default     = "<%= terraformBackendBucketName %>"
 }
 
 variable "api_name" {
