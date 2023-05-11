@@ -145,15 +145,21 @@ module.exports = class extends Generator {
             message:
               "What is the name of the S3 bucket that will be used to store Terraform state? (you can create it later)",
             default: `${slugify(this.answers.projectName, {
-              lower: true
+              lower: true,
+              strict: "_" // Removes "_"
             })}-terraform-state`
           },
           {
-            name: "terraformAwsRegion",
+            name: "AwsRegion",
             message:
               "In which AWS region do you want to deploy your infrastructure?",
             store: true,
             default: "eu-west-3"
+          },
+          {
+            name: "AwsAccountId",
+            message: "What is the id of your AWS account?",
+            store: true
           }
         ]))
       };
@@ -209,7 +215,7 @@ module.exports = class extends Generator {
       if (this.answers.includeAWSTerraformCodeForApi) {
         this.fs.copyTpl(
           this.templatePath("terraform"),
-          this.destinationPath(),
+          this.destinationPath("terraform"),
           this.answers,
           {},
           { globOptions: { dot: true } }

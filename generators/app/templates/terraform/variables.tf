@@ -9,7 +9,7 @@ variable "additional_tags" {
 variable "aws_region" {
   description = "Region in which the resources are deployed"
   type        = string
-  default     = "<%= terraformAwsRegion %>"
+  default     = "<%= AwsRegion %>"
 }
 
 variable "api_name" {

@@ -58,6 +58,26 @@ Now, every time you are in your project directory your virtualenv will be activa
 poetry install --no-root
 ```
 
+<% if (includeAWSTerraformCodeForApi) { %>
+### Setup AWS for your project
+Setup your AWS account locally to be able to access the different resources locally:
+- if you are managing only this aws account in your computer
+  - Run `aws configure` and specify your ACCESS_KEY_ID and SECRET_ACCESS_KEY
+- if you are managing several aws accounts in your computer
+  - Modify your local file located in `~/.aws/credentials` and add:
+  - ```bash
+    [<%= projectName %>]
+    aws_access_key_id=XXXXXX
+    aws_secret_access_key=XXXXXXXX
+    region=ca-central-1
+    ```
+  - [Optional] In your IDE, modify the default terminal env variables of your project to add AWS_PROFILE=<%= projectName %>.
+  This allows you to use the right aws profile when calling python files.
+
+### Install the terraform project
+Go to `terraform/README.md`
+<% } %>
+
 ### Install git hooks (running before commit and push commands)
 
 ```bash
@@ -130,4 +150,16 @@ make start-api
 You can test the `hello_world` route by [importing the Postman collection](https://learning.postman.com/docs/getting-started/importing-and-exporting-data/#importing-postman-data) at `postman`.
 
 For more details on the API routes, check the automatically generated [swagger](https://learning.postman.com/docs/getting-started/importing-and-exporting-data/#importing-postman-data) at the `/docs` url.
+<% } %>
+
+<% if (includeAWSTerraformCodeForApi) { %>
+### Deploy the API to AWS
+To deploy the API run (depending on your computer's architecture):
+```bash
+make build_and_push_image_from_amd
+```
+or
+```bash
+make build_and_push_image_from_arm
+```
 <% } %>

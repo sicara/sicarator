@@ -19,7 +19,6 @@ resource "aws_ecs_task_definition" "this" {
           protocol      = "tcp"
         }
       ]
-      taskRoleArn = aws_iam_role.ecs_task_role.arn
       logConfiguration = {
         logDriver = "awslogs"
         options = {
