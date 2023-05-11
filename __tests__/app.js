@@ -3,6 +3,8 @@ const path = require("path");
 const assert = require("yeoman-assert");
 const helpers = require("yeoman-test");
 
+jest.setTimeout(60000); // 1 minute timeout for poetry lock command
+
 const COMMON_FILES_PATHS = [
   "README.md",
   ".gitignore",
