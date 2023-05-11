@@ -3,6 +3,14 @@ FROM python:<%= pythonVersion %>-slim-buster as requirements-stage
 
 WORKDIR /tmp
 
+ENV \
+    # Prevent Python from buffering stdout and stderr and loosing some logs (equivalent to python -u option)
+    PYTHONUNBUFFERED=1 \
+    # Prevent Pip from timing out when installing heavy dependencies
+    PIP_DEFAULT_TIMEOUT=600 \
+    # Prevent Pip from creating a cache directory to reduce image size
+    PIP_NO_CACHE_DIR=1
+
 # Install curl, poetry
 RUN apt-get -y update; apt-get -y install curl
 RUN curl -sSL https://install.python-poetry.org | POETRY_VERSION=1.2.2 python3 -
