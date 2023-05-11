@@ -11,9 +11,10 @@ ENV \
     # Prevent Pip from creating a cache directory to reduce image size
     PIP_NO_CACHE_DIR=1
 
-# Install curl, poetry
-RUN apt-get -y update; apt-get -y install curl
+# Install curl, poetry ; remove apt cache to reduce image size
+RUN apt-get -y update && apt-get -y install curl  && rm -rf /var/lib/apt/lists/*
 RUN curl -sSL https://install.python-poetry.org | POETRY_VERSION=1.2.2 python3 -
+
 ENV HOME /root
 ENV PATH=${PATH}:$HOME/.local/bin
 
@@ -26,8 +27,8 @@ FROM python:<%= pythonVersion %>-slim-buster
 
 WORKDIR /code
 
-# Install curl for healthcheck
-RUN apt-get -y update; apt-get -y install curl
+# Install curl for healthcheck ; remove apt cache to reduce image size
+RUN apt-get -y update && apt-get -y install curl && rm -rf /var/lib/apt/lists/*
 
 # Install dependencies with pip from exported requirements.txt
 COPY --from=requirements-stage /tmp/requirements.txt /code/requirements.txt
