@@ -15,5 +15,5 @@ mypy:
 
 <% if (includeApi) { %>
 start-api:
-	poetry run uvicorn src.api.main:app --reload
+	docker compose up -d
 <% } %>

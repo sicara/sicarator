@@ -96,7 +96,8 @@ module.exports = class extends Generator {
       },
       {
         name: "includeApi",
-        message: "Include an API? (it will be built with FastAPI)",
+        message:
+          "Include an API? (it will be built with FastAPI and containerized with Docker)",
         type: "confirm",
         default: false,
         store: true

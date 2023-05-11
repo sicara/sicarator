@@ -35,6 +35,11 @@
     pyenv global <%= pythonVersion %>
     ```
 
+<% if (includeApi) { %>
+### Docker Engine
+Install [Docker Engine](https://docs.docker.com/engine/install/) to build and run the API's Docker image locally.
+<% } %>
+
 ## Installation
 
 ### Create a virtual environment
@@ -114,14 +119,15 @@ make mypy
 
 <% if (includeApi) { %>
 ## API
-The **<%= projectName %>** project includes an API built with [FastAPI](https://fastapi.tiangolo.com/). Its code can be found at `src/api`!
+The **<%= projectName %>** project includes an API built with [FastAPI](https://fastapi.tiangolo.com/). Its code can be found at `src/api`.
 
-To start the API, run the `start-api` Makefile command:
+The API is containerized using a [Docker](https://docs.docker.com/get-started/) image, built from the `Dockerfile` and `docker-compose.yml` at the root.
+
+To build and start the API, use the following Makefile command:
 ```bash
 make start-api
 ```
 You can test the `hello_world` route by [importing the Postman collection](https://learning.postman.com/docs/getting-started/importing-and-exporting-data/#importing-postman-data) at `postman`.
 
 For more details on the API routes, check the automatically generated [swagger](https://learning.postman.com/docs/getting-started/importing-and-exporting-data/#importing-postman-data) at the `/docs` url.
-
 <% } %>
