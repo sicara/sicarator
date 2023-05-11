@@ -5,6 +5,8 @@ resource "aws_ecs_cluster" "this" {
 resource "aws_ecs_task_definition" "this" {
   family                   = "${terraform.workspace}_${var.api_name}_task_def"
   requires_compatibilities = ["EC2"]
+
+  # Configuration of the container containing the API
   container_definitions = jsonencode([
     {
       name   = "${terraform.workspace}_${var.api_name}_container"
@@ -17,15 +19,15 @@ resource "aws_ecs_task_definition" "this" {
           protocol      = "tcp"
         }
       ]
+      taskRoleArn = aws_iam_role.ecs_task_role.arn
       logConfiguration = {
         logDriver = "awslogs"
         options = {
           awslogs-region = var.aws_region
           awslogs-group  = aws_cloudwatch_log_group.this.name
         }
-        taskRoleArn = aws_iam_role.ecs_task_role.arn
-
-  } }])
+  }
+    }])
 }
 
 resource "aws_ecs_service" "this" {
@@ -46,6 +48,8 @@ resource "aws_ecs_service" "this" {
     weight            = 100
   }
 
+  # Allows to double the number of running tasks that can be running in a service during a deployment, in order
+  # to launch the new API version in a new task (to allow rolling deployment)
   deployment_maximum_percent = 200
 
   depends_on = [aws_lb_listener.this]

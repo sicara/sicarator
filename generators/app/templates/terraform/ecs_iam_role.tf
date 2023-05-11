@@ -22,6 +22,7 @@ resource "aws_iam_instance_profile" "ec2_for_ecs_profile" {
 
 }
 
+# Add policy to access ECS and ECR
 resource "aws_iam_role_policy_attachment" "attach_container_permissions_to_ec2_for_ecs_role" {
   role       = aws_iam_role.ec2_for_ecs_role.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"

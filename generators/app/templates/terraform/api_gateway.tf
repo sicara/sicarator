@@ -5,17 +5,11 @@ module "api_gateway" {
   protocol_type          = "HTTP"
   create_api_domain_name = false
 
-  # TODO: CORS are currently too permissive. They should be restricted according to the application's usage
-  cors_configuration = {
-    allow_headers = ["content-type", "x-amz-date", "authorization", "x-api-key", "x-amz-security-token", "x-amz-user-agent"]
-    allow_methods = ["OPTIONS", "GET", "POST"]
-    allow_origins = ["*"]
-  }
-
+  # Integration for the ALB which is used a proxy
   integrations = {
     "ANY /{proxy+}" = {
       connection_type    = "VPC_LINK"
-      vpc_link           = "http_communication_inside_vpc_link"
+      vpc_link           = "${terraform.workspace}_${var.api_name}_http_communication_inside_vpc_link"
       integration_uri    = aws_lb_listener.this.arn
       integration_type   = "HTTP_PROXY"
       integration_method = "ANY"

@@ -9,13 +9,7 @@ variable "additional_tags" {
 variable "aws_region" {
   description = "Region in which the resources are deployed"
   type        = string
-  default     = "eu-west-3"
-}
-
-variable "backend_bucket_name" {
-  description = "Name of the backend bucket"
-  type        = string
-  default     = "<%= terraformBackendBucketName %>"
+  default     = "<%= terraformAwsRegion %>"
 }
 
 variable "api_name" {

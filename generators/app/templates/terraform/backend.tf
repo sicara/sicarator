@@ -1,7 +1,7 @@
 terraform {
   backend "s3" {
-    bucket  = var.backend_bucket_name
-    region  = "eu-west-3"
+    bucket  = "<%= terraformBackendBucketName %>"
+    region  = "<%= terraformAwsRegion %>"
     key     = "state.tfstate"
     encrypt = true
   }
