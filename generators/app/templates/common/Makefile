@@ -19,27 +19,35 @@ start-api:
 <% } %>
 
 <% if (includeAWSTerraformCodeForApi) { %>
-# Deployment
-AWS_ACCOUNT_ID=<%= AwsAccountId %>
-ECR_REPOSITORY_NAME=dev_api_image
+## DEPLOYMENT ##
+AWS_ACCOUNT_ADDRESS=<%= AwsAccountId %>.dkr.ecr.<%= AwsRegion %>.amazonaws.com
 AWS_REGION=<%= AwsRegion %>
+ECR_REPOSITORY_NAME=dev_api_image
+ECS_CLUSTER_NAME=dev_api_cluster
+ECS_SERVICE_NAME=dev_api_service
 
 ecr_login:
-	aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}
+	aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ADDRESS}
 
 build_api_image:
 	docker build . -t api
 
 tag_and_push_image_to_ecr:
-	docker tag api ${AWS_ACCOUNT_ID}/${ECR_REPOSITORY_NAME}:latest
-	docker push ${AWS_ACCOUNT_ID}/${ECR_REPOSITORY_NAME}:latest
+	docker tag api ${AWS_ACCOUNT_ADDRESS}/${ECR_REPOSITORY_NAME}:latest
+	docker push ${AWS_ACCOUNT_ADDRESS}/${ECR_REPOSITORY_NAME}:latest
 
-build_and_push_image_from_amd:
+# Redeployment of ECS service to take into account the new image
+redeploy_ecs_service:
+	aws ecs update-service --cluster ${ECS_CLUSTER_NAME} --service ${ECS_SERVICE_NAME} --force-new-deployment
+
+deploy_image_on_api_from_amd:
 	make ecr_login
 	make build_model_api_image
 	make tag_and_push_image_to_ecr
+	make redeploy_ecs_service
 
-build_and_push_image_from_arm:
+deploy_image_on_api_from_arm:
 	make ecr_login
-	docker buildx build --platform linux/amd64 --push -t ${AWS_ACCOUNT_ID}/${ECR_REPOSITORY_NAME}:latest .
+	docker buildx build --platform linux/amd64 --push -t ${AWS_ACCOUNT_ADDRESS}/${ECR_REPOSITORY_NAME}:latest .
+	make redeploy_ecs_service
 <% } %>

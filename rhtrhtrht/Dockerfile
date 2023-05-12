@@ -1,5 +1,5 @@
 # Docker multi-stage building, as recommended by https://fastapi.tiangolo.com/deployment/docker/#docker-image-with-poetry
-FROM python:<%= pythonVersion %>-slim-buster as requirements-stage
+FROM python:3.9.13-slim-buster as requirements-stage
 
 WORKDIR /tmp
 
@@ -14,7 +14,7 @@ COPY ./pyproject.toml ./poetry.lock* /tmp/
 RUN poetry export -f requirements.txt --output requirements.txt --without-hashes --no-interaction --no-cache --only=main
 
 
-FROM python:<%= pythonVersion %>-slim-buster
+FROM python:3.9.13-slim-buster
 
 WORKDIR /code
 
@@ -35,5 +35,5 @@ USER appuser
 # Start FastAPI
 CMD uvicorn src.api.main:app --host 0.0.0.0 --port 80
 
-# Healthcheck
+## Healthcheck
 HEALTHCHECK --interval=10s --timeout=1s --retries=3 CMD curl --fail http://localhost/health || exit 1

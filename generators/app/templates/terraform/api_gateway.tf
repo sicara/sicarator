@@ -9,7 +9,7 @@ module "api_gateway" {
   integrations = {
     "ANY /{proxy+}" = {
       connection_type    = "VPC_LINK"
-      vpc_link           = "${terraform.workspace}_${var.api_name}_http_communication_inside_vpc_link"
+      vpc_link           = "http_communication_inside_vpc_link"
       integration_uri    = aws_lb_listener.this.arn
       integration_type   = "HTTP_PROXY"
       integration_method = "ANY"

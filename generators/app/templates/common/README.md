@@ -69,7 +69,7 @@ Setup your AWS account locally to be able to access the different resources loca
     [<%= projectName %>]
     aws_access_key_id=XXXXXX
     aws_secret_access_key=XXXXXXXX
-    region=ca-central-1
+    region=<%= AwsRegion %>
     ```
   - [Optional] In your IDE, modify the default terminal env variables of your project to add AWS_PROFILE=<%= projectName %>.
   This allows you to use the right aws profile when calling python files.
@@ -156,10 +156,10 @@ For more details on the API routes, check the automatically generated [swagger](
 ### Deploy the API to AWS
 To deploy the API run (depending on your computer's architecture):
 ```bash
-make build_and_push_image_from_amd
+make deploy_image_on_api_from_amd
 ```
 or
 ```bash
-make build_and_push_image_from_arm
+make deploy_image_on_api_from_arm
 ```
 <% } %>
