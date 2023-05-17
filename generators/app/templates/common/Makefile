@@ -20,8 +20,8 @@ start-api:
 
 <% if (includeAWSTerraformCodeForApi) { %>
 ## DEPLOYMENT ##
-AWS_ACCOUNT_ADDRESS=<%= AwsAccountId %>.dkr.ecr.<%= AwsRegion %>.amazonaws.com
-AWS_REGION=<%= AwsRegion %>
+AWS_ACCOUNT_ADDRESS=<%= AwsAccountId %>.dkr.ecr.<%= awsRegion %>.amazonaws.com
+AWS_REGION=<%= awsRegion %>
 ECR_REPOSITORY_NAME=dev_api_image
 ECS_CLUSTER_NAME=dev_api_cluster
 ECS_SERVICE_NAME=dev_api_service

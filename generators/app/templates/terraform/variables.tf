@@ -9,7 +9,7 @@ variable "additional_tags" {
 variable "aws_region" {
   description = "Region in which the resources are deployed"
   type        = string
-  default     = "<%= AwsRegion %>"
+  default     = "<%= awsRegion %>"
 }
 
 variable "api_name" {
@@ -28,4 +28,10 @@ variable "ec2_memory_reserved" {
   description = "The amount of memory (in MiB) to reserve for the api container inside the EC2. Warning: you must select a value below the RAM capacity of the chosen instance"
   type        = number
   default     = 3500
+}
+
+variable "enable_nat_gateway" {
+  description = "Should be true if you want to provision NAT Gateways for your VPC to allow your EC2 instance to access the public internet"
+  type        = bool
+  default     = "<%= enableNatGateway %>"
 }

@@ -5,6 +5,7 @@ module "vpc" {
   vpc_availability_zone = ["${var.aws_region}a", "${var.aws_region}b"]
   vpc_cidr              = "172.16.0.0/24"
   public_subnet_cidr    = ["172.16.0.0/25"]
+  enable_nat_gateway = var.enable_nat_gateway
   private_subnet_cidr   = ["172.16.0.128/26", "172.16.0.192/26"]
   tags                  = var.additional_tags
 }

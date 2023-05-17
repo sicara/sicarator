@@ -69,7 +69,7 @@ Setup your AWS account locally to be able to access the different resources loca
     [<%= projectName %>]
     aws_access_key_id=XXXXXX
     aws_secret_access_key=XXXXXXXX
-    region=<%= AwsRegion %>
+    region=<%= awsRegion %>
     ```
   - [Optional] In your IDE, modify the default terminal env variables of your project to add AWS_PROFILE=<%= projectName %>.
   This allows you to use the right aws profile when calling python files.

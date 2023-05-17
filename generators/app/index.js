@@ -150,7 +150,7 @@ module.exports = class extends Generator {
             })}-terraform-state`
           },
           {
-            name: "AwsRegion",
+            name: "awsRegion",
             message:
               "In which AWS region do you want to deploy your infrastructure?",
             store: true,
@@ -159,6 +159,14 @@ module.exports = class extends Generator {
           {
             name: "AwsAccountId",
             message: "What is the id of your AWS account?",
+            store: true
+          },
+          {
+            name: "includeNatGateway",
+            message:
+              "Include a NAT Gateway to allow your the instance of your API to access internet (extra cost of 32$/month)",
+            type: "confirm",
+            default: true,
             store: true
           }
         ]))
