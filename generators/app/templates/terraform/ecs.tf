@@ -25,8 +25,8 @@ resource "aws_ecs_task_definition" "this" {
           awslogs-region = var.aws_region
           awslogs-group  = aws_cloudwatch_log_group.this.name
         }
-  }
-    }])
+      }
+  }])
 }
 
 resource "aws_ecs_service" "this" {
