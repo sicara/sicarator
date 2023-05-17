@@ -1,4 +1,4 @@
-data "aws_iam_policy_document" "assume_ec2_role" {
+data "aws_iam_policy_document" "this" {
   statement {
     actions = ["sts:AssumeRole"]
 
@@ -9,21 +9,21 @@ data "aws_iam_policy_document" "assume_ec2_role" {
   }
 }
 
-resource "aws_iam_role" "ec2_for_ecs_role" {
-  assume_role_policy = data.aws_iam_policy_document.assume_ec2_role.json
+resource "aws_iam_role" "this" {
+  assume_role_policy = data.aws_iam_policy_document.this.json
   name               = "${terraform.workspace}EC2ForECSRole"
   tags               = var.additional_tags
 }
 
-resource "aws_iam_instance_profile" "ec2_for_ecs_profile" {
+resource "aws_iam_instance_profile" "this" {
   name = "${terraform.workspace}EC2ForECSProfile"
-  role = aws_iam_role.ec2_for_ecs_role.name
+  role = aws_iam_role.this.name
   tags = var.additional_tags
 
 }
 
 # Add policy to access ECS and ECR
-resource "aws_iam_role_policy_attachment" "attach_container_permissions_to_ec2_for_ecs_role" {
-  role       = aws_iam_role.ec2_for_ecs_role.name
+resource "aws_iam_role_policy_attachment" "this" {
+  role       = aws_iam_role.this.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
 }

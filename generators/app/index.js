@@ -112,7 +112,7 @@ module.exports = class extends Generator {
           {
             name: "includeAWSTerraformCodeForApi",
             message:
-              "Include Terraform code to deploy API on AWS (stack main components: ESG, ECS, EC2)?",
+              "Include Terraform code to provision an API on AWS (stack main components: API Gateway, ESG, ECS, EC2)?",
             type: "confirm",
             default: false,
             store: true

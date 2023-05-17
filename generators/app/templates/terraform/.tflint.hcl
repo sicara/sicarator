@@ -10,5 +10,5 @@ plugin "terraform" {
 
 # Disallow the need for main.tf file
 rule "terraform_standard_module_structure" {
-enabled = false
+  enabled = false
 }
