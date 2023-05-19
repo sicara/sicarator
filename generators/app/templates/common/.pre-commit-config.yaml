@@ -39,28 +39,18 @@ repos:
     language: system
     types: [python]
     stages: [push]
-<% if (includeAWSTerraformCodeForApi) { %>
-  - id: terraform-docs-check
-    name: Check terraform docs is up to date
-    entry: cd terraform && make docs_check
-    language: system
-    stages: [ commit ]
+<% if (includeAWSInfrastructureCodeForApi) { %>
   - id: terraform-docs
-    name: Update terraform docs (useful if previous hook failed)
+    name: Update terraform docs
     entry: cd terraform && make docs
     language: system
     stages: [ commit ]
-  - id: fmt-check
-    name: Check formatting
-    entry: cd terraform && make fmt_check
-    language: system
-    stages: [ commit ]
   - id: terraform-fmt
-    name: Do formatting (useful if previous hook failed)
+    name: Format terraform code
     entry: cd terraform && make fmt
     language: system
     stages: [ commit ]
-  - id: tflint
+  - id: terraform-lint
     name: Validates all Terraform configuration files with TFlint
     entry: cd terraform && make lint
     language: system

@@ -19,7 +19,7 @@ variable "api_name" {
 }
 
 variable "ec2_instance_type" {
-  description = "Name of the aws EC2 instance to use in the api"
+  description = "Type of the aws EC2 instance to use in the api"
   type        = string
   default     = "t2.medium"
 }

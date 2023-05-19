@@ -58,7 +58,7 @@ Now, every time you are in your project directory your virtualenv will be activa
 poetry install --no-root
 ```
 
-<% if (includeAWSTerraformCodeForApi) { %>
+<% if (includeAWSInfrastructureCodeForApi) { %>
 ### Setup AWS for your project
 Setup your AWS account locally to be able to access the different resources locally:
 - if you are managing only this aws account in your computer
@@ -152,14 +152,14 @@ You can test the `hello_world` route by [importing the Postman collection](https
 For more details on the API routes, check the automatically generated [swagger](https://learning.postman.com/docs/getting-started/importing-and-exporting-data/#importing-postman-data) at the `/docs` url.
 <% } %>
 
-<% if (includeAWSTerraformCodeForApi) { %>
+<% if (includeAWSInfrastructureCodeForApi) { %>
 ### Deploy the API to AWS
-To deploy the API run (depending on your computer's architecture):
+To deploy the API, run (depending on your computer's architecture):
 ```bash
-make deploy_image_on_api_from_amd
+make deploy-image-on-api-from-x86 # E.g. linux and mac intel
 ```
 or
 ```bash
-make deploy_image_on_api_from_arm
+make deploy-image-on-api-from-arm # E.g. mac M1
 ```
 <% } %>

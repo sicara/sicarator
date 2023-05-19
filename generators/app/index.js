@@ -110,9 +110,10 @@ module.exports = class extends Generator {
         includeHelloWorld: false,
         ...(await this.prompt([
           {
-            name: "includeAWSTerraformCodeForApi",
+            name: "includeAWSInfrastructureCodeForApi",
             message:
-              "Include Terraform code to provision an API on AWS (stack main components: API Gateway, ESG, ECS, EC2)?",
+              "Include Terraform code to provision an API on AWS? Stack main components: API Gateway, ASG, ECS, EC2. " +
+              "Cost: ~16$/month + price au EC2 instances) ?",
             type: "confirm",
             default: false,
             store: true
@@ -122,7 +123,7 @@ module.exports = class extends Generator {
     } else {
       this.answers = {
         ...this.answers,
-        includeAWSTerraformCodeForApi: false,
+        includeAWSInfrastructureCodeForApi: false,
         ...(await this.prompt([
           {
             name: "includeHelloWorld",
@@ -136,7 +137,7 @@ module.exports = class extends Generator {
       };
     }
 
-    if (this.answers.includeAWSTerraformCodeForApi) {
+    if (this.answers.includeAWSInfrastructureCodeForApi) {
       this.answers = {
         ...this.answers,
         ...(await this.prompt([
@@ -220,10 +221,10 @@ module.exports = class extends Generator {
         {},
         { globOptions: { dot: true } }
       );
-      if (this.answers.includeAWSTerraformCodeForApi) {
+      if (this.answers.includeAWSInfrastructureCodeForApi) {
         this.fs.copyTpl(
-          this.templatePath("terraform"),
-          this.destinationPath("terraform"),
+          this.templatePath("api_infrastructure"),
+          this.destinationPath("api_infrastructure"),
           this.answers,
           {},
           { globOptions: { dot: true } }
