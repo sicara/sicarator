@@ -5,7 +5,7 @@ module "api_gateway" {
   protocol_type          = "HTTP"
   create_api_domain_name = false
 
-  # Integration for the ALB which is used a proxy
+  # Integration for the ALB which is used as a proxy
   integrations = {
     "ANY /{proxy+}" = {
       connection_type    = "VPC_LINK"

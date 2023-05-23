@@ -12,46 +12,46 @@ This folder contains the Terraform code for all resources.
 - [Install terraform-docs](https://github.com/terraform-docs/terraform-docs#installation)
 
 - Init the project locally:
-```bash
-terraform init
-```
+  ```bash
+  terraform init
+  ```
 
-- Install TFlint pluggins:
-```bash
-tflint --init
-```
+- Install TFlint plugins:
+  ```bash
+  tflint --init
+  ```
 
 - If you are the first one to initialize the project, you need to create the development 
 workspace (you may delete this section afterwards):
-```bash
-terraform workspace new dev
-```
+  ```bash
+  terraform workspace new dev
+  ```
 
 - Select the development workspace to start iterating.
-```bash
-terraform workspace select dev
-```
+  ```bash
+  terraform workspace select dev
+  ```
 
 ## Terraform Usage
 You can check basic terraform commands in the [official documentation](https://developer.hashicorp.com/terraform/cli/commands)
 
 ### Process to add/delete/update a resource
 
-Select the environment you want to deploy on:
+Select the environment you want to provision:
 ```bash
 terraform workspace select <env_name>
 ```
 
 Then check the module adding/deletion plan
-```bash
-terraform plan
-```
+  ```bash
+  terraform plan
+  ```
 
-If the plan suits what you were expecting, deploy in the development environnement by running:
+If the plan suits what you were expecting, provision the development environment by running:
 
-```bash
-terraform apply
-```
+  ```bash
+  terraform apply
+  ```
 
 ## Pricing of the api architecture
 - API gateway: free for the first 1M requests per month, then ~$1 per million requests  ([see official doc](https://aws.amazon.com/fr/api-gateway/pricing/))- Application Load Balancer: ~16$ per month. [Link](https://aws.amazon.com/fr/elasticloadbalancing/pricing/)
@@ -118,12 +118,12 @@ terraform apply
 
 ## Inputs
 
-| Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
-| <a name="input_additional_tags"></a> [additional\_tags](#input\_additional\_tags) | Additional resource tags | `map(string)` | <pre>{<br>  "Terraform": "True"<br>}</pre> | no |
-| <a name="input_api_name"></a> [api\_name](#input\_api\_name) | Name appended to resources specific to the infrastructure of the api | `string` | `"api"` | no |
-| <a name="input_aws_region"></a> [aws\_region](#input\_aws\_region) | Region in which the resources are deployed | `string` | `"<%= awsRegion %>"` | no |
-| <a name="input_ec2_instance_type"></a> [ec2\_instance\_type](#input\_ec2\_instance\_type) | Name of the aws EC2 instance to use in the api | `string` | `"t2.medium"` | no |
+| Name | Description                                                                                                                                                   | Type | Default | Required |
+|------|---------------------------------------------------------------------------------------------------------------------------------------------------------------|------|---------|:--------:|
+| <a name="input_additional_tags"></a> [additional\_tags](#input\_additional\_tags) | Additional resource tags                                                                                                                                      | `map(string)` | <pre>{<br>  "Terraform": "True"<br>}</pre> | no |
+| <a name="input_api_name"></a> [api\_name](#input\_api\_name) | Name appended to resources specific to the infrastructure of the api                                                                                          | `string` | `"api"` | no |
+| <a name="input_aws_region"></a> [aws\_region](#input\_aws\_region) | Region in which the resources are provisioned                                                                                                                 | `string` | `"<%= awsRegion %>"` | no |
+| <a name="input_ec2_instance_type"></a> [ec2\_instance\_type](#input\_ec2\_instance\_type) | Name of the aws EC2 instance to use in the api                                                                                                                | `string` | `"t2.medium"` | no |
 | <a name="input_ec2_memory_reserved"></a> [ec2\_memory\_reserved](#input\_ec2\_memory\_reserved) | The amount of memory (in MiB) to reserve for the api container inside the EC2. Warning: you must select a value below the RAM capacity of the chosen instance | `number` | `3500` | no |
 
 ## Outputs

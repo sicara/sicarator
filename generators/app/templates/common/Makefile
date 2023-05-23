@@ -22,10 +22,6 @@ start-api:
 	docker compose up -d
 <% } %>
 <% if (includeAWSInfrastructureCodeForApi) { %>
-build-api-image:
-	docker build . -t api
-
-
 # Deployment
 
 AWS_ACCOUNT_ADDRESS=<%= AwsAccountId %>.dkr.ecr.<%= awsRegion %>.amazonaws.com
@@ -37,22 +33,27 @@ ECS_SERVICE_NAME=dev_api_service
 ecr-login:
 	aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ADDRESS}
 
-tag-and-push-image-to-ecr:
-	docker tag api ${AWS_ACCOUNT_ADDRESS}/${ECR_REPOSITORY_NAME}:latest
-	docker push ${AWS_ACCOUNT_ADDRESS}/${ECR_REPOSITORY_NAME}:latest
-
 # Redeployment of ECS service to take into account the new image
 redeploy_ecs_service:
 	aws ecs update-service --cluster ${ECS_CLUSTER_NAME} --service ${ECS_SERVICE_NAME} --force-new-deployment
 
 deploy-image-on-api-from-x86:
-	make ecr_login
-	make build_model_api_image
-	make tag_and_push_image_to_ecr
-	make redeploy_ecs_service
+	make ecr-login
 
+	# build image
+	docker build . -t api
+
+	# tag and push image to ecr
+	docker tag api ${AWS_ACCOUNT_ADDRESS}/${ECR_REPOSITORY_NAME}:latest
+	docker push ${AWS_ACCOUNT_ADDRESS}/${ECR_REPOSITORY_NAME}:latest
+
+	make redeploy-ecs-service
+
+# When building an image from ARM (Mac M1 and M2) the standard way (c.f. deploy-image-on-api-from-x86), the resulting
+# image can only be run on ARM machines (which is not the case of the provisioned instance). Using buildx allows
+# to overcome this limitation, by specifying for which platform the image is built.
 deploy-image-on-api-from-arm:
-	make ecr_login
+	make ecr-login
 	docker buildx build --platform linux/amd64 --push -t ${AWS_ACCOUNT_ADDRESS}/${ECR_REPOSITORY_NAME}:latest .
-	make redeploy_ecs_service
+	make redeploy-ecs-service
 <% } %>

@@ -9,20 +9,23 @@ data "aws_ami" "ecs_optimized_ami" {
 }
 
 resource "aws_launch_configuration" "this" {
-    name                 = "${terraform.workspace}_${var.api_name}_launch_config"
-    image_id             = data.aws_ami.ecs_optimized_ami.id
-    iam_instance_profile = aws_iam_instance_profile.this.arn
-    security_groups = [aws_security_group.http_communication_inside_vpc.id,
-    aws_security_group.outbounds_https_communication_on_all_cidr_blocks.id] # https communication on all cidr blocks
-    # is enabled to allow ECS to find and register the instance, as ECS is not inside VPC.
-    # PS: use a NAT gateway to improve security.
+  name                 = "${terraform.workspace}_${var.api_name}_launch_config"
+  image_id             = data.aws_ami.ecs_optimized_ami.id
+  iam_instance_profile = aws_iam_instance_profile.this.arn
+  security_groups = [
+    aws_security_group.http_communication_inside_vpc.id,
 
-    instance_type               = var.ec2_instance_type
-    associate_public_ip_address = false
+    # https communication on all cidr blocks is enabled to allow ECS to find and register the instance, as
+    # ECS is not inside VPC. PS: use a NAT gateway to improve security.
+    aws_security_group.outbounds_https_communication_on_all_cidr_blocks.id
+  ]
 
-    # The following line of code allows to specify a config inside the EC2 to make sure
-    # the instance is launched in the correct ECS cluster
-    user_data = "#!/bin/bash\necho ECS_CLUSTER=${local.ecs_cluster_name} >> /etc/ecs/ecs.config"
+  instance_type               = var.ec2_instance_type
+  associate_public_ip_address = false
+
+  # The following line of code allows to specify a config inside the EC2 to make sure the instance is launched in
+  # the correct ECS cluster
+  user_data = "#!/bin/bash\necho ECS_CLUSTER=${local.ecs_cluster_name} >> /etc/ecs/ecs.config"
 }
 
 resource "aws_autoscaling_group" "this" {

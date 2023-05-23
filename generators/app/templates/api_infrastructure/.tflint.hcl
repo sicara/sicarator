@@ -8,7 +8,3 @@ plugin "terraform" {
   enabled = true
 }
 
-# Disallow the need for main.tf file
-rule "terraform_standard_module_structure" {
-  enabled = false
-}
