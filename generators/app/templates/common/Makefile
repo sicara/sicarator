@@ -32,11 +32,11 @@ ECS_CLUSTER_NAME=dev_api_cluster
 ECS_SERVICE_NAME=dev_api_service
 
 ecr-login:
-	aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ADDRESS}
+	aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_URL}
 
 # Redeployment of ECS service to take into account the new image
 redeploy-ecs-service:
-	aws ecs update-service --cluster ${ECS_CLUSTER_NAME} --service ${ECS_SERVICE_NAME} --force-new-deployment
+	aws ecs update-service --cluster ${ECS_CLUSTER_NAME} --service ${ECS_SERVICE_NAME} --force-new-deployment --no-cli-pager
 
 deploy-api-from-x86:
 	make ecr-login
