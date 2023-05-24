@@ -164,7 +164,7 @@ module.exports = class extends Generator {
           },
           {
             name: "includeNatGateway",
-            message: `Include a NAT Gateway to allow your API instance to access internet?
+            message: `Include a NAT Gateway to allow the API instance to access internet?
 💰 Extra cost: ~32$/month.`,
             type: "confirm",
             default: false,
