@@ -33,5 +33,5 @@ variable "ec2_memory_reserved" {
 variable "enable_nat_gateway" {
   description = "Should be true if you want to provision NAT Gateways for your VPC to allow your EC2 instance to access the public internet"
   type        = bool
-  default     = "<%= enableNatGateway %>"
+  default     = "<%= includeNatGateway %>"
 }
