@@ -15,14 +15,14 @@ fix-ruff:
 mypy:
 	poetry run mypy src
 
-<% if (includeApi) { %>
+<% if (includeApi) { -%>
 # Api
 
 start-api:
 	docker compose up -d
 
-<% } %>
-<% if (includeAWSInfrastructureCodeForApi) { %>
+<% } -%>
+<% if (includeAWSInfrastructureCodeForApi) { -%>
 # Deployment
 
 AWS_ACCOUNT_ADDRESS=<%= awsAccountId %>.dkr.ecr.<%= awsRegion %>.amazonaws.com
@@ -32,7 +32,7 @@ ECS_CLUSTER_NAME=dev_api_cluster
 ECS_SERVICE_NAME=dev_api_service
 
 ecr-login:
-	aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_URL}
+	aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ADDRESS}
 
 # Redeployment of ECS service to take into account the new image
 redeploy-ecs-service:
@@ -58,4 +58,4 @@ deploy-api-from-arm:
 	docker buildx build --platform linux/amd64 --push -t ${AWS_ACCOUNT_ADDRESS}/${ECR_REPOSITORY_NAME}:latest .
 	make redeploy-ecs-service
 
-<% } %>
+<% } -%>

@@ -35,12 +35,12 @@
     pyenv global <%= pythonVersion %>
     ```
 
-<% if (includeApi) { %>
+<% if (includeApi) { -%>
 ### Docker Engine
 Install [Docker Engine](https://docs.docker.com/engine/install/) to build and run the API's Docker image locally.
 
-<% } %>
-<% if (includeAWSInfrastructureCodeForApi) { %>
+<% } -%>
+<% if (includeAWSInfrastructureCodeForApi) { -%>
 ### AWS Command Line Interface
 Install [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) to be able to interact
 with AWS services from your terminal.
@@ -51,7 +51,7 @@ To manage the project infrastructure, you will need to install:
 - [TFlint](https://github.com/terraform-linters/tflint#installation)
 - [terraform-docs](https://github.com/terraform-docs/terraform-docs#installation)
 
-<% } %>
+<% } -%>
 ## Installation
 
 ### Create a virtual environment
@@ -70,7 +70,7 @@ Now, every time you are in your project directory your virtualenv will be activa
 poetry install --no-root
 ```
 
-<% if (includeAWSInfrastructureCodeForApi) { %>
+<% if (includeAWSInfrastructureCodeForApi) { -%>
 ### Setup AWS for your project
 Set up your AWS account locally to be able to access the different resources:
 - Get your AWS credentials from the AWS console, or ask an administrator to provide them to you.
@@ -105,7 +105,7 @@ Set up your AWS account locally to be able to access the different resources:
   terraform workspace select dev
   ```
 
-<% } %>
+<% } -%>
 ### Install git hooks (running before commit and push commands)
 
 ```bash
@@ -165,7 +165,7 @@ or
 make mypy
 ```
 
-<% if (includeApi) { %>
+<% if (includeApi) { -%>
 ## API
 The **<%= projectName %>** project includes an API built with [FastAPI](https://fastapi.tiangolo.com/). Its code can be found at `src/api`.
 
@@ -179,8 +179,8 @@ You can test the `hello_world` route by [importing the Postman collection](https
 
 For more details on the API routes, check the automatically generated [swagger](https://learning.postman.com/docs/getting-started/importing-and-exporting-data/#importing-postman-data) at the `/docs` url.
 
-<% } %>
-<% if (includeAWSInfrastructureCodeForApi) { %>
+<% } -%>
+<% if (includeAWSInfrastructureCodeForApi) { -%>
 ### Deploy the API to AWS
 To deploy the API, run (depending on your computer's architecture):
 ```bash
@@ -191,8 +191,8 @@ or
 make deploy-api-from-arm # E.g. Mac M1 or M2
 ```
 
-<% } %>
-<% if (includeAWSInfrastructureCodeForApi) { %>
+<% } -%>
+<% if (includeAWSInfrastructureCodeForApi) { -%>
 ## Infrastructure
 
 The infrastructure of the project consists of AWS resources, provisioned with Terraform.
@@ -207,9 +207,9 @@ The Terraform code for all resources can be found in the `terraform` folder.
 - ECR: <1$ per month. [see official doc](https://aws.amazon.com/fr/ecr/pricing/)
 - S3: <1$ per month. [see official doc](https://aws.amazon.com/fr/s3/pricing/)
 - ECS, VPC, ASG: Free (no overhead charge)
-<% if (includeNatGateway) { %>
+<% if (includeNatGateway) { -%>
 - NAT Gateway: ~32$ per month [see official doc](https://aws.amazon.com/fr/vpc/pricing/)
-<% } %>
+<% } -%>
 
 ### Process to add/delete/update resources
 
@@ -228,4 +228,4 @@ If the plan suits what you were expecting, provision the development environment
   terraform apply
   ```
 
-<% } %>
+<% } -%>
