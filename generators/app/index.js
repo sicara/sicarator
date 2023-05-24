@@ -42,7 +42,7 @@ module.exports = class extends Generator {
       },
       {
         name: "pythonVersion",
-        message: `Which python version do yo want to use?
+        message: `Which Python version do yo want to use?
 💡 If the chosen version is not installed on your machine, it will be automatically installed by PyEnv.
 🚨️ Older versions are not recommended unless your project has some specific requirements.`,
         type: "list",
@@ -144,7 +144,7 @@ module.exports = class extends Generator {
           {
             name: "terraformBackendBucketName",
             message: `Name of the S3 bucket that will be used to store Terraform state?
-💡 You can create it later.`,
+💡 You can create the bucket later, and update the backend configuration file (backend.tf) accordingly if needed.`,
             default: `${slugify(this.answers.projectName, {
               lower: true,
               strict: "_" // Removes "_"
@@ -158,7 +158,7 @@ module.exports = class extends Generator {
             store: true
           },
           {
-            name: "AwsAccountId",
+            name: "awsAccountId",
             message: "ID of your AWS account?",
             store: true
           },

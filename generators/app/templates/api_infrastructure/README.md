@@ -11,6 +11,8 @@ This folder contains the Terraform code for all resources.
 - [Install TFlint](https://github.com/terraform-linters/tflint#installation)
 - [Install terraform-docs](https://github.com/terraform-docs/terraform-docs#installation)
 
+*All commands below are to be run from `api_infrastructure` folder.*
+
 - Init the project locally:
   ```bash
   terraform init

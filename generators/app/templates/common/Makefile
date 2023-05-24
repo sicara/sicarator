@@ -15,16 +15,17 @@ fix-ruff:
 mypy:
 	poetry run mypy src
 
+<% if (includeApi) { %>
 # Api
 
-<% if (includeApi) { %>
 start-api:
 	docker compose up -d
+
 <% } %>
 <% if (includeAWSInfrastructureCodeForApi) { %>
 # Deployment
 
-AWS_ACCOUNT_ADDRESS=<%= AwsAccountId %>.dkr.ecr.<%= awsRegion %>.amazonaws.com
+AWS_ACCOUNT_ADDRESS=<%= awsAccountId %>.dkr.ecr.<%= awsRegion %>.amazonaws.com
 AWS_REGION=<%= awsRegion %>
 ECR_REPOSITORY_NAME=dev_api_image
 ECS_CLUSTER_NAME=dev_api_cluster
@@ -34,10 +35,10 @@ ecr-login:
 	aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ADDRESS}
 
 # Redeployment of ECS service to take into account the new image
-redeploy_ecs_service:
+redeploy-ecs-service:
 	aws ecs update-service --cluster ${ECS_CLUSTER_NAME} --service ${ECS_SERVICE_NAME} --force-new-deployment
 
-deploy-image-on-api-from-x86:
+deploy-api-from-x86:
 	make ecr-login
 
 	# build image
@@ -49,11 +50,12 @@ deploy-image-on-api-from-x86:
 
 	make redeploy-ecs-service
 
-# When building an image from ARM (Mac M1 and M2) the standard way (c.f. deploy-image-on-api-from-x86), the resulting
-# image can only be run on ARM machines (which is not the case of the provisioned instance). Using buildx allows
-# to overcome this limitation, by specifying for which platform the image is built.
-deploy-image-on-api-from-arm:
+# When building an image from ARM (Mac M1 or M2) the standard way (`deploy-api-from-x86`), the resulting image can only
+# be run on ARM machines (which is not the case of the provisioned instance). Using `buildx` allows to overcome this
+# limitation, by specifying for which platform the image is built.
+deploy-api-from-arm:
 	make ecr-login
 	docker buildx build --platform linux/amd64 --push -t ${AWS_ACCOUNT_ADDRESS}/${ECR_REPOSITORY_NAME}:latest .
 	make redeploy-ecs-service
+
 <% } %>

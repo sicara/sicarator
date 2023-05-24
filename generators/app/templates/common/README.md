@@ -38,8 +38,14 @@
 <% if (includeApi) { %>
 ### Docker Engine
 Install [Docker Engine](https://docs.docker.com/engine/install/) to build and run the API's Docker image locally.
-<% } %>
 
+<% } %>
+<% if (includeAWSInfrastructureCodeForApi) { %>
+### AWS Command Line Interface
+Install [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) to be able to interact
+with AWS services from your terminal.
+
+<% } %>
 ## Installation
 
 ### Create a virtual environment
@@ -60,24 +66,25 @@ poetry install --no-root
 
 <% if (includeAWSInfrastructureCodeForApi) { %>
 ### Setup AWS for your project
-Setup your AWS account locally to be able to access the different resources locally:
-- if you are managing only this aws account in your computer
+Set up your AWS account locally to be able to access the different resources:
+- Get your AWS credentials from the AWS console, or ask an administrator to provide them to you.
+- If you are managing only this AWS account in your computer
   - Run `aws configure` and specify your ACCESS_KEY_ID and SECRET_ACCESS_KEY
-- if you are managing several aws accounts in your computer
-  - Modify your local file located in `~/.aws/credentials` and add:
-  - ```bash
+- If you are managing several AWS accounts in your computer
+  - Modify your local file located in `~/.aws/credentials` to add:
+    ```bash
     [<%= projectName %>]
     aws_access_key_id=XXXXXX
     aws_secret_access_key=XXXXXXXX
     region=<%= awsRegion %>
     ```
-  - [Optional] In your IDE, modify the default terminal env variables of your project to add AWS_PROFILE=<%= projectName %>.
-  This allows you to use the right aws profile when calling python files.
+  - *(Optional)* In your IDE, modify the default terminal env variables of your project to add `AWS_PROFILE=<%= projectName %>`.
+  It allows you to use the right AWS profile when calling Python files.
 
-### Install the terraform project
-Go to `terraform/README.md`
+### Install the Terraform project
+See [dedicated documentation](api_infrastructure/README.md)
+
 <% } %>
-
 ### Install git hooks (running before commit and push commands)
 
 ```bash
@@ -156,10 +163,10 @@ For more details on the API routes, check the automatically generated [swagger](
 ### Deploy the API to AWS
 To deploy the API, run (depending on your computer's architecture):
 ```bash
-make deploy-image-on-api-from-x86 # E.g. linux and mac intel
+make deploy-api-from-x86 # E.g. Linux or Mac intel
 ```
 or
 ```bash
-make deploy-image-on-api-from-arm # E.g. mac M1
+make deploy-api-from-arm # E.g. Mac M1 or M2
 ```
 <% } %>
