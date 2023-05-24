@@ -97,8 +97,8 @@ module.exports = class extends Generator {
       },
       {
         name: "includeApi",
-        message:
-          "Include an API? (it will be built with FastAPI and containerized with Docker)",
+        message: `Include an API?
+💡 It will be built with FastAPI and containerized with Docker.`,
         type: "confirm",
         default: false,
         store: true
@@ -111,9 +111,9 @@ module.exports = class extends Generator {
         ...(await this.prompt([
           {
             name: "includeAWSInfrastructureCodeForApi",
-            message:
-              "Include Terraform code to provision an API on AWS? Stack main components: API Gateway, ASG, ECS, EC2. " +
-              "Cost: ~16$/month + price au EC2 instances) ?",
+            message: `Include Terraform code to provision the API infrastructure on AWS?
+💡 Stack main components: API Gateway, ASG, ECS, EC2.
+💰 Cost: ~16$/month + price of the EC2 instances.`,
             type: "confirm",
             default: false,
             store: true
@@ -127,8 +127,8 @@ module.exports = class extends Generator {
         ...(await this.prompt([
           {
             name: "includeHelloWorld",
-            message:
-              "Include 'hello world' function and unit test? (warning: if 'no', CI testing step will fail due to empty tests)",
+            message: `Include 'hello world' function and unit test?
+🚨️ If 'no', CI testing step will fail due to empty tests`,
             type: "confirm",
             default: true,
             store: true
@@ -143,8 +143,8 @@ module.exports = class extends Generator {
         ...(await this.prompt([
           {
             name: "terraformBackendBucketName",
-            message:
-              "What is the name of the S3 bucket that will be used to store Terraform state? (you can create it later)",
+            message: `Name of the S3 bucket that will be used to store Terraform state?
+💡 You can create it later.`,
             default: `${slugify(this.answers.projectName, {
               lower: true,
               strict: "_" // Removes "_"
@@ -153,19 +153,19 @@ module.exports = class extends Generator {
           {
             name: "awsRegion",
             message:
-              "In which AWS region do you want to deploy your infrastructure?",
-            store: true,
-            default: "eu-west-3"
+              "AWS region in which you want to provision your infrastructure?",
+            default: "eu-west-3",
+            store: true
           },
           {
             name: "AwsAccountId",
-            message: "What is the id of your AWS account?",
+            message: "ID of your AWS account?",
             store: true
           },
           {
             name: "includeNatGateway",
-            message:
-              "Include a NAT Gateway to allow your instance of your API to access internet (extra cost of 32$/month)",
+            message: `Include a NAT Gateway to allow your API instance to access internet?
+💰 Extra cost: ~32$/month.`,
             type: "confirm",
             default: false,
             store: true
