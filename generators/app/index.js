@@ -223,8 +223,8 @@ module.exports = class extends Generator {
       );
       if (this.answers.includeAWSInfrastructureCodeForApi) {
         this.fs.copyTpl(
-          this.templatePath("api_infrastructure"),
-          this.destinationPath("api_infrastructure"),
+          this.templatePath("terraform"),
+          this.destinationPath(),
           this.answers,
           {},
           { globOptions: { dot: true } }

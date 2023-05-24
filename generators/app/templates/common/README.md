@@ -88,7 +88,7 @@ Set up your AWS account locally to be able to access the different resources:
   It allows you to use the right AWS profile when calling Python files.
 
 ### Set-up Terraform
-*All commands below are to be run from `api_infrastructure` folder.*
+*All commands below are to be run from `terraform` folder.*
 
 - Init the project locally:
   ```bash
@@ -196,10 +196,10 @@ make deploy-api-from-arm # E.g. Mac M1 or M2
 ## Infrastructure
 
 The infrastructure of the project consists of AWS resources, provisioned with Terraform.
-The Terraform code for all resources can be found in the `api_infrastructure` folder.
+The Terraform code for all resources can be found in the `terraform` folder.
 
 ### Architecture and communication between the components
-![Architecture and communication between the components](api_infrastructure/schema/architecture.png)
+![Architecture and communication between the components](docs/architecture.png)
 
 ### Pricing of the infrastructure
 - API gateway: free for the first 1M requests per month, then ~$1 per million requests  ([see official doc](https://aws.amazon.com/fr/api-gateway/pricing/))- Application Load Balancer: ~16$ per month. [Link](https://aws.amazon.com/fr/elasticloadbalancing/pricing/)
