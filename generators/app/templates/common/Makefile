@@ -50,9 +50,9 @@ deploy-api-from-x86:
 
 	make redeploy-ecs-service
 
-# When building an image from ARM (Mac M1 or M2) the standard way (`deploy-api-from-x86`), the resulting image can only
-# be run on ARM machines (which is not the case of the provisioned instance). Using `buildx` allows to overcome this
-# limitation, by specifying for which platform the image is built.
+# When building an image from an ARM processor (Mac M1 or M2) with the standard way (`deploy-api-from-x86`), the
+# resulting image can only be run on ARM machines (which is not the case of the provisioned instance). Using `buildx`
+# allows to overcome this limitation, by specifying for which platform the image is built.
 deploy-api-from-arm:
 	make ecr-login
 	docker buildx build --platform linux/amd64 --push -t ${AWS_ACCOUNT_ADDRESS}/${ECR_REPOSITORY_NAME}:latest .
