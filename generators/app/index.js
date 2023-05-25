@@ -191,6 +191,53 @@ module.exports = class extends Generator {
         type: "confirm",
         default: true,
         store: true
+      },
+
+      // DVC
+      {
+        name: "includeDvc",
+        message: `Include DVC on the project?
+💡 DVC is a tool used to version data files and manage data pipelines. Strongly recommended for ML projects!`,
+        type: "confirm",
+        default: false,
+        store: true
+      },
+      {
+        when: ({ includeDvc }) => includeDvc,
+        name: "dvcRemoteType",
+        message: "Which DVC remote type do you want to use?",
+        type: "list",
+        default: "s3",
+        choices: [
+          {
+            name: "AWS S3",
+            value: "s3"
+          },
+          {
+            name: "Google Cloud Storage",
+            value: "gs"
+          },
+          {
+            name: "Azure Blob Storage",
+            value: "azure"
+          },
+          {
+            name: "Other (not recommended ; need to be configured manually)",
+            value: null
+          }
+        ],
+        store: true
+      },
+      {
+        when: ({ dvcRemoteType }) => dvcRemoteType,
+        name: "dvcRemoteBucketName",
+        message: ({ dvcRemoteType }) => `DVC remote bucket name?
+💡 You can create the remote later, and update the DVC configuration file (.dvc/config) accordingly if needed.
+${dvcRemoteType}://`,
+        default: ({ projectSlug }) =>
+          this.config.get("dvcRemoteBucketName") || `${projectSlug}-dvc-remote`,
+        transformer: bucketName => strictlySlugify(bucketName, false),
+        filter: strictlySlugify
       }
     ]);
 
@@ -202,7 +249,8 @@ module.exports = class extends Generator {
       "projectSlug",
       "projectDescription",
       "terraformBackendBucketName",
-      "awsAccountId"
+      "awsAccountId",
+      "dvcRemoteBucketName"
     ].forEach(promptName => {
       if (this.answers[promptName]) {
         this.config.set(promptName, this.answers[promptName]);
@@ -273,6 +321,16 @@ module.exports = class extends Generator {
 
     if (this.answers.includeHelloWorld) {
       this.fs.copy(this.templatePath("hello_world"), this.destinationPath());
+    }
+
+    if (this.answers.includeDvc) {
+      this.fs.copyTpl(
+        this.templatePath("dvc"),
+        this.destinationPath(),
+        this.answers,
+        {},
+        { globOptions: { dot: true } }
+      );
     }
   }
 

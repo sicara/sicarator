@@ -1,0 +1,6 @@
+<% if (dvcRemoteType) { -%>
+[core]
+    remote = origin
+['remote "origin"']
+    url = <%= dvcRemoteType %>://<%= dvcRemoteBucketName %>
+<% } -%>

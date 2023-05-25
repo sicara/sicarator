@@ -13,6 +13,9 @@ loguru = "^0.7.0"
 
 [tool.poetry.group.dev.dependencies]
 black = "^22"
+<% if (includeDvc) { -%>
+dvc = {extras = ["<%= dvcRemoteType %>"], version = "^2.58.1"}
+<% } -%>
 mypy = "^1.2"
 pre-commit = "^2"
 pytest = "^7"
