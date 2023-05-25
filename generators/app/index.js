@@ -26,6 +26,7 @@ module.exports = class extends Generator {
     );
 
     this.answers = await this.prompt([
+      // Common
       {
         name: "projectName",
         message: `Project name?
@@ -118,6 +119,8 @@ module.exports = class extends Generator {
         ],
         store: true
       },
+
+      // API
       {
         name: "includeApi",
         message: `Include an API?
@@ -126,15 +129,8 @@ module.exports = class extends Generator {
         default: false,
         store: true
       },
-      {
-        when: ({ includeApi }) => !includeApi,
-        name: "includeHelloWorld",
-        message: `Include 'hello world' function and unit test?
-🚨️ If 'no', CI testing step will fail due to empty tests`,
-        type: "confirm",
-        default: true,
-        store: true
-      },
+
+      // API infrastructure
       {
         when: ({ includeApi }) => includeApi,
         name: "includeAWSInfrastructureCodeForApi",
@@ -183,6 +179,17 @@ module.exports = class extends Generator {
 💰 Extra cost: ~32$/month.`,
         type: "confirm",
         default: false,
+        store: true
+      },
+
+      // Hello world code
+      {
+        when: ({ includeApi }) => !includeApi,
+        name: "includeHelloWorld",
+        message: `Include 'hello world' function and unit test?
+🚨️ If 'no', CI testing step will fail due to empty tests`,
+        type: "confirm",
+        default: true,
         store: true
       }
     ]);
