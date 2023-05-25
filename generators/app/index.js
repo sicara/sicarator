@@ -244,7 +244,12 @@ module.exports = class extends Generator {
       "--skip-existing"
     ]);
 
-    this.spawnCommandSync("poetry", ["lock"]);
+    this.spawnCommandSync("poetry", ["lock"], {
+      env: {
+        ...process.env,
+        PYENV_VERSION: this.answers.pythonVersion // Allow Poetry to find the correct Python version
+      }
+    });
   }
 
   end() {
