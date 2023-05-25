@@ -195,10 +195,14 @@ module.exports = class extends Generator {
   }
 
   default() {
-    if (path.basename(this.destinationPath()) !== this.answers.projectName) {
-      this.log(`${chalk.green("create folder")} ${this.answers.projectName}`);
-      mkdirp.sync(this.answers.projectName);
-      this.destinationRoot(this.destinationPath(this.answers.projectName));
+    // If current directory is not the project name or the project slug, create a root folder named after the project slug
+    if (
+      path.basename(this.destinationPath()) !== this.answers.projectName &&
+      path.basename(this.destinationPath()) !== this.answers.projectSlug
+    ) {
+      this.log(`${chalk.green("create folder")} ${this.answers.projectSlug}`);
+      mkdirp.sync(this.answers.projectSlug);
+      this.destinationRoot(this.destinationPath(this.answers.projectSlug));
     }
   }
 
