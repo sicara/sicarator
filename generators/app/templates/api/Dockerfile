@@ -44,7 +44,7 @@ RUN useradd appuser
 USER appuser
 
 # Start FastAPI
-CMD ["uvicorn", "src.api.main:app", "--host", "0.0.0.0"]
+CMD uvicorn src.api.main:app --host 0.0.0.0 --port 80
 
 # Healthcheck
 HEALTHCHECK --interval=10s --timeout=1s --retries=3 CMD curl --fail http://localhost/health || exit 1

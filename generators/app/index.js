@@ -4,6 +4,7 @@ const chalk = require("chalk");
 const yosay = require("yosay");
 const path = require("path");
 const mkdirp = require("mkdirp");
+const slugify = require("slugify");
 
 module.exports = class extends Generator {
   async prompting() {
@@ -41,7 +42,7 @@ module.exports = class extends Generator {
       },
       {
         name: "pythonVersion",
-        message: `Which python version do yo want to use?
+        message: `Which Python version do yo want to use?
 💡 If the chosen version is not installed on your machine, it will be automatically installed by PyEnv.
 🚨️ Older versions are not recommended unless your project has some specific requirements.`,
         type: "list",
@@ -96,8 +97,8 @@ module.exports = class extends Generator {
       },
       {
         name: "includeApi",
-        message:
-          "Include an API? (it will be built with FastAPI and containerized with Docker)",
+        message: `Include an API?
+💡 It will be built with FastAPI and containerized with Docker.`,
         type: "confirm",
         default: false,
         store: true
@@ -106,18 +107,67 @@ module.exports = class extends Generator {
     if (this.answers.includeApi) {
       this.answers = {
         ...this.answers,
-        includeHelloWorld: false
+        includeHelloWorld: false,
+        ...(await this.prompt([
+          {
+            name: "includeAWSInfrastructureCodeForApi",
+            message: `Include Terraform code to provision the API infrastructure on AWS?
+💡 Stack main components: API Gateway, ASG, ECS, EC2.
+💰 Cost: ~16$/month + price of the EC2 instances.`,
+            type: "confirm",
+            default: false,
+            store: true
+          }
+        ]))
       };
     } else {
       this.answers = {
         ...this.answers,
+        includeAWSInfrastructureCodeForApi: false,
         ...(await this.prompt([
           {
             name: "includeHelloWorld",
-            message:
-              "Include 'hello world' function and unit test? (warning: if 'no', CI testing step will fail due to empty tests)",
+            message: `Include 'hello world' function and unit test?
+🚨️ If 'no', CI testing step will fail due to empty tests`,
             type: "confirm",
             default: true,
+            store: true
+          }
+        ]))
+      };
+    }
+
+    if (this.answers.includeAWSInfrastructureCodeForApi) {
+      this.answers = {
+        ...this.answers,
+        ...(await this.prompt([
+          {
+            name: "terraformBackendBucketName",
+            message: `Name of the S3 bucket that will be used to store Terraform state?
+💡 You can create the bucket later, and update the backend configuration file (backend.tf) accordingly if needed.`,
+            default: `${slugify(this.answers.projectName, {
+              lower: true,
+              strict: "_" // Removes "_"
+            })}-terraform-state`
+          },
+          {
+            name: "awsRegion",
+            message:
+              "AWS region in which you want to provision your infrastructure?",
+            default: "eu-west-3",
+            store: true
+          },
+          {
+            name: "awsAccountId",
+            message: "ID of your AWS account?",
+            store: true
+          },
+          {
+            name: "includeNatGateway",
+            message: `Include a NAT Gateway to allow the API instance to access internet?
+💰 Extra cost: ~32$/month.`,
+            type: "confirm",
+            default: false,
             store: true
           }
         ]))
@@ -171,6 +221,15 @@ module.exports = class extends Generator {
         {},
         { globOptions: { dot: true } }
       );
+      if (this.answers.includeAWSInfrastructureCodeForApi) {
+        this.fs.copyTpl(
+          this.templatePath("terraform"),
+          this.destinationPath(),
+          this.answers,
+          {},
+          { globOptions: { dot: true } }
+        );
+      }
     }
 
     if (this.answers.includeHelloWorld) {

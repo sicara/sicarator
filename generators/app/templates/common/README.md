@@ -35,11 +35,23 @@
     pyenv global <%= pythonVersion %>
     ```
 
-<% if (includeApi) { %>
+<% if (includeApi) { -%>
 ### Docker Engine
 Install [Docker Engine](https://docs.docker.com/engine/install/) to build and run the API's Docker image locally.
-<% } %>
 
+<% } -%>
+<% if (includeAWSInfrastructureCodeForApi) { -%>
+### AWS Command Line Interface
+Install [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) to be able to interact
+with AWS services from your terminal.
+
+### Terraform and associated tools
+To manage the project infrastructure, you will need to install:
+- [Terraform](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli#install-terraform)
+- [TFlint](https://github.com/terraform-linters/tflint#installation)
+- [terraform-docs](https://github.com/terraform-docs/terraform-docs#installation)
+
+<% } -%>
 ## Installation
 
 ### Create a virtual environment
@@ -58,6 +70,42 @@ Now, every time you are in your project directory your virtualenv will be activa
 poetry install --no-root
 ```
 
+<% if (includeAWSInfrastructureCodeForApi) { -%>
+### Setup AWS for your project
+Set up your AWS account locally to be able to access the different resources:
+- Get your AWS credentials from the AWS console, or ask an administrator to provide them to you.
+- If you are managing only this AWS account in your computer
+  - Run `aws configure` and specify your ACCESS_KEY_ID and SECRET_ACCESS_KEY
+- If you are managing several AWS accounts in your computer
+  - Modify your local file located in `~/.aws/credentials` to add:
+    ```bash
+    [<%= projectName %>]
+    aws_access_key_id=XXXXXX
+    aws_secret_access_key=XXXXXXXX
+    region=<%= awsRegion %>
+    ```
+  - *(Optional)* In your IDE, modify the default terminal env variables of your project to add `AWS_PROFILE=<%= projectName %>`.
+  It allows you to use the right AWS profile when calling Python files.
+
+### Set-up Terraform
+*All commands below are to be run from `terraform` folder.*
+
+- Init the project locally:
+  ```bash
+  terraform init
+  ```
+
+- Install TFlint plugins:
+  ```bash
+  tflint --init
+  ```
+
+- Select the development workspace:
+  ```bash
+  terraform workspace select dev
+  ```
+
+<% } -%>
 ### Install git hooks (running before commit and push commands)
 
 ```bash
@@ -117,7 +165,7 @@ or
 make mypy
 ```
 
-<% if (includeApi) { %>
+<% if (includeApi) { -%>
 ## API
 The **<%= projectName %>** project includes an API built with [FastAPI](https://fastapi.tiangolo.com/). Its code can be found at `src/api`.
 
@@ -130,4 +178,54 @@ make start-api
 You can test the `hello_world` route by [importing the Postman collection](https://learning.postman.com/docs/getting-started/importing-and-exporting-data/#importing-postman-data) at `postman`.
 
 For more details on the API routes, check the automatically generated [swagger](https://learning.postman.com/docs/getting-started/importing-and-exporting-data/#importing-postman-data) at the `/docs` url.
-<% } %>
+
+<% } -%>
+<% if (includeAWSInfrastructureCodeForApi) { -%>
+### Deploy the API to AWS
+To deploy the API, run (depending on your computer's architecture):
+```bash
+make deploy-api-from-x86 # E.g. Linux or Mac intel
+```
+or
+```bash
+make deploy-api-from-arm # E.g. Mac M1 or M2
+```
+
+<% } -%>
+<% if (includeAWSInfrastructureCodeForApi) { -%>
+## Infrastructure
+
+The infrastructure of the project consists of AWS resources, provisioned with Terraform.
+The Terraform code for all resources can be found in the `terraform` folder.
+
+### Architecture and communication between the components
+![Architecture and communication between the components](docs/architecture.png)
+
+### Pricing of the infrastructure
+- API gateway: free for the first 1M requests per month, then ~$1 per million requests  ([see official doc](https://aws.amazon.com/fr/api-gateway/pricing/))- Application Load Balancer: ~16$ per month. [Link](https://aws.amazon.com/fr/elasticloadbalancing/pricing/)
+- EC2: Depends on the chosen instance. [see official doc](https://aws.amazon.com/fr/ec2/pricing/on-demand/)
+- ECR: <1$ per month. [see official doc](https://aws.amazon.com/fr/ecr/pricing/)
+- S3: <1$ per month. [see official doc](https://aws.amazon.com/fr/s3/pricing/)
+- ECS, VPC, ASG: Free (no overhead charge)
+<% if (includeNatGateway) { -%>
+- NAT Gateway: ~32$ per month [see official doc](https://aws.amazon.com/fr/vpc/pricing/)
+<% } -%>
+
+### Process to add/delete/update resources
+
+Select the environment you want to provision:
+```bash
+terraform workspace select <env_name>
+```
+
+Then check the module adding/deletion plan
+  ```bash
+  terraform plan
+  ```
+
+If the plan suits what you were expecting, provision the development environment by running:
+  ```bash
+  terraform apply
+  ```
+
+<% } -%>
