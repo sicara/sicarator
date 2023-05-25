@@ -6,6 +6,14 @@ const path = require("path");
 const mkdirp = require("mkdirp");
 const slugify = require("slugify");
 
+function strictlySlugify(projectName, trim = true) {
+  return slugify(projectName, {
+    lower: true,
+    strict: true,
+    trim
+  });
+}
+
 module.exports = class extends Generator {
   async prompting() {
     // Have Yeoman greet the user.
@@ -20,8 +28,19 @@ module.exports = class extends Generator {
     this.answers = await this.prompt([
       {
         name: "projectName",
-        message: "What's the name of your project?",
+        message: `Project name?
+💡 Should be short, but can contain any character ; to be used in the README.md, etc.`,
         default: path.basename(process.cwd())
+      },
+      {
+        name: "projectSlug",
+        message: `Project slug?
+💡 Should contain only lowercase letters, numbers and hyphens (-) ; to be used in URLs, etc.`,
+        default: ({ projectName }) => strictlySlugify(projectName),
+        // Transform in real time without trimming
+        transformer: projectName => strictlySlugify(projectName, false),
+        // Transform in the end with trimming
+        filter: strictlySlugify
       },
       {
         name: "projectDescription",
@@ -146,10 +165,9 @@ module.exports = class extends Generator {
             name: "terraformBackendBucketName",
             message: `Name of the S3 bucket that will be used to store Terraform state?
 💡 You can create the bucket later, and update the backend configuration file (backend.tf) accordingly if needed.`,
-            default: `${slugify(this.answers.projectName, {
-              lower: true,
-              strict: "_" // Removes "_"
-            })}-terraform-state`
+            default: ({ projectSlug }) => `${projectSlug}-terraform-state`,
+            transformer: bucketName => strictlySlugify(bucketName, false),
+            filter: strictlySlugify
           },
           {
             name: "awsRegion",

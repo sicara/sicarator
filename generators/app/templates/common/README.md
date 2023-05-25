@@ -59,8 +59,8 @@ To manage the project infrastructure, you will need to install:
 Create your virtual environment and link it to your project folder:
 
 ```bash
-pyenv virtualenv <%= pythonVersion %> <%= projectName %>
-pyenv local <%= projectName %>
+pyenv virtualenv <%= pythonVersion %> <%= projectSlug %>
+pyenv local <%= projectSlug %>
 ```
 Now, every time you are in your project directory your virtualenv will be activated thanks to `pyenv`!
 
@@ -79,12 +79,12 @@ Set up your AWS account locally to be able to access the different resources:
 - If you are managing several AWS accounts in your computer
   - Modify your local file located in `~/.aws/credentials` to add:
     ```bash
-    [<%= projectName %>]
+    [<%= projectSlug %>]
     aws_access_key_id=XXXXXX
     aws_secret_access_key=XXXXXXXX
     region=<%= awsRegion %>
     ```
-  - *(Optional)* In your IDE, modify the default terminal env variables of your project to add `AWS_PROFILE=<%= projectName %>`.
+  - *(Optional)* In your IDE, modify the default terminal env variables of your project to add `AWS_PROFILE=<%= projectSlug %>`.
   It allows you to use the right AWS profile when calling Python files.
 
 ### Set-up Terraform
@@ -167,7 +167,7 @@ make mypy
 
 <% if (includeApi) { -%>
 ## API
-The **<%= projectName %>** project includes an API built with [FastAPI](https://fastapi.tiangolo.com/). Its code can be found at `src/api`.
+The project includes an API built with [FastAPI](https://fastapi.tiangolo.com/). Its code can be found at `src/api`.
 
 The API is containerized using a [Docker](https://docs.docker.com/get-started/) image, built from the `Dockerfile` and `docker-compose.yml` at the root.
 
