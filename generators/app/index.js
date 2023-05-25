@@ -125,78 +125,65 @@ module.exports = class extends Generator {
         type: "confirm",
         default: false,
         store: true
-      }
-    ]);
-    if (this.answers.includeApi) {
-      this.answers = {
-        ...this.answers,
-        includeHelloWorld: false,
-        ...(await this.prompt([
-          {
-            name: "includeAWSInfrastructureCodeForApi",
-            message: `Include Terraform code to provision the API infrastructure on AWS?
+      },
+      {
+        when: ({ includeApi }) => !includeApi,
+        name: "includeHelloWorld",
+        message: `Include 'hello world' function and unit test?
+🚨️ If 'no', CI testing step will fail due to empty tests`,
+        type: "confirm",
+        default: true,
+        store: true
+      },
+      {
+        when: ({ includeApi }) => includeApi,
+        name: "includeAWSInfrastructureCodeForApi",
+        message: `Include Terraform code to provision the API infrastructure on AWS?
 💡 Stack main components: API Gateway, ASG, ECS, EC2.
 💰 Cost: ~16$/month + price of the EC2 instances (~38$/month for one t2.medium instance).`,
-            type: "confirm",
-            default: false,
-            store: true
-          }
-        ]))
-      };
-    } else {
-      this.answers = {
-        ...this.answers,
-        includeAWSInfrastructureCodeForApi: false,
-        ...(await this.prompt([
-          {
-            name: "includeHelloWorld",
-            message: `Include 'hello world' function and unit test?
-🚨️ If 'no', CI testing step will fail due to empty tests`,
-            type: "confirm",
-            default: true,
-            store: true
-          }
-        ]))
-      };
-    }
-
-    if (this.answers.includeAWSInfrastructureCodeForApi) {
-      this.answers = {
-        ...this.answers,
-        ...(await this.prompt([
-          {
-            name: "terraformBackendBucketName",
-            message: `Name of the S3 bucket that will be used to store Terraform state?
+        type: "confirm",
+        default: false,
+        store: true
+      },
+      {
+        when: ({ includeAWSInfrastructureCodeForApi }) =>
+          includeAWSInfrastructureCodeForApi,
+        name: "terraformBackendBucketName",
+        message: `Name of the S3 bucket that will be used to store Terraform state?
 💡 You can create the bucket later, and update the backend configuration file (backend.tf) accordingly if needed.`,
-            default: ({ projectSlug }) =>
-              this.config.get("terraformBackendBucketName") ||
-              `${projectSlug}-terraform-backend`,
-            transformer: bucketName => strictlySlugify(bucketName, false),
-            filter: strictlySlugify
-          },
-          {
-            name: "awsRegion",
-            message:
-              "AWS region in which you want to provision your infrastructure?",
-            default: "eu-west-3",
-            store: true
-          },
-          {
-            name: "awsAccountId",
-            message: "ID of your AWS account?",
-            store: true
-          },
-          {
-            name: "includeNatGateway",
-            message: `Include a NAT Gateway to allow the API instance to access internet?
+        default: ({ projectSlug }) =>
+          this.config.get("terraformBackendBucketName") ||
+          `${projectSlug}-terraform-backend`,
+        transformer: bucketName => strictlySlugify(bucketName, false),
+        filter: strictlySlugify
+      },
+      {
+        when: ({ includeAWSInfrastructureCodeForApi }) =>
+          includeAWSInfrastructureCodeForApi,
+        name: "awsRegion",
+        message:
+          "AWS region in which you want to provision your infrastructure?",
+        default: "eu-west-3",
+        store: true
+      },
+      {
+        when: ({ includeAWSInfrastructureCodeForApi }) =>
+          includeAWSInfrastructureCodeForApi,
+        name: "awsAccountId",
+        message: "ID of your AWS account?",
+        store: true
+      },
+      {
+        when: ({ includeAWSInfrastructureCodeForApi }) =>
+          includeAWSInfrastructureCodeForApi,
+        name: "includeNatGateway",
+        message: `Include a NAT Gateway to allow the API instance to access internet?
 💰 Extra cost: ~32$/month.`,
-            type: "confirm",
-            default: false,
-            store: true
-          }
-        ]))
-      };
-    }
+        type: "confirm",
+        default: false,
+        store: true
+      }
+    ]);
 
     // Save user answers without `store: true` to the local config file (.yo-rc.json)
     // Answers with `store: true` are indeed already saved to the local config file (as well as to the global config file).

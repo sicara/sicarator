@@ -40,7 +40,7 @@
 Install [Docker Engine](https://docs.docker.com/engine/install/) to build and run the API's Docker image locally.
 
 <% } -%>
-<% if (includeAWSInfrastructureCodeForApi) { -%>
+<% if (includeApi && includeAWSInfrastructureCodeForApi) { -%>
 ### AWS Command Line Interface
 Install [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) to be able to interact
 with AWS services from your terminal.
@@ -70,7 +70,7 @@ Now, every time you are in your project directory your virtualenv will be activa
 poetry install --no-root
 ```
 
-<% if (includeAWSInfrastructureCodeForApi) { -%>
+<% if (includeApi && includeAWSInfrastructureCodeForApi) { -%>
 ### Setup AWS for your project
 Set up your AWS account locally to be able to access the different resources:
 - Get your AWS credentials from the AWS console, or ask an administrator to provide them to you.
@@ -180,7 +180,7 @@ You can test the `hello_world` route by [importing the Postman collection](https
 For more details on the API routes, check the automatically generated [swagger](https://learning.postman.com/docs/getting-started/importing-and-exporting-data/#importing-postman-data) at the `/docs` url.
 
 <% } -%>
-<% if (includeAWSInfrastructureCodeForApi) { -%>
+<% if (includeApi && includeAWSInfrastructureCodeForApi) { -%>
 ### Deploy the API to AWS
 To deploy the API, run (depending on your computer's architecture):
 ```bash
@@ -192,7 +192,7 @@ make deploy-api-from-arm # E.g. Mac M1 or M2
 ```
 
 <% } -%>
-<% if (includeAWSInfrastructureCodeForApi) { -%>
+<% if (includeApi && includeAWSInfrastructureCodeForApi) { -%>
 ## Infrastructure
 
 The infrastructure of the project consists of AWS resources, provisioned with Terraform.
