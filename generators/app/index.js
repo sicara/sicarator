@@ -377,5 +377,8 @@ ${dvcRemoteType}://`,
         this.destinationPath(".yo-rc.json")
       );
     }
+
+    // Initialize git repository
+    this.spawnCommandSync("git", ["init"]);
   }
 };
