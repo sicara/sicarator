@@ -46,7 +46,9 @@ module.exports = class extends Generator {
       {
         name: "projectDescription",
         message: "Project description in one line?",
-        default: this.config.get("projectDescription")
+        default:
+          this.config.get("projectDescription") ||
+          "Project generated with Sicarator"
       },
       {
         name: "authorName",
