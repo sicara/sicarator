@@ -44,8 +44,7 @@ module.exports = class extends Generator {
       },
       {
         name: "projectDescription",
-        message: "Project description in one line?",
-        store: true
+        message: "Project description in one line?"
       },
       {
         name: "authorName",
