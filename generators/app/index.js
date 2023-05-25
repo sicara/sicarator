@@ -30,13 +30,14 @@ module.exports = class extends Generator {
         name: "projectName",
         message: `Project name?
 💡 Should be short, but can contain any character ; to be used in the README.md, etc.`,
-        default: path.basename(process.cwd())
+        default: this.config.get("projectName") || path.basename(process.cwd())
       },
       {
         name: "projectSlug",
         message: `Project slug?
 💡 Should contain only lowercase letters, numbers and hyphens (-) ; to be used in URLs, etc.`,
-        default: ({ projectName }) => strictlySlugify(projectName),
+        default: ({ projectName }) =>
+          this.config.get("projectSlug") || strictlySlugify(projectName),
         // Transform in real time without trimming
         transformer: projectName => strictlySlugify(projectName, false),
         // Transform in the end with trimming
@@ -44,7 +45,8 @@ module.exports = class extends Generator {
       },
       {
         name: "projectDescription",
-        message: "Project description in one line?"
+        message: "Project description in one line?",
+        default: this.config.get("projectDescription")
       },
       {
         name: "authorName",
@@ -164,7 +166,9 @@ module.exports = class extends Generator {
             name: "terraformBackendBucketName",
             message: `Name of the S3 bucket that will be used to store Terraform state?
 💡 You can create the bucket later, and update the backend configuration file (backend.tf) accordingly if needed.`,
-            default: ({ projectSlug }) => `${projectSlug}-terraform-state`,
+            default: ({ projectSlug }) =>
+              this.config.get("terraformBackendBucketName") ||
+              `${projectSlug}-terraform-backend`,
             transformer: bucketName => strictlySlugify(bucketName, false),
             filter: strictlySlugify
           },
@@ -190,6 +194,19 @@ module.exports = class extends Generator {
           }
         ]))
       };
+    }
+
+    // Save user answers without `store: true` to the local config file (.yo-rc.json)
+    // Answers with `store: true` are indeed already saved to the local config file (as well as to the global config file).
+    // Following answers don't have `store: true` because we don't want to save them to the global config file.
+    this.config.set("projectName", this.answers.projectName);
+    this.config.set("projectSlug", this.answers.projectSlug);
+    this.config.set("projectDescription", this.answers.projectDescription);
+    if (this.answers.terraformBackendBucketName) {
+      this.config.set(
+        "terraformBackendBucketName",
+        this.answers.terraformBackendBucketName
+      );
     }
   }
 
