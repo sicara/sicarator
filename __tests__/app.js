@@ -71,6 +71,10 @@ describe("generator-sicarator:app", () => {
       assert.noFile(DVC_FILES_PATHS);
     });
 
+    it("creates .git folder", () => {
+      assert.file(".git");
+    });
+
     it("has correct Python version", () => {
       assert.fileContent("pyproject.toml", `python = "${PYTHON_VERSION}"`);
     });
