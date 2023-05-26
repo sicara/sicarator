@@ -43,8 +43,9 @@ module.exports = class extends Generator {
       {
         name: "pythonVersion",
         message: `Which Python version do yo want to use?
-💡 If the chosen version is not installed on your machine, it will be automatically installed by PyEnv.
-🚨️ Older versions are not recommended unless your project has some specific requirements.`,
+🚨️ Older versions are not recommended unless your project has some specific requirements.
+💡 You can check their compatibility with the main Python packages on https://pyreadiness.org/.
+💡 If the chosen version is not installed on your machine, it will be automatically installed by PyEnv.`,
         type: "list",
         default: "3.11.3",
         choices: [
