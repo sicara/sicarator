@@ -113,7 +113,7 @@ module.exports = class extends Generator {
             name: "includeAWSInfrastructureCodeForApi",
             message: `Include Terraform code to provision the API infrastructure on AWS?
 💡 Stack main components: API Gateway, ASG, ECS, EC2.
-💰 Cost: ~16$/month + price of the EC2 instances.`,
+💰 Cost: ~16$/month + price of the EC2 instances (~38$/month for one t2.medium instance).`,
             type: "confirm",
             default: false,
             store: true
