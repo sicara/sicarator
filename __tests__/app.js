@@ -8,11 +8,12 @@ jest.setTimeout(60000); // 1 minute timeout for poetry lock command
 const PYTHON_VERSION = "3.11.3"; // Should match the version used in the CI (see .circleci/config.yml)
 
 const COMMON_FILES_PATHS = [
-  "README.md",
-  ".gitignore",
-  ".yo-rc.json",
-  "poetry.lock",
-  "pyproject.toml"
+  "src",
+  "tests",
+  ".pre-commit-config.yaml",
+  "Makefile",
+  "pyproject.toml",
+  "README.md"
 ];
 const HELLO_WORLD_FILES_PATHS = [
   "src/hello_world.py",
@@ -25,6 +26,7 @@ const API_FILES_PATHS = [
   "docker-compose.yml"
 ];
 const TERRAFORM_FILES_PATHS = ["terraform", "docs/architecture.png"];
+const DVC_FILES_PATHS = [".dvcignore", ".dvc/config", ".dvc/.gitignore"];
 
 describe("generator-sicarator:app", () => {
   describe("Sicarator with default answers", () => {
@@ -33,10 +35,10 @@ describe("generator-sicarator:app", () => {
         .run(path.join(__dirname, "../generators/app"))
         .withPrompts({
           projectName: "project-name",
-          projectDescription: "Project Description",
           pythonVersion: PYTHON_VERSION,
           includeApi: false,
-          includeHelloWorld: true
+          includeHelloWorld: true,
+          includeDvc: false
         })
         .withLocalConfig({});
     });
@@ -45,12 +47,28 @@ describe("generator-sicarator:app", () => {
       assert.file(COMMON_FILES_PATHS);
     });
 
+    it("creates poetry.lock", () => {
+      assert.file("poetry.lock");
+    });
+
+    it("creates .gitignore", () => {
+      assert.file(".gitignore");
+    });
+
+    it("creates .yo-rc.json", () => {
+      assert.file(".yo-rc.json");
+    });
+
     it("creates hello-world files", () => {
       assert.file(HELLO_WORLD_FILES_PATHS);
     });
 
     it("does not create API files", () => {
       assert.noFile(API_FILES_PATHS);
+    });
+
+    it("does not create DVC files", () => {
+      assert.noFile(DVC_FILES_PATHS);
     });
 
     it("has correct Python version", () => {
@@ -63,16 +81,20 @@ describe("generator-sicarator:app", () => {
         .run(path.join(__dirname, "../generators/app"))
         .withPrompts({
           projectName: "project-name",
-          projectDescription: "Project Description",
           pythonVersion: PYTHON_VERSION,
           includeApi: true,
-          includeAWSInfrastructureCodeForApi: false
+          includeAWSInfrastructureCodeForApi: false,
+          includeDvc: false
         })
         .withLocalConfig({});
     });
 
     it("creates common files", () => {
       assert.file(COMMON_FILES_PATHS);
+    });
+
+    it("creates poetry.lock", () => {
+      assert.file("poetry.lock");
     });
 
     it("does not create hello-world files", () => {
@@ -93,20 +115,24 @@ describe("generator-sicarator:app", () => {
         .run(path.join(__dirname, "../generators/app"))
         .withPrompts({
           projectName: "project-name",
-          projectDescription: "Project Description",
           pythonVersion: PYTHON_VERSION,
           includeApi: true,
           includeAWSInfrastructureCodeForApi: true,
           terraformBackendBucketName: "terraform-backend-bucket-name",
           awsRegion: "eu-west-1",
           awsAccountId: "1234567890",
-          includeNatGateway: true
+          includeNatGateway: true,
+          includeDvc: false
         })
         .withLocalConfig({});
     });
 
     it("creates common files", () => {
       assert.file(COMMON_FILES_PATHS);
+    });
+
+    it("creates poetry.lock", () => {
+      assert.file("poetry.lock");
     });
 
     it("does not create hello-world files", () => {
@@ -133,6 +159,30 @@ describe("generator-sicarator:app", () => {
         "Makefile",
         "AWS_ACCOUNT_URL=1234567890.dkr.ecr.eu-west-1.amazonaws.com"
       );
+    });
+  });
+  describe("Sicarator with DVC", () => {
+    beforeAll(() => {
+      return helpers
+        .run(path.join(__dirname, "../generators/app"))
+        .withPrompts({
+          projectName: "project-name",
+          pythonVersion: PYTHON_VERSION,
+          includeDvc: true
+        })
+        .withLocalConfig({});
+    });
+
+    it("creates common files", () => {
+      assert.file(COMMON_FILES_PATHS);
+    });
+
+    it("creates poetry.lock", () => {
+      assert.file("poetry.lock");
+    });
+
+    it("creates DVC files", () => {
+      assert.file(DVC_FILES_PATHS);
     });
   });
 });
