@@ -5,6 +5,8 @@ const helpers = require("yeoman-test");
 
 jest.setTimeout(60000); // 1 minute timeout for poetry lock command
 
+const PYTHON_VERSION = "3.11.3"; // Should match the version used in the CI (see .circleci/config.yml)
+
 const COMMON_FILES_PATHS = [
   "README.md",
   ".gitignore",
@@ -32,7 +34,7 @@ describe("generator-sicarator:app", () => {
         .withPrompts({
           projectName: "project-name",
           projectDescription: "Project Description",
-          pythonVersion: "3.9.13", // Python version depends on the docker image of CI
+          pythonVersion: PYTHON_VERSION,
           includeApi: false,
           includeHelloWorld: true
         })
@@ -52,7 +54,7 @@ describe("generator-sicarator:app", () => {
     });
 
     it("has correct Python version", () => {
-      assert.fileContent("pyproject.toml", 'python = "3.9.13"');
+      assert.fileContent("pyproject.toml", `python = "${PYTHON_VERSION}"`);
     });
   });
   describe("Sicarator with API, without Terraform", () => {
@@ -62,7 +64,7 @@ describe("generator-sicarator:app", () => {
         .withPrompts({
           projectName: "project-name",
           projectDescription: "Project Description",
-          pythonVersion: "3.9.13", // Python version depends on the docker image of CI
+          pythonVersion: PYTHON_VERSION,
           includeApi: true,
           includeAWSInfrastructureCodeForApi: false
         })
@@ -92,7 +94,7 @@ describe("generator-sicarator:app", () => {
         .withPrompts({
           projectName: "project-name",
           projectDescription: "Project Description",
-          pythonVersion: "3.9.13", // Python version depends on the docker image of CI
+          pythonVersion: PYTHON_VERSION,
           includeApi: true,
           includeAWSInfrastructureCodeForApi: true,
           terraformBackendBucketName: "terraform-backend-bucket-name",
