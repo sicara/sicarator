@@ -202,14 +202,15 @@ The Terraform code for all resources can be found in the `terraform` folder.
 ![Architecture and communication between the components](docs/architecture.png)
 
 ### Pricing of the infrastructure
-- API gateway: free for the first 1M requests per month, then ~$1 per million requests  ([see official doc](https://aws.amazon.com/fr/api-gateway/pricing/))- Application Load Balancer: ~16$ per month. [Link](https://aws.amazon.com/fr/elasticloadbalancing/pricing/)
-- EC2: Depends on the chosen instance. [see official doc](https://aws.amazon.com/fr/ec2/pricing/on-demand/)
-- ECR: <1$ per month. [see official doc](https://aws.amazon.com/fr/ecr/pricing/)
-- S3: <1$ per month. [see official doc](https://aws.amazon.com/fr/s3/pricing/)
-- ECS, VPC, ASG: Free (no overhead charge)
+- EC2: ~38$ per month. ([see official doc](https://aws.amazon.com/ec2/pricing/on-demand/))
 <% if (includeNatGateway) { -%>
-- NAT Gateway: ~32$ per month [see official doc](https://aws.amazon.com/fr/vpc/pricing/)
+- NAT Gateway: ~32$ per month ([see official doc](https://aws.amazon.com/vpc/pricing/))
 <% } -%>
+- Application Load Balancer: ~16$ per month. ([see official doc](https://aws.amazon.com/elasticloadbalancing/pricing/))
+- API gateway: free for the first 1M requests per month, then ~$1 per million requests  ([see official doc](https://aws.amazon.com/api-gateway/pricing/))
+- ECR: <1$ per month. ([see official doc](https://aws.amazon.com/ecr/pricing/))
+- S3: <1$ per month. ([see official doc](https://aws.amazon.com/s3/pricing/))
+- ECS, VPC, ASG: Free (no overhead charge)
 
 ### Process to add/delete/update resources
 
