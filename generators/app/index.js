@@ -6,6 +6,9 @@ const path = require("path");
 const mkdirp = require("mkdirp");
 const slugify = require("slugify");
 
+const TEMPLATE_OPTIONS = {};
+const COPY_OPTIONS = { globOptions: { dot: true } };
+
 function strictlySlugify(projectName, trim = true) {
   return slugify(projectName, {
     lower: true,
@@ -281,13 +284,16 @@ ${dvcRemoteType}://`,
       this.templatePath("common"),
       this.destinationPath(),
       { ...this.answers, pythonMajorVersion, pythonMajorVersionShortcut },
-      {},
-      { globOptions: { dot: true } }
+      TEMPLATE_OPTIONS,
+      COPY_OPTIONS
     );
 
-    this.fs.copy(
+    this.fs.copyTpl(
       this.templatePath("gitignore/gitignore"),
-      this.destinationPath(".gitignore")
+      this.destinationPath(".gitignore"),
+      this.answers,
+      TEMPLATE_OPTIONS,
+      COPY_OPTIONS
     );
 
     if (this.answers.ci !== null) {
@@ -295,8 +301,8 @@ ${dvcRemoteType}://`,
         this.templatePath(path.join("ci", this.answers.ci)),
         this.destinationPath(this.answers.ci),
         this.answers,
-        {},
-        { globOptions: { dot: true } }
+        TEMPLATE_OPTIONS,
+        COPY_OPTIONS
       );
     }
 
@@ -305,22 +311,28 @@ ${dvcRemoteType}://`,
         this.templatePath("api"),
         this.destinationPath(),
         this.answers,
-        {},
-        { globOptions: { dot: true } }
+        TEMPLATE_OPTIONS,
+        COPY_OPTIONS
       );
       if (this.answers.includeAWSInfrastructureCodeForApi) {
         this.fs.copyTpl(
           this.templatePath("terraform"),
           this.destinationPath(),
           this.answers,
-          {},
-          { globOptions: { dot: true } }
+          TEMPLATE_OPTIONS,
+          COPY_OPTIONS
         );
       }
     }
 
     if (this.answers.includeHelloWorld) {
-      this.fs.copy(this.templatePath("hello_world"), this.destinationPath());
+      this.fs.copyTpl(
+        this.templatePath("hello_world"),
+        this.destinationPath(),
+        this.answers,
+        TEMPLATE_OPTIONS,
+        COPY_OPTIONS
+      );
     }
 
     if (this.answers.includeDvc) {
@@ -328,8 +340,8 @@ ${dvcRemoteType}://`,
         this.templatePath("dvc"),
         this.destinationPath(),
         this.answers,
-        {},
-        { globOptions: { dot: true } }
+        TEMPLATE_OPTIONS,
+        COPY_OPTIONS
       );
     }
   }
