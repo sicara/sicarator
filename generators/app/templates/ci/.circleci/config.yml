@@ -4,7 +4,6 @@ orbs:
 
 executors:
   base-python:
-    working_directory: ~/<%= projectName %>
     docker:
       - image: cimg/python:<%= pythonVersion %>
 
@@ -23,7 +22,7 @@ commands:
       # Restore cached dependencies
       - restore_cache:
           keys:
-            - <%= projectName %>-dependencies-poetry-1.2.2-{{ checksum "poetry.lock" }}
+            - project-dependencies-poetry-1.2.2-{{ checksum "poetry.lock" }}
 
 jobs:
   install:
@@ -44,7 +43,7 @@ jobs:
             poetry run pip install --upgrade pip
             poetry install --no-root
       - save_cache:
-          key: <%= projectName %>-dependencies-poetry-1.2.2-{{ checksum "poetry.lock" }}
+          key: project-dependencies-poetry-1.2.2-{{ checksum "poetry.lock" }}
           paths:
             - /home/circleci/.cache/pypoetry/virtualenvs
             - /home/circleci/.poetry/env
@@ -87,7 +86,7 @@ jobs:
 
 workflows:
   version: 2
-  <%= projectName %>:
+  quality_checks:
     jobs:
       - install
       - test:

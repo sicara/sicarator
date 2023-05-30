@@ -8,7 +8,6 @@ def test_health_check_route() -> None:
 
 
 def test_hello_world() -> None:
-    assert (
-        hello_world(HelloWorldRouteInput(name="<%= projectName %>"))
-        == HelloWorldRouteOutput(message="Hello, <%= projectName %>!")
+    assert hello_world(HelloWorldRouteInput(name="World")) == HelloWorldRouteOutput(
+        message="Hello, World!"
     )

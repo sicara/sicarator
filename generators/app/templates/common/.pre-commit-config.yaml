@@ -39,7 +39,7 @@ repos:
     language: system
     types: [python]
     stages: [push]
-<% if (includeAWSInfrastructureCodeForApi) { -%>
+<% if (includeApi && includeAWSInfrastructureCodeForApi) { -%>
   - id: terraform-docs
     name: Update terraform docs
     entry: cd terraform && make docs

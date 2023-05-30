@@ -40,7 +40,7 @@
 Install [Docker Engine](https://docs.docker.com/engine/install/) to build and run the API's Docker image locally.
 
 <% } -%>
-<% if (includeAWSInfrastructureCodeForApi) { -%>
+<% if (includeApi && includeAWSInfrastructureCodeForApi) { -%>
 ### AWS Command Line Interface
 Install [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) to be able to interact
 with AWS services from your terminal.
@@ -59,8 +59,8 @@ To manage the project infrastructure, you will need to install:
 Create your virtual environment and link it to your project folder:
 
 ```bash
-pyenv virtualenv <%= pythonVersion %> <%= projectName %>
-pyenv local <%= projectName %>
+pyenv virtualenv <%= pythonVersion %> <%= projectSlug %>
+pyenv local <%= projectSlug %>
 ```
 Now, every time you are in your project directory your virtualenv will be activated thanks to `pyenv`!
 
@@ -70,7 +70,7 @@ Now, every time you are in your project directory your virtualenv will be activa
 poetry install --no-root
 ```
 
-<% if (includeAWSInfrastructureCodeForApi) { -%>
+<% if (includeApi && includeAWSInfrastructureCodeForApi) { -%>
 ### Setup AWS for your project
 Set up your AWS account locally to be able to access the different resources:
 - Get your AWS credentials from the AWS console, or ask an administrator to provide them to you.
@@ -79,12 +79,12 @@ Set up your AWS account locally to be able to access the different resources:
 - If you are managing several AWS accounts in your computer
   - Modify your local file located in `~/.aws/credentials` to add:
     ```bash
-    [<%= projectName %>]
+    [<%= projectSlug %>]
     aws_access_key_id=XXXXXX
     aws_secret_access_key=XXXXXXXX
     region=<%= awsRegion %>
     ```
-  - *(Optional)* In your IDE, modify the default terminal env variables of your project to add `AWS_PROFILE=<%= projectName %>`.
+  - *(Optional)* In your IDE, modify the default terminal env variables of your project to add `AWS_PROFILE=<%= projectSlug %>`.
   It allows you to use the right AWS profile when calling Python files.
 
 ### Set-up Terraform
@@ -167,7 +167,7 @@ make mypy
 
 <% if (includeApi) { -%>
 ## API
-The **<%= projectName %>** project includes an API built with [FastAPI](https://fastapi.tiangolo.com/). Its code can be found at `src/api`.
+The project includes an API built with [FastAPI](https://fastapi.tiangolo.com/). Its code can be found at `src/api`.
 
 The API is containerized using a [Docker](https://docs.docker.com/get-started/) image, built from the `Dockerfile` and `docker-compose.yml` at the root.
 
@@ -180,7 +180,7 @@ You can test the `hello_world` route by [importing the Postman collection](https
 For more details on the API routes, check the automatically generated [swagger](https://learning.postman.com/docs/getting-started/importing-and-exporting-data/#importing-postman-data) at the `/docs` url.
 
 <% } -%>
-<% if (includeAWSInfrastructureCodeForApi) { -%>
+<% if (includeApi && includeAWSInfrastructureCodeForApi) { -%>
 ### Deploy the API to AWS
 To deploy the API, run (depending on your computer's architecture):
 ```bash
@@ -192,7 +192,7 @@ make deploy-api-from-arm # E.g. Mac M1 or M2
 ```
 
 <% } -%>
-<% if (includeAWSInfrastructureCodeForApi) { -%>
+<% if (includeApi && includeAWSInfrastructureCodeForApi) { -%>
 ## Infrastructure
 
 The infrastructure of the project consists of AWS resources, provisioned with Terraform.
