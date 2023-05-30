@@ -170,8 +170,10 @@ module.exports = class extends Generator {
         when: ({ includeAWSInfrastructureCodeForApi }) =>
           includeAWSInfrastructureCodeForApi,
         name: "awsAccountId",
-        message: "ID of your AWS account?",
-        store: true
+        message: `ID of your AWS account?
+💡 Keep it blank if you don't have it yet: you can update the AWS_ACCOUNT_URL variable in the Makefile once you know it.`,
+        default: this.config.get("awsAccountId") || "",
+        filter: awsAccountId => awsAccountId || "*your-aws-account-id*"
       },
       {
         when: ({ includeAWSInfrastructureCodeForApi }) =>
@@ -188,15 +190,17 @@ module.exports = class extends Generator {
     // Save user answers without `store: true` to the local config file (.yo-rc.json)
     // Answers with `store: true` are indeed already saved to the local config file (as well as to the global config file).
     // Following answers don't have `store: true` because we don't want to save them to the global config file.
-    this.config.set("projectName", this.answers.projectName);
-    this.config.set("projectSlug", this.answers.projectSlug);
-    this.config.set("projectDescription", this.answers.projectDescription);
-    if (this.answers.terraformBackendBucketName) {
-      this.config.set(
-        "terraformBackendBucketName",
-        this.answers.terraformBackendBucketName
-      );
-    }
+    [
+      "projectName",
+      "projectSlug",
+      "projectDescription",
+      "terraformBackendBucketName",
+      "awsAccountId"
+    ].forEach(promptName => {
+      if (this.answers[promptName]) {
+        this.config.set(promptName, this.answers[promptName]);
+      }
+    });
   }
 
   default() {
