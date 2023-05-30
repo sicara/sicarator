@@ -244,7 +244,17 @@ module.exports = class extends Generator {
       "--skip-existing"
     ]);
 
-    this.spawnCommandSync("poetry", ["lock"]);
+    this.log("Generating Poetry lock file in a temporary virtual environment");
+    this.spawnCommandSync("poetry", ["lock"], {
+      env: {
+        ...process.env,
+        PYENV_VERSION: this.answers.pythonVersion, // Allow Poetry to find the correct Python version
+        POETRY_VIRTUALENVS_IN_PROJECT: 1 // Allow to easily delete the .venv, see below
+      }
+    });
+    // Delete Poetry environment, because the developer will create its own Pyenv environment when installing the project
+    this.log("Deleting temporary virtual environment");
+    this.spawnCommandSync("rm", ["-rf", ".venv"]);
   }
 
   end() {
