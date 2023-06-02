@@ -1,11 +1,12 @@
 {
   "name": "generator-sicarator",
   "version": "0.1.0",
-  "description": "Sicara's project generator",
+  "description": "Instant Setup & Best Quality for Data Projects!",
   "homepage": "https://github.com/sicara/sicarator",
   "author": {
     "name": "Yannick Wolff",
-    "email": "yannickw@sicara.com"
+    "email": "yannickw@sicara.com",
+    "url": "https://sicara.fr"
   },
   "files": [
     "generators"
@@ -76,6 +77,7 @@
     "test": "jest",
     "test:ci": "jest --ci --runInBand --reporters=default --reporters=jest-junit"
   },
-  "repository": "git@github.com:sicara/sicarator.git",
+  "repository": "github:sicara/sicarator",
+  "bugs": "https://github.com/sicara/sicarator/issues",
   "license": "Apache-2.0"
 }
