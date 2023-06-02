@@ -270,6 +270,16 @@ ${dvcRemoteType}://`,
       this.log(`${chalk.green("create folder")} ${this.answers.projectSlug}`);
       mkdirp.sync(this.answers.projectSlug);
       this.destinationRoot(this.destinationPath(this.answers.projectSlug));
+
+      // A ".yo-rc.json" file may have been created at the starting path during the prompting step
+      if (
+        this.fs.exists(this.destinationPath(path.join("..", ".yo-rc.json")))
+      ) {
+        this.fs.move(
+          this.destinationPath(path.join("..", ".yo-rc.json")),
+          this.destinationPath(".yo-rc.json")
+        );
+      }
     }
   }
 
@@ -367,17 +377,6 @@ ${dvcRemoteType}://`,
   }
 
   end() {
-    // A ".yo-rc.json" file may have been created at the starting path during the prompting step instead of the inside of the generated project.
-    if (
-      !this.fs.exists(this.destinationPath(".yo-rc.json")) &&
-      this.fs.exists(this.destinationPath(path.join("..", ".yo-rc.json")))
-    ) {
-      this.fs.move(
-        this.destinationPath(path.join("..", ".yo-rc.json")),
-        this.destinationPath(".yo-rc.json")
-      );
-    }
-
     // Initialize git repository
     this.spawnCommandSync("git", ["init"]);
 
