@@ -268,7 +268,7 @@ module.exports = class extends Generator {
         message: ({ dvcRemoteType }) =>
           `${mainMessage("DVC remote bucket name?")}${infoMessage(
             "You can create the remote later, and update the DVC configuration file (.dvc/config) accordingly if needed."
-          )} ${dvcRemoteType}://`,
+          )}\n${dvcRemoteType}://`,
         default: ({ projectSlug }) =>
           this.config.get("dvcRemoteBucketName") || `${projectSlug}-dvc-remote`,
         transformer: bucketName => strictlySlugify(bucketName, false),
