@@ -77,5 +77,5 @@
     "test:ci": "jest --ci --runInBand --reporters=default --reporters=jest-junit"
   },
   "repository": "git@github.com:sicara/sicarator.git",
-  "license": "MIT"
+  "license": "Apache-2.0"
 }
