@@ -18,11 +18,11 @@ commands:
             rm -rf /home/circleci/.local/share/pypoetry
       - restore_cache:
           keys:
-            - poetry-1.2.2
+            - poetry-1.5.1
       # Restore cached dependencies
       - restore_cache:
           keys:
-            - project-dependencies-poetry-1.2.2-{{ checksum "poetry.lock" }}
+            - project-dependencies-poetry-1.5.1-{{ checksum "poetry.lock" }}
 
 jobs:
   install:
@@ -32,9 +32,9 @@ jobs:
       - run:
           name: Install Poetry right version (if not already restored from cache)
           command: |
-            [ -d "/home/circleci/.local/share/pypoetry" ] || curl -sSL https://install.python-poetry.org | python - --version 1.2.2
+            [ -d "/home/circleci/.local/share/pypoetry" ] || curl -sSL https://install.python-poetry.org | python - --version 1.5.1
       - save_cache:
-          key: poetry-1.2.2
+          key: poetry-1.5.1
           paths:
             - /home/circleci/.local/share/pypoetry
       - run:
@@ -43,7 +43,7 @@ jobs:
             poetry run pip install --upgrade pip
             poetry install --no-root
       - save_cache:
-          key: project-dependencies-poetry-1.2.2-{{ checksum "poetry.lock" }}
+          key: project-dependencies-poetry-1.5.1-{{ checksum "poetry.lock" }}
           paths:
             - /home/circleci/.cache/pypoetry/virtualenvs
             - /home/circleci/.poetry/env
