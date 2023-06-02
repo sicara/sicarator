@@ -21,10 +21,10 @@
           }
         },
         "url": {
-          "raw": "http://127.0.0.1:8000/hello-world",
+          "raw": "http://127.0.0.1:80/hello-world",
           "protocol": "http",
           "host": ["127", "0", "0", "1"],
-          "port": "8000",
+          "port": "80",
           "path": ["hello-world"]
         }
       },

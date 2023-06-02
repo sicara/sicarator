@@ -24,6 +24,7 @@
   - containerized with [Docker](https://www.docker.com/)
   - deployed on [AWS](https://aws.amazon.com/) (API Gateway, ASG, ECS, EC2)
   - provisioned with [Terraform](https://www.terraform.io/)
+  - testable with a [Postman](https://www.postman.com/) collection
 - *(optional)* **Data Versioning and Pipelines** with [DVC](https://dvc.org/)
 - *(optional)* **Data Visualization** with [Streamlit](https://streamlit.io/)
 
