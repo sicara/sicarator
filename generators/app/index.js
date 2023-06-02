@@ -24,7 +24,7 @@ module.exports = class extends Generator {
       yosay(
         `Hi, I'm ${chalk.red(
           "Sicarator"
-        )}! I'm going to help you to set up your new project!`
+        )}! I'm going to help you set up your ${chalk.yellow("data project")}!`
       )
     );
 
