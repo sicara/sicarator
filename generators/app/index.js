@@ -159,7 +159,7 @@ module.exports = class extends Generator {
         )}${infoMessage(
           "Stack main components: API Gateway, ASG, ECS, EC2."
         )}${costMessage(
-          "Cost: ~16$/month + price of the EC2 instances (~38$/month for one t2.medium instance)."
+          "AWS costs: ~16$/month + price of the EC2 instances (~38$/month for one t2.medium instance)."
         )}`,
         type: "confirm",
         default: false,
@@ -206,7 +206,7 @@ module.exports = class extends Generator {
         name: "includeNatGateway",
         message: `${mainMessage(
           "Include a NAT Gateway to allow the API instance to access internet?"
-        )}${costMessage("Extra cost: ~32$/month.")}`,
+        )}${costMessage("Extra AWS cost: ~32$/month.")}`,
         type: "confirm",
         default: false,
         store: true
