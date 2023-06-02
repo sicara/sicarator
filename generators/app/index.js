@@ -200,7 +200,8 @@ module.exports = class extends Generator {
       {
         name: "includeDvc",
         message: `Include DVC on the project?
-💡 DVC is a tool used to version data files and manage data pipelines. Strongly recommended for ML projects!`,
+💡 This tool allows to version data files and create data pipelines (see https://dvc.org/).
+  Strongly recommended for ML projects!`,
         type: "confirm",
         default: false,
         store: true
@@ -241,6 +242,17 @@ ${dvcRemoteType}://`,
           this.config.get("dvcRemoteBucketName") || `${projectSlug}-dvc-remote`,
         transformer: bucketName => strictlySlugify(bucketName, false),
         filter: strictlySlugify
+      },
+
+      // Streamlit
+      {
+        name: "includeStreamlit",
+        message: `Include Streamlit on the project?
+💡 This Python package allows to easily build interactive web apps for ML projects (see https://streamlit.io/).
+  Very useful to analyze data and model results, and to share them with non-technical people.`,
+        type: "confirm",
+        default: false,
+        store: true
       }
     ]);
 
@@ -348,6 +360,16 @@ ${dvcRemoteType}://`,
     if (this.answers.includeDvc) {
       this.fs.copyTpl(
         this.templatePath("dvc"),
+        this.destinationPath(),
+        this.answers,
+        TEMPLATE_OPTIONS,
+        COPY_OPTIONS
+      );
+    }
+
+    if (this.answers.includeStreamlit) {
+      this.fs.copyTpl(
+        this.templatePath("streamlit"),
         this.destinationPath(),
         this.answers,
         TEMPLATE_OPTIONS,

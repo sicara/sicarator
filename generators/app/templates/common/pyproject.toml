@@ -21,6 +21,9 @@ pre-commit = "^2"
 pytest = "^7"
 pytest-cov = "^3"
 ruff = "^0"
+<% if (includeStreamlit) { -%>
+streamlit = "^1.16.0"
+<% } -%>
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
