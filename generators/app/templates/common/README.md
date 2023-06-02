@@ -112,6 +112,15 @@ Set up your AWS account locally to be able to access the different resources:
 poetry run pre-commit install
 ```
 
+<% if (includeDvc && dvcRemoteType) { -%>
+### Pull data from DVC remote
+- Make sure you have access to the DVC remote bucket (see bucket URL in `.dvc/config` file). If not, ask an administrator to give you access.
+- Pull the data:
+  ```bash
+  dvc pull
+  ```
+
+<% } -%>
 ## Testing
 
 To run unit tests, run `pytest` with:

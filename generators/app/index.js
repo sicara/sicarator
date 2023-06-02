@@ -6,6 +6,9 @@ const path = require("path");
 const mkdirp = require("mkdirp");
 const slugify = require("slugify");
 
+const TEMPLATE_OPTIONS = {};
+const COPY_OPTIONS = { globOptions: { dot: true } };
+
 function strictlySlugify(projectName, trim = true) {
   return slugify(projectName, {
     lower: true,
@@ -26,6 +29,7 @@ module.exports = class extends Generator {
     );
 
     this.answers = await this.prompt([
+      // Common
       {
         name: "projectName",
         message: `Project name?
@@ -118,6 +122,8 @@ module.exports = class extends Generator {
         ],
         store: true
       },
+
+      // API
       {
         name: "includeApi",
         message: `Include an API?
@@ -126,15 +132,8 @@ module.exports = class extends Generator {
         default: false,
         store: true
       },
-      {
-        when: ({ includeApi }) => !includeApi,
-        name: "includeHelloWorld",
-        message: `Include 'hello world' function and unit test?
-🚨️ If 'no', CI testing step will fail due to empty tests`,
-        type: "confirm",
-        default: true,
-        store: true
-      },
+
+      // API infrastructure
       {
         when: ({ includeApi }) => includeApi,
         name: "includeAWSInfrastructureCodeForApi",
@@ -184,6 +183,64 @@ module.exports = class extends Generator {
         type: "confirm",
         default: false,
         store: true
+      },
+
+      // Hello world code
+      {
+        when: ({ includeApi }) => !includeApi,
+        name: "includeHelloWorld",
+        message: `Include 'hello world' function and unit test?
+🚨️ If 'no', CI testing step will fail due to empty tests`,
+        type: "confirm",
+        default: true,
+        store: true
+      },
+
+      // DVC
+      {
+        name: "includeDvc",
+        message: `Include DVC on the project?
+💡 DVC is a tool used to version data files and manage data pipelines. Strongly recommended for ML projects!`,
+        type: "confirm",
+        default: false,
+        store: true
+      },
+      {
+        when: ({ includeDvc }) => includeDvc,
+        name: "dvcRemoteType",
+        message: "Which DVC remote type do you want to use?",
+        type: "list",
+        default: "s3",
+        choices: [
+          {
+            name: "AWS S3",
+            value: "s3"
+          },
+          {
+            name: "Google Cloud Storage",
+            value: "gs"
+          },
+          {
+            name: "Azure Blob Storage",
+            value: "azure"
+          },
+          {
+            name: "Other (not recommended ; need to be configured manually)",
+            value: null
+          }
+        ],
+        store: true
+      },
+      {
+        when: ({ dvcRemoteType }) => dvcRemoteType,
+        name: "dvcRemoteBucketName",
+        message: ({ dvcRemoteType }) => `DVC remote bucket name?
+💡 You can create the remote later, and update the DVC configuration file (.dvc/config) accordingly if needed.
+${dvcRemoteType}://`,
+        default: ({ projectSlug }) =>
+          this.config.get("dvcRemoteBucketName") || `${projectSlug}-dvc-remote`,
+        transformer: bucketName => strictlySlugify(bucketName, false),
+        filter: strictlySlugify
       }
     ]);
 
@@ -195,7 +252,8 @@ module.exports = class extends Generator {
       "projectSlug",
       "projectDescription",
       "terraformBackendBucketName",
-      "awsAccountId"
+      "awsAccountId",
+      "dvcRemoteBucketName"
     ].forEach(promptName => {
       if (this.answers[promptName]) {
         this.config.set(promptName, this.answers[promptName]);
@@ -226,13 +284,16 @@ module.exports = class extends Generator {
       this.templatePath("common"),
       this.destinationPath(),
       { ...this.answers, pythonMajorVersion, pythonMajorVersionShortcut },
-      {},
-      { globOptions: { dot: true } }
+      TEMPLATE_OPTIONS,
+      COPY_OPTIONS
     );
 
-    this.fs.copy(
+    this.fs.copyTpl(
       this.templatePath("gitignore/gitignore"),
-      this.destinationPath(".gitignore")
+      this.destinationPath(".gitignore"),
+      this.answers,
+      TEMPLATE_OPTIONS,
+      COPY_OPTIONS
     );
 
     if (this.answers.ci !== null) {
@@ -240,8 +301,8 @@ module.exports = class extends Generator {
         this.templatePath(path.join("ci", this.answers.ci)),
         this.destinationPath(this.answers.ci),
         this.answers,
-        {},
-        { globOptions: { dot: true } }
+        TEMPLATE_OPTIONS,
+        COPY_OPTIONS
       );
     }
 
@@ -250,22 +311,38 @@ module.exports = class extends Generator {
         this.templatePath("api"),
         this.destinationPath(),
         this.answers,
-        {},
-        { globOptions: { dot: true } }
+        TEMPLATE_OPTIONS,
+        COPY_OPTIONS
       );
       if (this.answers.includeAWSInfrastructureCodeForApi) {
         this.fs.copyTpl(
           this.templatePath("terraform"),
           this.destinationPath(),
           this.answers,
-          {},
-          { globOptions: { dot: true } }
+          TEMPLATE_OPTIONS,
+          COPY_OPTIONS
         );
       }
     }
 
     if (this.answers.includeHelloWorld) {
-      this.fs.copy(this.templatePath("hello_world"), this.destinationPath());
+      this.fs.copyTpl(
+        this.templatePath("hello_world"),
+        this.destinationPath(),
+        this.answers,
+        TEMPLATE_OPTIONS,
+        COPY_OPTIONS
+      );
+    }
+
+    if (this.answers.includeDvc) {
+      this.fs.copyTpl(
+        this.templatePath("dvc"),
+        this.destinationPath(),
+        this.answers,
+        TEMPLATE_OPTIONS,
+        COPY_OPTIONS
+      );
     }
   }
 
@@ -291,7 +368,10 @@ module.exports = class extends Generator {
 
   end() {
     // A ".yo-rc.json" file may have been created at the starting path during the prompting step instead of the inside of the generated project.
-    if (this.fs.exists(this.destinationPath(path.join("..", ".yo-rc.json")))) {
+    if (
+      !this.fs.exists(this.destinationPath(".yo-rc.json")) &&
+      this.fs.exists(this.destinationPath(path.join("..", ".yo-rc.json")))
+    ) {
       this.fs.move(
         this.destinationPath(path.join("..", ".yo-rc.json")),
         this.destinationPath(".yo-rc.json")
