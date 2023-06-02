@@ -1,7 +1,31 @@
 # Sicarator
-> Sicara's project generator
+> Instant Setup & Best Quality for Data Projects!
+
+**Sicarator** is a **CLI generator** for **Data Science projects**. It is built with [Yeoman](https://yeoman.io/) and maintained by [Sicara](https://www.sicara.fr/).
 
 ![Demo GIF](./demo.gif)
+
+## Main components of the generated project
+
+- **Python** development environment with:
+  - [Poetry](https://python-poetry.org/) for dependency management
+  - [Pytest](https://docs.pytest.org/) for testing
+  - [Black](https://black.readthedocs.io/) for code formatting
+  - [Ruff](https://beta.ruff.rs/) for static analysis
+  - [Mypy](https://mypy.readthedocs.io/) for type checking
+  - [Pre-commit](https://pre-commit.com/) for git hooks
+- **Continuous Integration** of your choice:
+  - [CircleCI](https://circleci.com/)
+  - [Github Actions](https://github.com/features/actions)
+  - [Gitlab CI/CD](https://docs.gitlab.com/ee/ci/)
+  - [Azure Pipelines](https://azure.microsoft.com/en-us/products/devops/pipelines/)
+- *(optional)* **API**:
+  - built with [FastAPI](https://fastapi.tiangolo.com/)
+  - containerized with [Docker](https://www.docker.com/)
+  - deployed on [AWS](https://aws.amazon.com/) (API Gateway, ASG, ECS, EC2)
+  - provisioned with [Terraform](https://www.terraform.io/)
+- *(optional)* **Data Versioning and Pipelines** with [DVC](https://dvc.org/)
+- *(optional)* **Data Visualization** with [Streamlit](https://streamlit.io/)
 
 ## Requirements
 
@@ -11,7 +35,7 @@ Install [pyenv](https://github.com/pyenv/pyenv) to manage your Python versions a
   ```bash
   curl -sSL https://pyenv.run | bash
   ```
-*If you are on MacOS and experiencing errors on python install with pyenv, follow this [comment](https://github.com/pyenv/pyenv/issues/1740#issuecomment-738749988)*
+*If you are on MacOS and experiencing errors on Python install with PyEnv, follow this [comment](https://github.com/pyenv/pyenv/issues/1740#issuecomment-738749988)*
 
 ### Poetry
 

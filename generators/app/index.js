@@ -1,10 +1,17 @@
 "use strict";
-const Generator = require("yeoman-generator");
 const chalk = require("chalk");
-const yosay = require("yosay");
-const path = require("path");
+const Generator = require("yeoman-generator");
 const mkdirp = require("mkdirp");
+const path = require("path");
 const slugify = require("slugify");
+const yosay = require("yosay");
+
+const {
+  mainMessage,
+  infoMessage,
+  warningMessage,
+  costMessage
+} = require("./utils/messages");
 
 const TEMPLATE_OPTIONS = {};
 const COPY_OPTIONS = { globOptions: { dot: true } };
@@ -24,7 +31,7 @@ module.exports = class extends Generator {
       yosay(
         `Hi, I'm ${chalk.red(
           "Sicarator"
-        )}! I'm going to help you to set up your new project!`
+        )}! I'm going to help you set up your ${chalk.yellow("data project")}!`
       )
     );
 
@@ -32,14 +39,16 @@ module.exports = class extends Generator {
       // Common
       {
         name: "projectName",
-        message: `Project name?
-💡 Should be short, but can contain any character ; to be used in the README.md, etc.`,
+        message: `${mainMessage("Project name?")}${infoMessage(
+          "Should be short, but can contain any character ; to be used in the README.md, etc."
+        )}`,
         default: this.config.get("projectName") || path.basename(process.cwd())
       },
       {
         name: "projectSlug",
-        message: `Project slug?
-💡 Should contain only lowercase letters, numbers and hyphens (-) ; to be used in URLs, etc.`,
+        message: `${mainMessage("Project slug?")}${infoMessage(
+          "Should contain only lowercase letters, numbers and hyphens (-) ; to be used in URLs, etc."
+        )}`,
         default: ({ projectName }) =>
           this.config.get("projectSlug") || strictlySlugify(projectName),
         // Transform in real time without trimming
@@ -49,29 +58,34 @@ module.exports = class extends Generator {
       },
       {
         name: "projectDescription",
-        message: "Project description in one line?",
+        message: mainMessage("Project description in one line?"),
         default:
           this.config.get("projectDescription") ||
           "Project generated with Sicarator"
       },
       {
         name: "authorName",
-        message: "The author's name?",
+        message: mainMessage("The author's name?"),
         default: this.user.git.name(),
         store: true
       },
       {
         name: "authorEmail",
-        message: "The author's email?",
+        message: mainMessage("The author's email?"),
         default: this.user.git.email(),
         store: true
       },
       {
         name: "pythonVersion",
-        message: `Which Python version do yo want to use?
-🚨️ Older versions are not recommended unless your project has some specific requirements.
-💡 You can check their compatibility with the main Python packages on https://pyreadiness.org/.
-💡 If the chosen version is not installed on your machine, it will be automatically installed by PyEnv.`,
+        message: `${mainMessage(
+          "Which Python version do yo want to use?"
+        )}${warningMessage(
+          "Older versions are not recommended unless your project has some specific requirements"
+        )}${infoMessage(
+          "You can check their compatibility with the main Python packages on https://pyreadiness.org/."
+        )}${infoMessage(
+          "If the chosen version is not installed on your machine, it will be automatically installed by PyEnv."
+        )}`,
         type: "list",
         default: "3.11.3",
         choices: [
@@ -95,7 +109,9 @@ module.exports = class extends Generator {
       },
       {
         name: "ci",
-        message: "Which CI (Continuous Integration) tool do you want to use?",
+        message: mainMessage(
+          "Which CI (Continuous Integration) tool do you want to use?"
+        ),
         type: "list",
         default: ".circleci",
         choices: [
@@ -126,8 +142,9 @@ module.exports = class extends Generator {
       // API
       {
         name: "includeApi",
-        message: `Include an API?
-💡 It will be built with FastAPI and containerized with Docker.`,
+        message: `${mainMessage("Include an API?")}${infoMessage(
+          "It will be built with FastAPI and containerized with Docker."
+        )}`,
         type: "confirm",
         default: false,
         store: true
@@ -137,9 +154,13 @@ module.exports = class extends Generator {
       {
         when: ({ includeApi }) => includeApi,
         name: "includeAWSInfrastructureCodeForApi",
-        message: `Include Terraform code to provision the API infrastructure on AWS?
-💡 Stack main components: API Gateway, ASG, ECS, EC2.
-💰 Cost: ~16$/month + price of the EC2 instances (~38$/month for one t2.medium instance).`,
+        message: `${mainMessage(
+          "Include Terraform code to provision the API infrastructure on AWS?"
+        )}${infoMessage(
+          "Stack main components: API Gateway, ASG, ECS, EC2."
+        )}${costMessage(
+          "AWS costs: ~16$/month + price of the EC2 instances (~38$/month for one t2.medium instance)."
+        )}`,
         type: "confirm",
         default: false,
         store: true
@@ -148,8 +169,11 @@ module.exports = class extends Generator {
         when: ({ includeAWSInfrastructureCodeForApi }) =>
           includeAWSInfrastructureCodeForApi,
         name: "terraformBackendBucketName",
-        message: `Name of the S3 bucket that will be used to store Terraform state?
-💡 You can create the bucket later, and update the backend configuration file (backend.tf) accordingly if needed.`,
+        message: `${mainMessage(
+          "Name of the S3 bucket that will be used to store Terraform state?"
+        )}${infoMessage(
+          "You can create the bucket later, and update the backend configuration file (backend.tf) accordingly if needed."
+        )}`,
         default: ({ projectSlug }) =>
           this.config.get("terraformBackendBucketName") ||
           `${projectSlug}-terraform-backend`,
@@ -160,8 +184,9 @@ module.exports = class extends Generator {
         when: ({ includeAWSInfrastructureCodeForApi }) =>
           includeAWSInfrastructureCodeForApi,
         name: "awsRegion",
-        message:
-          "AWS region in which you want to provision your infrastructure?",
+        message: mainMessage(
+          "AWS region in which you want to provision your infrastructure?"
+        ),
         default: "eu-west-3",
         store: true
       },
@@ -169,8 +194,9 @@ module.exports = class extends Generator {
         when: ({ includeAWSInfrastructureCodeForApi }) =>
           includeAWSInfrastructureCodeForApi,
         name: "awsAccountId",
-        message: `ID of your AWS account?
-💡 Keep it blank if you don't have it yet: you can update the AWS_ACCOUNT_URL variable in the Makefile once you know it.`,
+        message: `${mainMessage("ID of your AWS account?")}${infoMessage(
+          "Keep it blank if you don't have it yet: you can update the AWS_ACCOUNT_URL variable in the Makefile once you know it."
+        )}`,
         default: this.config.get("awsAccountId") || "",
         filter: awsAccountId => awsAccountId || "*your-aws-account-id*"
       },
@@ -178,8 +204,9 @@ module.exports = class extends Generator {
         when: ({ includeAWSInfrastructureCodeForApi }) =>
           includeAWSInfrastructureCodeForApi,
         name: "includeNatGateway",
-        message: `Include a NAT Gateway to allow the API instance to access internet?
-💰 Extra cost: ~32$/month.`,
+        message: `${mainMessage(
+          "Include a NAT Gateway to allow the API instance to access internet?"
+        )}${costMessage("Extra AWS cost: ~32$/month.")}`,
         type: "confirm",
         default: false,
         store: true
@@ -189,8 +216,11 @@ module.exports = class extends Generator {
       {
         when: ({ includeApi }) => !includeApi,
         name: "includeHelloWorld",
-        message: `Include 'hello world' function and unit test?
-🚨️ If 'no', CI testing step will fail due to empty tests`,
+        message: `${mainMessage(
+          "Include 'hello world' function and unit test?"
+        )}${warningMessage(
+          "If 'no', CI testing step will fail due to empty tests."
+        )}`,
         type: "confirm",
         default: true,
         store: true
@@ -199,9 +229,9 @@ module.exports = class extends Generator {
       // DVC
       {
         name: "includeDvc",
-        message: `Include DVC on the project?
-💡 This tool allows to version data files and create data pipelines (see https://dvc.org/).
-  Strongly recommended for ML projects!`,
+        message: `${mainMessage("Include DVC on the project?")}${infoMessage(
+          "This tool allows to version data files and create data pipelines (see https://dvc.org/)."
+        )}${infoMessage("Strongly recommended for ML projects!")}`,
         type: "confirm",
         default: false,
         store: true
@@ -209,7 +239,7 @@ module.exports = class extends Generator {
       {
         when: ({ includeDvc }) => includeDvc,
         name: "dvcRemoteType",
-        message: "Which DVC remote type do you want to use?",
+        message: mainMessage("Which DVC remote type do you want to use?"),
         type: "list",
         default: "s3",
         choices: [
@@ -235,9 +265,10 @@ module.exports = class extends Generator {
       {
         when: ({ dvcRemoteType }) => dvcRemoteType,
         name: "dvcRemoteBucketName",
-        message: ({ dvcRemoteType }) => `DVC remote bucket name?
-💡 You can create the remote later, and update the DVC configuration file (.dvc/config) accordingly if needed.
-${dvcRemoteType}://`,
+        message: ({ dvcRemoteType }) =>
+          `${mainMessage("DVC remote bucket name?")}${infoMessage(
+            "You can create the remote later, and update the DVC configuration file (.dvc/config) accordingly if needed."
+          )}\n${dvcRemoteType}://`,
         default: ({ projectSlug }) =>
           this.config.get("dvcRemoteBucketName") || `${projectSlug}-dvc-remote`,
         transformer: bucketName => strictlySlugify(bucketName, false),
@@ -247,9 +278,13 @@ ${dvcRemoteType}://`,
       // Streamlit
       {
         name: "includeStreamlit",
-        message: `Include Streamlit on the project?
-💡 This Python package allows to easily build interactive web apps for ML projects (see https://streamlit.io/).
-  Very useful to analyze data and model results, and to share them with non-technical people.`,
+        message: `${mainMessage(
+          "Include Streamlit on the project?"
+        )}${infoMessage(
+          "This Python package allows to easily build interactive web apps for ML projects (see https://streamlit.io/)."
+        )}${infoMessage(
+          "Very useful to analyze data and model results, and to share them with non-technical people."
+        )}`,
         type: "confirm",
         default: false,
         store: true
@@ -409,9 +444,11 @@ ${dvcRemoteType}://`,
       }).status !== 0
     ) {
       this.spawnCommandSync("git", ["add", "."]);
+      this.log("Creating initial commit");
       this.spawnCommandSync("git", [
         "commit",
-        "-m",
+        "--quiet",
+        "--message",
         "Initial commit (generated by Sicarator)"
       ]);
     }
