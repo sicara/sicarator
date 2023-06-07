@@ -243,6 +243,6 @@ If the plan suits what you were expecting, provision the development environment
 ## Streamlit
 
 The project includes a Streamlit app.
-See its documentation in the [specific README](streamlit_app/README.md).
+See its documentation in the [specific README](src/streamlit_app/README.md).
 
 <% } -%>
