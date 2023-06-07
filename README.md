@@ -52,12 +52,12 @@ Install [Poetry](https://python-poetry.org) to manage your dependencies and tool
 
 ### Node.js
 
-Install a stable version of [Node.js](https://nodejs.org/) (v16.x.x) if you don't have one.
+Install a stable version of [Node.js](https://nodejs.org/) (v18.x.x) if you don't have one.
 The Sicarator is indeed a [Yeoman](https://yeoman.io/) generator, which is a `Node.js` module.
     
 For linux:
   ```bash
-  curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash -
+  curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
   sudo apt-get install -y nodejs
   ```
 
