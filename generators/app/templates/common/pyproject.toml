@@ -90,6 +90,8 @@ ban-relative-imports = "all"
 
 [tool.ruff.flake8-type-checking]
 strict = true
+runtime-evaluated-base-classes = ["pydantic.BaseModel"]
+# Pydantic need to be able to evaluate types at runtime; see https://pypi.org/project/flake8-type-checking/
 
 [tool.ruff.per-file-ignores]
 # Allow missing docstrings for tests
