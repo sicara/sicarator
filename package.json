@@ -25,6 +25,7 @@
     "jest-junit": "^13.0.0",
     "lint-staged": "^9.4.3",
     "prettier": "^1.19.1",
+    "release-it": "^15.11.0",
     "yeoman-assert": "^3.1.1",
     "yeoman-test": "^1.7.0"
   },
@@ -72,10 +73,22 @@
       "prettier"
     ]
   },
+  "release-it": {
+    "git": {
+      "tagName": "v${version}"
+    },
+    "github": {
+      "release": true
+    },
+    "npm": {
+      "publish": false
+    }
+  },
   "scripts": {
     "lint": "eslint .",
     "test": "jest",
-    "test:ci": "jest --ci --runInBand --reporters=default --reporters=jest-junit"
+    "test:ci": "jest --ci --runInBand --reporters=default --reporters=jest-junit",
+    "release": "release-it"
   },
   "repository": "github:sicara/sicarator",
   "bugs": "https://github.com/sicara/sicarator/issues",
