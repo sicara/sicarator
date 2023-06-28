@@ -65,6 +65,48 @@ deploy-api-from-arm:
 	make redeploy-ecs-service
 
 <% } -%>
+
+<% if (includeApi && includeGCPInfrastructureCodeForApi) { -%>
+########################################################################################################################
+# Deployment
+########################################################################################################################
+
+GCP_PROJECT_ID=<%= gcpProjectID %>
+GCP_REGION=<%= gcpRegion %>
+ARTIFACT_REGISTRY_NAME=docker-registry-api-dev
+CLOUD_RUN_SERVICE_NAME=api_service_dev
+
+artifact-registry-login:
+	gcloud auth configure-docker
+
+# Redeployment of Cloud Run service to take into account the new image
+redeploy-cloud-run-service:
+	gcloud run deploy ${CLOUD_RUN_SERVICE_NAME} \
+	--image=${GCP_REGION}-docker.pkg.dev/${GCP_PROJECT_ID}/${ARTIFACT_REGISTRY_NAME}/${CLOUD_RUN_SERVICE_NAME}:latest \
+	--region=${GCP_REGION}
+
+
+deploy-api-from-x86:
+	make artifact-registry-login:
+
+	# build image
+	docker build . -t api -t ${GCP_REGION}-docker.pkg.dev/${GCP_PROJECT_ID}/${ARTIFACT_REGISTRY_NAME}/${CLOUD_RUN_SERVICE_NAME}:latest
+
+	# tag and push image to Artifact Registry
+	docker push -t ${GCP_REGION}-docker.pkg.dev/${GCP_PROJECT_ID}/${ARTIFACT_REGISTRY_NAME}/${CLOUD_RUN_SERVICE_NAME}:latest
+
+	make redeploy-cloud-run-service
+
+# When building an image from an ARM processor (Mac M1 or M2) with the standard way (`deploy-api-from-x86`), the
+# resulting image can only be run on ARM machines (which is not the case of the provisioned instance). Using `buildx`
+# allows to overcome this limitation, by specifying for which platform the image is built.
+deploy-api-from-arm:
+	make ecr-login
+	docker buildx build --platform linux/amd64 --push -t ${GCP_REGION}-docker.pkg.dev/${GCP_PROJECT_ID}/${ARTIFACT_REGISTRY_NAME}/${CLOUD_RUN_SERVICE_NAME}:latest .
+	make redeploy-cloud-run-service
+
+<% } -%>
+
 <% if (includeStreamlit) { -%>
 ########################################################################################################################
 # Streamlit

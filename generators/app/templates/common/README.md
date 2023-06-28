@@ -239,6 +239,35 @@ If the plan suits what you were expecting, provision the development environment
   ```
 
 <% } -%>
+<% if (includeApi && includeGCPInfrastructureCodeForApi) { -%>
+## Infrastructure
+
+The infrastructure of the project consists of GCP resources, provisioned with Terraform.
+The Terraform code for all resources can be found in the `terraform` folder.
+
+### Process to add/delete/update resources
+
+Select the environment you want to provision:
+```bash
+terraform workspace select <env_name>
+```
+
+Then check the module adding/deletion plan
+  ```bash
+  terraform plan
+  ```
+
+If the plan suits what you were expecting, provision the development environment by running:
+  ```bash
+  terraform apply
+  ```
+
+### Access the API
+
+If you try to reach the API with the URL given by Terraform, you should have an error. See [this guide](https://cloud.google.com/run/docs/authenticating/developers?hl=en) to connect to your API in Cloud Run.   
+
+
+<% } -%>
 <% if (includeStreamlit) { -%>
 ## Streamlit
 

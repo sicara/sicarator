@@ -1,0 +1,41 @@
+<!-- BEGIN_TF_DOCS -->
+## Requirements
+
+| Name | Version |
+|------|---------|
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3.0 |
+| <a name="requirement_google"></a> [google](#requirement\_google) | ~>4.70 |
+
+## Providers
+
+| Name | Version |
+|------|---------|
+| <a name="provider_google"></a> [google](#provider\_google) | 4.71.0 |
+
+## Modules
+
+No modules.
+
+## Resources
+
+| Name | Type |
+|------|------|
+| [google_artifact_registry_repository.this](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/artifact_registry_repository) | resource |
+| [google_cloud_run_v2_service.this](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/cloud_run_v2_service) | resource |
+
+## Inputs
+
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| <a name="input_additional_tags"></a> [additional\_tags](#input\_additional\_tags) | Additional resource tags | `map(string)` | n/a | yes |
+| <a name="input_api_name"></a> [api\_name](#input\_api\_name) | Name appended to resources specific to the infrastructure of the api | `string` | `"test"` | no |
+| <a name="input_gcp_project_id"></a> [gcp\_project\_id](#input\_gcp\_project\_id) | Your GCP project ID in which resources will be created | `string` | `"kube-dbt-demo"` | no |
+| <a name="input_gcp_region"></a> [gcp\_region](#input\_gcp\_region) | Region in which the resources are provisioned | `string` | `"<%= gcpRegion %>"` | no |
+
+## Outputs
+
+| Name | Description |
+|------|-------------|
+| <a name="output_docker_registry_url"></a> [docker\_registry\_url](#output\_docker\_registry\_url) | The base URL of the Doker registry |
+| <a name="output_service_url"></a> [service\_url](#output\_service\_url) | The URL of the service in Cloud Run |
+<!-- END_TF_DOCS -->
