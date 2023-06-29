@@ -15,7 +15,7 @@ variable "gcp_region" {
 variable "gcp_project_id" {
   description = "GCP project ID in which resources will be created"
   type        = string
-  default     = "<=% gcpProjectId %>"
+  default     = "<%= gcpProjectId %>"
 }
 
 variable "api_name" {
