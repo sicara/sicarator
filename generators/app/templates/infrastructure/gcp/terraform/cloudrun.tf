@@ -2,7 +2,7 @@
 # not meant to do this. This can be made with `gcloud` CLI (see Makefile command `deploy-api...`).
 
 resource "google_cloud_run_v2_service" "this" {
-  name     = "${terraform.workspace}_${var.api_name}_service"
+  name     = "${terraform.workspace}-${var.api_name}-service"
   ingress  = "INGRESS_TRAFFIC_ALL"
   location = var.gcp_region
 
@@ -18,6 +18,6 @@ resource "google_cloud_run_v2_service" "this" {
   # We must ignore the changes happening to your revisions which will occur every time you will deploy an image.
   # If not, Terraform will keep tracking and planning update.
   lifecycle {
-    ignore_changes = [template[0], client, client_verison]
+    ignore_changes = [template[0], client, client_version]
   }
 }

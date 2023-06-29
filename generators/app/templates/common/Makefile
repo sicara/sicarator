@@ -26,11 +26,12 @@ start-api:
 	docker compose up -d
 
 <% } -%>
-<% if (includeApi && includeAWSInfrastructureCodeForApi) { -%>
+<% if (includeApi && apiInfrastructure !== null) { -%>
 ########################################################################################################################
 # Deployment
 ########################################################################################################################
 
+<% if (apiInfrastructure === "aws") { -%>
 AWS_ACCOUNT_URL=<%= awsAccountId %>.dkr.ecr.<%= awsRegion %>.amazonaws.com
 AWS_REGION=<%= awsRegion %>
 ECR_REPOSITORY_NAME=dev_api_image
@@ -45,37 +46,12 @@ ecr-login:
 redeploy-ecs-service:
 	aws ecs update-service --cluster ${ECS_CLUSTER_NAME} --service ${ECS_SERVICE_NAME} --force-new-deployment --no-cli-pager
 
-deploy-api-from-x86:
-	make ecr-login
-
-	# build image
-	docker build . -t api
-
-	# tag and push image to ecr
-	docker tag api ${IMAGE_URL}:latest
-	docker push ${IMAGE_URL}:latest
-
-	make redeploy-ecs-service
-
-# When building an image from an ARM processor (Mac M1 or M2) with the standard way (`deploy-api-from-x86`), the
-# resulting image can only be run on ARM machines (which is not the case of the provisioned instance). Using `buildx`
-# allows to overcome this limitation, by specifying for which platform the image is built.
-deploy-api-from-arm:
-	make ecr-login
-	docker buildx build --platform linux/amd64 --push -t ${IMAGE_URL}:latest .
-	make redeploy-ecs-service
-
 <% } -%>
-
-<% if (includeApi && includeGCPInfrastructureCodeForApi) { -%>
-########################################################################################################################
-# Deployment
-########################################################################################################################
-
-GCP_PROJECT_ID=<%= gcpProjectID %=>
-GCP_REGION=<%= gcpRegion %=>
-ARTIFACT_REGISTRY_NAME=dev_api_docker_registry
-CLOUD_RUN_SERVICE_NAME=dev_api_service
+<% if (apiInfrastructure === "gcp") { -%>
+GCP_PROJECT_ID=<%= gcpProjectId %>
+GCP_REGION=<%= gcpRegion %>
+ARTIFACT_REGISTRY_NAME=dev-api-docker-registry
+CLOUD_RUN_SERVICE_NAME=dev-api-service
 IMAGE_URL=${GCP_REGION}-docker.pkg.dev/${GCP_PROJECT_ID}/${ARTIFACT_REGISTRY_NAME}/${CLOUD_RUN_SERVICE_NAME}
 
 artifact-registry-login:
@@ -87,28 +63,33 @@ redeploy-cloud-run-service:
 	--image=${IMAGE_URL}:latest \
 	--region=${GCP_REGION}
 
-
+<% } -%>
 deploy-api-from-x86:
-	make artifact-registry-login
+<% if (apiInfrastructure === "aws") { -%>	make ecr-login<% } -%>
+<% if (apiInfrastructure === "gcp") { -%>	make artifact-registry-login<% } -%>
 
 	# build image
-	docker build . -t api -t ${IMAGE_URL}:latest
+	docker build . -t api
 
-	# tag and push image to Artifact Registry
-	docker push -t ${IMAGE_URL}:latest
+	# tag and push image to ecr
+	docker tag api ${IMAGE_URL}:latest
+	docker push ${IMAGE_URL}:latest
 
-	make redeploy-cloud-run-service
+<% if (apiInfrastructure === "aws") { -%>	make redeploy-ecs-service<% } -%>
+<% if (apiInfrastructure === "gcp") { -%>	make redeploy-cloud-run-service<% } -%>
 
 # When building an image from an ARM processor (Mac M1 or M2) with the standard way (`deploy-api-from-x86`), the
 # resulting image can only be run on ARM machines (which is not the case of the provisioned instance). Using `buildx`
 # allows to overcome this limitation, by specifying for which platform the image is built.
 deploy-api-from-arm:
-	make artifact-registry-login
+<% if (apiInfrastructure === "aws") { -%>	make ecr-login<% } -%>
+<% if (apiInfrastructure === "gcp") { -%>	make artifact-registry-login<% } -%>
+
 	docker buildx build --platform linux/amd64 --push -t ${IMAGE_URL}:latest .
-	make redeploy-cloud-run-service
+<% if (apiInfrastructure === "aws") { -%>	make redeploy-ecs-service<% } %>
+<% if (apiInfrastructure === "gcp") { -%>	make redeploy-cloud-run-service<% } %>
 
 <% } -%>
-
 <% if (includeStreamlit) { -%>
 ########################################################################################################################
 # Streamlit

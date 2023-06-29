@@ -24,6 +24,11 @@ function strictlySlugify(projectName, trim = true) {
   });
 }
 
+const CLOUD_STORAGE_SERVICES = {
+  aws: "S3",
+  gcp: "GCS"
+};
+
 module.exports = class extends Generator {
   async prompting() {
     // Have Yeoman greet the user.
@@ -153,27 +158,42 @@ module.exports = class extends Generator {
       // API infrastructure
       {
         when: ({ includeApi }) => includeApi,
-        name: "includeAWSInfrastructureCodeForApi",
+        name: "apiInfrastructure",
         message: `${mainMessage(
-          "Include Terraform code to provision the API infrastructure on AWS?"
-        )}${infoMessage(
-          "Stack main components: API Gateway, ASG, ECS, EC2."
-        )}${costMessage(
-          "AWS costs: ~16$/month + price of the EC2 instances (~38$/month for one t2.medium instance)."
-        )}`,
-        type: "confirm",
-        default: false,
+          "Include a Cloud Infrastructure for the API?"
+        )}${infoMessage("It will be provisioned with Terraform.")}`,
+        type: "list",
+        choices: [
+          {
+            name: "No, I will provision it myself",
+            value: null
+          },
+          {
+            name: `AWS auto-scaled infrastructure (API Gateway, ASG, ECS, EC2)${costMessage(
+              " AWS costs: ~16$/month + price of the EC2 instances (~38$/month for one t2.medium instance).",
+              4
+            )}`,
+            value: "aws"
+          },
+          {
+            name: `GCP serverless infrastructure (Cloud Run, Artifact Registry)${costMessage(
+              " GCP costs: depend on the number of requests since Cloud Run is a serverless service.",
+              4
+            )}`,
+            value: "gcp"
+          }
+        ],
         store: true
       },
       {
-        when: ({ includeAWSInfrastructureCodeForApi }) =>
-          includeAWSInfrastructureCodeForApi,
+        when: ({ apiInfrastructure }) => apiInfrastructure !== null,
         name: "terraformBackendBucketName",
-        message: `${mainMessage(
-          "Name of the S3 bucket that will be used to store Terraform state?"
-        )}${infoMessage(
-          "You can create the bucket later, and update the backend configuration file (backend.tf) accordingly if needed."
-        )}`,
+        message: ({ apiInfrastructure }) =>
+          `${mainMessage(
+            `Name of the ${CLOUD_STORAGE_SERVICES[apiInfrastructure]} bucket that will be used to store Terraform state?`
+          )}${infoMessage(
+            "You can create the bucket later, and update the backend configuration file (backend.tf) accordingly if needed."
+          )}`,
         default: ({ projectSlug }) =>
           this.config.get("terraformBackendBucketName") ||
           `${projectSlug}-terraform-backend`,
@@ -181,8 +201,7 @@ module.exports = class extends Generator {
         filter: strictlySlugify
       },
       {
-        when: ({ includeAWSInfrastructureCodeForApi }) =>
-          includeAWSInfrastructureCodeForApi,
+        when: ({ apiInfrastructure }) => apiInfrastructure === "aws",
         name: "awsRegion",
         message: mainMessage(
           "AWS region in which you want to provision your infrastructure?"
@@ -191,18 +210,16 @@ module.exports = class extends Generator {
         store: true
       },
       {
-        when: ({ includeAWSInfrastructureCodeForApi }) =>
-          includeAWSInfrastructureCodeForApi,
+        when: ({ apiInfrastructure }) => apiInfrastructure === "aws",
         name: "awsAccountId",
         message: `${mainMessage("ID of your AWS account?")}${infoMessage(
-          "Keep it blank if you don't have it yet: you can update the AWS_ACCOUNT_URL variable in the Makefile once you know it."
+          "Keep it blank if you don't have it yet: you can update it (in Makefile) once you know it."
         )}`,
         default: this.config.get("awsAccountId") || "",
         filter: awsAccountId => awsAccountId || "*your-aws-account-id*"
       },
       {
-        when: ({ includeAWSInfrastructureCodeForApi }) =>
-          includeAWSInfrastructureCodeForApi,
+        when: ({ apiInfrastructure }) => apiInfrastructure === "aws",
         name: "includeNatGateway",
         message: `${mainMessage(
           "Include a NAT Gateway to allow the API instance to access internet?"
@@ -210,6 +227,24 @@ module.exports = class extends Generator {
         type: "confirm",
         default: false,
         store: true
+      },
+      {
+        when: ({ apiInfrastructure }) => apiInfrastructure === "gcp",
+        name: "gcpRegion",
+        message: mainMessage(
+          "GCP region in which you want to provision your infrastructure?"
+        ),
+        default: "europe-west1",
+        store: true
+      },
+      {
+        when: ({ apiInfrastructure }) => apiInfrastructure === "gcp",
+        name: "gcpProjectId",
+        message: `${mainMessage("ID of your GCP project?")}${infoMessage(
+          "Keep it blank if you don't have it yet: you can update it (in Makefile and variables.tf) once you know it."
+        )}`,
+        default: this.config.get("gcpProjectId") || "",
+        filter: awsAccountId => awsAccountId || "*your-gcp-project-id*"
       },
 
       // Hello world code
@@ -300,6 +335,7 @@ module.exports = class extends Generator {
       "projectDescription",
       "terraformBackendBucketName",
       "awsAccountId",
+      "gcpProjectId",
       "dvcRemoteBucketName"
     ].forEach(promptName => {
       if (this.answers[promptName]) {
@@ -361,9 +397,18 @@ module.exports = class extends Generator {
         TEMPLATE_OPTIONS,
         COPY_OPTIONS
       );
-      if (this.answers.includeAWSInfrastructureCodeForApi) {
+      if (this.answers.apiInfrastructure !== null) {
         this.fs.copyTpl(
-          this.templatePath("terraform"),
+          this.templatePath(path.join("infrastructure", "common")),
+          this.destinationPath(),
+          this.answers,
+          TEMPLATE_OPTIONS,
+          COPY_OPTIONS
+        );
+        this.fs.copyTpl(
+          this.templatePath(
+            path.join("infrastructure", this.answers.apiInfrastructure)
+          ),
           this.destinationPath(),
           this.answers,
           TEMPLATE_OPTIONS,

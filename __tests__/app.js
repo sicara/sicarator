@@ -87,7 +87,7 @@ describe("generator-sicarator:app", () => {
           projectName: "project-name",
           pythonVersion: PYTHON_VERSION,
           includeApi: true,
-          includeAWSInfrastructureCodeForApi: false,
+          apiInfrastructure: null,
           includeDvc: false
         })
         .withLocalConfig({});
@@ -113,7 +113,7 @@ describe("generator-sicarator:app", () => {
       assert.noFile(TERRAFORM_FILES_PATHS);
     });
   });
-  describe("Sicarator with API and Terraform", () => {
+  describe("Sicarator with API and Terraformed AWS infrastructure", () => {
     beforeAll(() => {
       return helpers
         .run(path.join(__dirname, "../generators/app"))
@@ -121,7 +121,7 @@ describe("generator-sicarator:app", () => {
           projectName: "project-name",
           pythonVersion: PYTHON_VERSION,
           includeApi: true,
-          includeAWSInfrastructureCodeForApi: true,
+          apiInfrastructure: "aws",
           terraformBackendBucketName: "terraform-backend-bucket-name",
           awsRegion: "eu-west-1",
           awsAccountId: "1234567890",
@@ -162,6 +162,59 @@ describe("generator-sicarator:app", () => {
       assert.fileContent(
         "Makefile",
         "AWS_ACCOUNT_URL=1234567890.dkr.ecr.eu-west-1.amazonaws.com"
+      );
+    });
+  });
+  describe("Sicarator with API and Terraformed GCP infrastructure", () => {
+    beforeAll(() => {
+      return helpers
+        .run(path.join(__dirname, "../generators/app"))
+        .withPrompts({
+          projectName: "project-name",
+          pythonVersion: PYTHON_VERSION,
+          includeApi: true,
+          apiInfrastructure: "gcp",
+          terraformBackendBucketName: "terraform-backend-bucket-name",
+          gcpRegion: "europe-west9-a",
+          gcpProjectId: "my-gcp-project-id",
+          includeNatGateway: true,
+          includeDvc: false
+        })
+        .withLocalConfig({});
+    });
+
+    it("creates common files", () => {
+      assert.file(COMMON_FILES_PATHS);
+    });
+
+    it("creates poetry.lock", () => {
+      assert.file("poetry.lock");
+    });
+
+    it("does not create hello-world files", () => {
+      assert.noFile(HELLO_WORLD_FILES_PATHS);
+    });
+
+    it("creates API files", () => {
+      assert.file(API_FILES_PATHS);
+    });
+
+    it("creates terraform files", () => {
+      assert.file(TERRAFORM_FILES_PATHS);
+    });
+
+    it("has correct terraform backend bucket name", () => {
+      assert.fileContent(
+        "terraform/backend.tf",
+        'bucket  = "terraform-backend-bucket-name"'
+      );
+    });
+
+    it("has correct GCP project ID", () => {
+      assert.fileContent("Makefile", "GCP_PROJECT_ID=my-gcp-project-id");
+      assert.fileContent(
+        "terraform/variables.tf",
+        'default     = "my-gcp-project-id"'
       );
     });
   });
