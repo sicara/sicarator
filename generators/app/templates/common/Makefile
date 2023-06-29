@@ -71,10 +71,11 @@ deploy-api-from-arm:
 # Deployment
 ########################################################################################################################
 
-GCP_PROJECT_ID=<%= gcpProjectID %>
-GCP_REGION=<%= gcpRegion %>
-ARTIFACT_REGISTRY_NAME=docker-registry-api-dev
-CLOUD_RUN_SERVICE_NAME=api_service_dev
+GCP_PROJECT_ID=<%= gcpProjectID %=>
+GCP_REGION=<%= gcpRegion %=>
+ARTIFACT_REGISTRY_NAME=dev_api_docker_registry
+CLOUD_RUN_SERVICE_NAME=dev_api_service
+IMAGE_URL=${GCP_REGION}-docker.pkg.dev/${GCP_PROJECT_ID}/${ARTIFACT_REGISTRY_NAME}/${CLOUD_RUN_SERVICE_NAME}
 
 artifact-registry-login:
 	gcloud auth configure-docker
@@ -82,18 +83,18 @@ artifact-registry-login:
 # Redeployment of Cloud Run service to take into account the new image
 redeploy-cloud-run-service:
 	gcloud run deploy ${CLOUD_RUN_SERVICE_NAME} \
-	--image=${GCP_REGION}-docker.pkg.dev/${GCP_PROJECT_ID}/${ARTIFACT_REGISTRY_NAME}/${CLOUD_RUN_SERVICE_NAME}:latest \
+	--image=${IMAGE_URL}:latest \
 	--region=${GCP_REGION}
 
 
 deploy-api-from-x86:
-	make artifact-registry-login:
+	make artifact-registry-login
 
 	# build image
-	docker build . -t api -t ${GCP_REGION}-docker.pkg.dev/${GCP_PROJECT_ID}/${ARTIFACT_REGISTRY_NAME}/${CLOUD_RUN_SERVICE_NAME}:latest
+	docker build . -t api -t ${IMAGE_URL}:latest
 
 	# tag and push image to Artifact Registry
-	docker push -t ${GCP_REGION}-docker.pkg.dev/${GCP_PROJECT_ID}/${ARTIFACT_REGISTRY_NAME}/${CLOUD_RUN_SERVICE_NAME}:latest
+	docker push -t ${IMAGE_URL}:latest
 
 	make redeploy-cloud-run-service
 
@@ -101,8 +102,8 @@ deploy-api-from-x86:
 # resulting image can only be run on ARM machines (which is not the case of the provisioned instance). Using `buildx`
 # allows to overcome this limitation, by specifying for which platform the image is built.
 deploy-api-from-arm:
-	make ecr-login
-	docker buildx build --platform linux/amd64 --push -t ${GCP_REGION}-docker.pkg.dev/${GCP_PROJECT_ID}/${ARTIFACT_REGISTRY_NAME}/${CLOUD_RUN_SERVICE_NAME}:latest .
+	make artifact-registry-login
+	docker buildx build --platform linux/amd64 --push -t ${IMAGE_URL}:latest .
 	make redeploy-cloud-run-service
 
 <% } -%>

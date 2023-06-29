@@ -264,7 +264,7 @@ If the plan suits what you were expecting, provision the development environment
 
 ### Access the API
 
-If you try to reach the API with the URL given by Terraform, you should have an error. See [this guide](https://cloud.google.com/run/docs/authenticating/developers?hl=en) to connect to your API in Cloud Run.   
+If you try to reach the API with the URL given by Terraform, you should have an error. See [this guide](https://cloud.google.com/run/docs/authenticating/developers?hl=en) to connect to your API in Cloud Run.
 
 
 <% } -%>

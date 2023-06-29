@@ -13,7 +13,7 @@ variable "gcp_region" {
 }
 
 variable "gcp_project_id" {
-  description = "Your GCP project ID in which resources will be created"
+  description = "GCP project ID in which resources will be created"
   type        = string
   default     = "<=% gcpProjectID %=>"
 }

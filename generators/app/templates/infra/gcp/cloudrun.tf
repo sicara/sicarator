@@ -1,24 +1,26 @@
 # This will just create a default Cloud Run service but 
-# it will not update and mangae your revisions as Terraform is not meant to do this, that's a CD job.
+# it will not update and manage your revisions as Terraform is not meant to do this.
+# This can be made with `gcloud` CLI, see Makefile command `deploy-api...`. 
 
 resource "google_cloud_run_v2_service" "this" {
-  name     = "${var.api_name}-service-${terraform.workspace}"
+  name     = "${terraform.workspace}_${var.api_name}_service"
   ingress  = "INGRESS_TRAFFIC_ALL"
   location = var.gcp_region
 
 
   template {
+    # This is a demo image that wil be deployed as a placeholder for provisioning the service.
+    # Cloud Run indeed needs an image to create a service. 
+    # Your next image deployment will replace it.
     containers {
       image = "us-docker.pkg.dev/cloudrun/container/hello"
-
-      env {
-        name  = "ENV"
-        value = "dev"
-      }
     }
   }
 
+  # We must ignore the changes happening to your revisions
+  # which will occur every time you will deploy an image
+  # If not, Terraform will keep tracking and planning update
   lifecycle {
-    ignore_changes = [template[0].containers[0].image, client, client_verison]
+    ignore_changes = [template[0], client, client_verison]
   }
 }
