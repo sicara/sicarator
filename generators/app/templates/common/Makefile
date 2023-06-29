@@ -78,6 +78,7 @@ deploy-api-from-x86:
 <% if (apiInfrastructure === "aws") { -%>	make redeploy-ecs-service<% } -%>
 <% if (apiInfrastructure === "gcp") { -%>	make redeploy-cloud-run-service<% } -%>
 
+
 # When building an image from an ARM processor (Mac M1 or M2) with the standard way (`deploy-api-from-x86`), the
 # resulting image can only be run on ARM machines (which is not the case of the provisioned instance). Using `buildx`
 # allows to overcome this limitation, by specifying for which platform the image is built.
@@ -86,8 +87,8 @@ deploy-api-from-arm:
 <% if (apiInfrastructure === "gcp") { -%>	make artifact-registry-login<% } -%>
 
 	docker buildx build --platform linux/amd64 --push -t ${IMAGE_URL}:latest .
-<% if (apiInfrastructure === "aws") { -%>	make redeploy-ecs-service<% } %>
-<% if (apiInfrastructure === "gcp") { -%>	make redeploy-cloud-run-service<% } %>
+<% if (apiInfrastructure === "aws") { -%>	make redeploy-ecs-service<% } -%>
+<% if (apiInfrastructure === "gcp") { -%>	make redeploy-cloud-run-service<% } -%>
 
 <% } -%>
 <% if (includeStreamlit) { -%>
