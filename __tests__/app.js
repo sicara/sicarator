@@ -25,7 +25,7 @@ const API_FILES_PATHS = [
   "Dockerfile",
   "docker-compose.yml"
 ];
-const TERRAFORM_FILES_PATHS = ["terraform", "docs/architecture.png"];
+const TERRAFORM_FILES_PATHS = ["terraform/main.tf", "terraform/variables.tf"]; // Not exhaustive
 const DVC_FILES_PATHS = [".dvcignore", ".dvc/config", ".dvc/.gitignore"];
 
 describe("generator-sicarator:app", () => {
@@ -206,7 +206,7 @@ describe("generator-sicarator:app", () => {
     it("has correct terraform backend bucket name", () => {
       assert.fileContent(
         "terraform/backend.tf",
-        'bucket  = "terraform-backend-bucket-name"'
+        'bucket = "terraform-backend-bucket-name"'
       );
     });
 
