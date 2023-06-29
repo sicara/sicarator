@@ -36,6 +36,7 @@ AWS_REGION=<%= awsRegion %>
 ECR_REPOSITORY_NAME=dev_api_image
 ECS_CLUSTER_NAME=dev_api_cluster
 ECS_SERVICE_NAME=dev_api_service
+IMAGE_URL=${AWS_ACCOUNT_URL}/${ECR_REPOSITORY_NAME}
 
 ecr-login:
 	aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_URL}
@@ -51,8 +52,8 @@ deploy-api-from-x86:
 	docker build . -t api
 
 	# tag and push image to ecr
-	docker tag api ${AWS_ACCOUNT_URL}/${ECR_REPOSITORY_NAME}:latest
-	docker push ${AWS_ACCOUNT_URL}/${ECR_REPOSITORY_NAME}:latest
+	docker tag api ${IMAGE_URL}:latest
+	docker push ${IMAGE_URL}:latest
 
 	make redeploy-ecs-service
 
@@ -61,7 +62,7 @@ deploy-api-from-x86:
 # allows to overcome this limitation, by specifying for which platform the image is built.
 deploy-api-from-arm:
 	make ecr-login
-	docker buildx build --platform linux/amd64 --push -t ${AWS_ACCOUNT_URL}/${ECR_REPOSITORY_NAME}:latest .
+	docker buildx build --platform linux/amd64 --push -t ${IMAGE_URL}:latest .
 	make redeploy-ecs-service
 
 <% } -%>
