@@ -29,15 +29,15 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_additional_tags"></a> [additional\_tags](#input\_additional\_tags) | Additional resource tags | `map(string)` | n/a | yes |
-| <a name="input_api_name"></a> [api\_name](#input\_api\_name) | Name appended to resources specific to the infrastructure of the api | `string` | `"test"` | no |
-| <a name="input_gcp_project_id"></a> [gcp\_project\_id](#input\_gcp\_project\_id) | Your GCP project ID in which resources will be created | `string` | `"kube-dbt-demo"` | no |
+| <a name="input_additional_tags"></a> [additional\_tags](#input\_additional\_tags) | Additional resource tags | `map(string)` | <pre>{<br>  "terraform": "true"<br>}</pre> | no |
+| <a name="input_api_name"></a> [api\_name](#input\_api\_name) | Name appended to resources specific to the infrastructure of the api | `string` | `"api"` | no |
+| <a name="input_gcp_project_id"></a> [gcp\_project\_id](#input\_gcp\_project\_id) | GCP project ID in which resources will be created | `string` | `"<%= gcpProjectId %>"` | no |
 | <a name="input_gcp_region"></a> [gcp\_region](#input\_gcp\_region) | Region in which the resources are provisioned | `string` | `"<%= gcpRegion %>"` | no |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
-| <a name="output_docker_registry_url"></a> [docker\_registry\_url](#output\_docker\_registry\_url) | The base URL of the Doker registry |
-| <a name="output_service_url"></a> [service\_url](#output\_service\_url) | The URL of the service in Cloud Run |
+| <a name="output_docker_registry_url"></a> [docker\_registry\_url](#output\_docker\_registry\_url) | Base URL of the Doker registry |
+| <a name="output_service_url"></a> [service\_url](#output\_service\_url) | URL of the service in Cloud Run |
 <!-- END_TF_DOCS -->
