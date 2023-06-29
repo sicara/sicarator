@@ -55,7 +55,7 @@ CLOUD_RUN_SERVICE_NAME=dev-api-service
 IMAGE_URL=${GCP_REGION}-docker.pkg.dev/${GCP_PROJECT_ID}/${ARTIFACT_REGISTRY_NAME}/${CLOUD_RUN_SERVICE_NAME}
 
 artifact-registry-login:
-	gcloud auth configure-docker
+	gcloud auth configure-docker ${GCP_REGION}-docker.pkg.dev
 
 # Redeployment of Cloud Run service to take into account the new image
 redeploy-cloud-run-service:
