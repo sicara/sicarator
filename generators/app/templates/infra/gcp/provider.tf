@@ -1,4 +1,4 @@
 provider "google" {
-  project = "<=% gcpProjectID %=>"
-  region  = "<%= gcpRegion %=>"
+  project = var.gcp_project_id
+  region  = var.gcp_region
 }
