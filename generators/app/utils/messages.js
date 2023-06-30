@@ -13,8 +13,9 @@ function warningMessage(text) {
   return `\n🚨️️ ${chalk.red(text)}`;
 }
 
-function costMessage(text) {
-  return `\n💎 ${chalk.blue(text)}`;
+function costMessage(text, indentation = 0) {
+  const indentationString = " ".repeat(indentation);
+  return `\n${indentationString}💎 ${chalk.blue(text)}`;
 }
 
 module.exports = { mainMessage, infoMessage, warningMessage, costMessage };

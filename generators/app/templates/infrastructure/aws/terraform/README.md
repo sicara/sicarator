@@ -54,13 +54,14 @@
 
 ## Inputs
 
-| Name | Description                                                                                                                                                   | Type | Default | Required |
-|------|---------------------------------------------------------------------------------------------------------------------------------------------------------------|------|---------|:--------:|
-| <a name="input_additional_tags"></a> [additional\_tags](#input\_additional\_tags) | Additional resource tags                                                                                                                                      | `map(string)` | <pre>{<br>  "Terraform": "True"<br>}</pre> | no |
-| <a name="input_api_name"></a> [api\_name](#input\_api\_name) | Name appended to resources specific to the infrastructure of the api                                                                                          | `string` | `"api"` | no |
-| <a name="input_aws_region"></a> [aws\_region](#input\_aws\_region) | Region in which the resources are provisioned                                                                                                                 | `string` | `"<%= awsRegion %>"` | no |
-| <a name="input_ec2_instance_type"></a> [ec2\_instance\_type](#input\_ec2\_instance\_type) | Name of the aws EC2 instance to use in the api                                                                                                                | `string` | `"t2.medium"` | no |
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| <a name="input_additional_tags"></a> [additional\_tags](#input\_additional\_tags) | Additional resource tags | `map(string)` | <pre>{<br>  "terraform": "true"<br>}</pre> | no |
+| <a name="input_api_name"></a> [api\_name](#input\_api\_name) | Name appended to resources specific to the infrastructure of the api | `string` | `"api"` | no |
+| <a name="input_aws_region"></a> [aws\_region](#input\_aws\_region) | Region in which the resources are provisioned | `string` | `"<%= awsRegion %>"` | no |
+| <a name="input_ec2_instance_type"></a> [ec2\_instance\_type](#input\_ec2\_instance\_type) | Type of the aws EC2 instance to use in the api | `string` | `"t2.medium"` | no |
 | <a name="input_ec2_memory_reserved"></a> [ec2\_memory\_reserved](#input\_ec2\_memory\_reserved) | The amount of memory (in MiB) to reserve for the api container inside the EC2. Warning: you must select a value below the RAM capacity of the chosen instance | `number` | `3500` | no |
+| <a name="input_enable_nat_gateway"></a> [enable\_nat\_gateway](#input\_enable\_nat\_gateway) | Should be true if you want to provision NAT Gateways for your VPC to allow your EC2 instance to access the public internet | `bool` | `"true"` | no |
 
 ## Outputs
 

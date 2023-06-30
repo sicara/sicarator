@@ -40,11 +40,19 @@
 Install [Docker Engine](https://docs.docker.com/engine/install/) to build and run the API's Docker image locally.
 
 <% } -%>
-<% if (includeApi && includeAWSInfrastructureCodeForApi) { -%>
+<% if (includeApi && apiInfrastructure === "aws") { -%>
 ### AWS Command Line Interface
 Install [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) to be able to interact
 with AWS services from your terminal.
 
+<% } -%>
+<% if (includeApi && apiInfrastructure === "gcp") { -%>
+### Google Cloud SDK
+Install [Google Cloud SDK](https://cloud.google.com/sdk/docs/install) to be able to interact with GCP services from your
+terminal.
+
+<% } -%>
+<% if (includeApi && apiInfrastructure !== null) { -%>
 ### Terraform and associated tools
 To manage the project infrastructure, you will need to install:
 - [Terraform](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli#install-terraform)
@@ -70,7 +78,7 @@ Now, every time you are in your project directory your virtualenv will be activa
 poetry install --no-root
 ```
 
-<% if (includeApi && includeAWSInfrastructureCodeForApi) { -%>
+<% if (includeApi && apiInfrastructure === "aws") { -%>
 ### Setup AWS for your project
 Set up your AWS account locally to be able to access the different resources:
 - Get your AWS credentials from the AWS console, or ask an administrator to provide them to you.
@@ -87,6 +95,18 @@ Set up your AWS account locally to be able to access the different resources:
   - *(Optional)* In your IDE, modify the default terminal env variables of your project to add `AWS_PROFILE=<%= projectSlug %>`.
   It allows you to use the right AWS profile when calling Python files.
 
+<% } -%>
+<% if (includeApi && apiInfrastructure === "gcp") { -%>
+### Setup GCP for your project
+Set up your GCP account locally to be able to access the different resources:
+- Run `gcloud auth login` and follow the instructions to log in to your GCP account.
+- Set the GCP project ID:
+  ```bash
+  gcloud config set project <%= gcpProjectId %>
+  ```
+
+<% } -%>
+<% if (includeApi && apiInfrastructure !== null) { -%>
 ### Set-up Terraform
 *All commands below are to be run from `terraform` folder.*
 
@@ -105,6 +125,13 @@ Set up your AWS account locally to be able to access the different resources:
   terraform workspace select dev
   ```
 
+<% if (includeApi && apiInfrastructure === "gcp") { -%>
+- Set up your gcloud application default credentials (which will be used by Terraform):
+  ```bash
+  gcloud auth application-default login
+  ```
+
+<% } -%>
 <% } -%>
 ### Install git hooks (running before commit and push commands)
 
@@ -189,8 +216,8 @@ You can test the `hello_world` route by [importing the Postman collection](https
 For more details on the API routes, check the automatically generated [swagger](https://learning.postman.com/docs/getting-started/importing-and-exporting-data/#importing-postman-data) at the `/docs` url.
 
 <% } -%>
-<% if (includeApi && includeAWSInfrastructureCodeForApi) { -%>
-### Deploy the API to AWS
+<% if (includeApi && apiInfrastructure !== null) { -%>
+### Deploy the API
 To deploy the API, run (depending on your computer's architecture):
 ```bash
 make deploy-api-from-x86 # E.g. Linux or Mac intel
@@ -201,16 +228,24 @@ make deploy-api-from-arm # E.g. Mac M1 or M2
 ```
 
 <% } -%>
-<% if (includeApi && includeAWSInfrastructureCodeForApi) { -%>
+<% if (includeApi && apiInfrastructure !== null) { -%>
 ## Infrastructure
 
+<% if (apiInfrastructure === "aws") { -%>
 The infrastructure of the project consists of AWS resources, provisioned with Terraform.
+<% } -%>
+<% if (apiInfrastructure === "gcp") { -%>
+The infrastructure of the project consists of GCP resources, provisioned with Terraform.
+<% } -%>
 The Terraform code for all resources can be found in the `terraform` folder.
 
+<% if (apiInfrastructure === "aws") { -%>
 ### Architecture and communication between the components
 ![Architecture and communication between the components](docs/architecture.png)
 
+<% } -%>
 ### Pricing of the infrastructure
+<% if (apiInfrastructure === "aws") { -%>
 - EC2: ~38$ per month. ([see official doc](https://aws.amazon.com/ec2/pricing/on-demand/))
 <% if (includeNatGateway) { -%>
 - NAT Gateway: ~32$ per month ([see official doc](https://aws.amazon.com/vpc/pricing/))
@@ -220,6 +255,11 @@ The Terraform code for all resources can be found in the `terraform` folder.
 - ECR: <1$ per month. ([see official doc](https://aws.amazon.com/ecr/pricing/))
 - S3: <1$ per month. ([see official doc](https://aws.amazon.com/s3/pricing/))
 - ECS, VPC, ASG: Free (no overhead charge)
+<% } -%>
+<% if (apiInfrastructure === "gcp") { -%>
+- Cloud Run costs depend on the number of requests to the API. You can estimate them with the [GCP pricing calculator](https://cloud.google.com/products/calculator).
+- Artifact Registry: <1$ per month. ([see official doc](https://cloud.google.com/artifact-registry/pricing))
+<% } -%>
 
 ### Process to add/delete/update resources
 
@@ -238,6 +278,12 @@ If the plan suits what you were expecting, provision the development environment
   terraform apply
   ```
 
+<% if (apiInfrastructure === "gcp") { -%>
+### Access the API
+
+If you try to reach the API with the URL given by Terraform, you should have an error. See [this guide](https://cloud.google.com/run/docs/authenticating/developers?hl=en) to connect to your API in Cloud Run.
+
+<% } -%>
 <% } -%>
 <% if (includeStreamlit) { -%>
 ## Streamlit

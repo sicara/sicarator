@@ -44,7 +44,12 @@ RUN useradd appuser
 USER appuser
 
 # Start FastAPI
+<% if (apiInfrastructure === "gcp") { -%>
+# Use port 80 unless specified with $PORT env variable (as required by GCP Cloud Run)
+CMD uvicorn src.api.main:app --host 0.0.0.0 --port ${PORT:-80}
+<% } else { -%>
 CMD uvicorn src.api.main:app --host 0.0.0.0 --port 80
+<% } -%>
 
 # Healthcheck
 HEALTHCHECK --interval=10s --timeout=1s --retries=3 CMD curl --fail http://localhost/health || exit 1
