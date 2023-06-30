@@ -22,7 +22,10 @@
 - *(optional)* **API**:
   - built with [FastAPI](https://fastapi.tiangolo.com/)
   - containerized with [Docker](https://www.docker.com/)
-  - deployed on [AWS](https://aws.amazon.com/) (API Gateway, ASG, ECS, EC2)
+  - deployed on one of the following infrastructures:
+    - [AWS](https://aws.amazon.com/) auto-scaled infrastructure (API Gateway, ASG, ECS, EC2)
+    - [GCP](https://cloud.google.com/) serverless infrastructure (Cloud Run, Artifact Registry)
+    - *more to come...*
   - provisioned with [Terraform](https://www.terraform.io/)
   - testable with a [Postman](https://www.postman.com/) collection
 - *(optional)* **Data Versioning and Pipelines** with [DVC](https://dvc.org/)
