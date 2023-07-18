@@ -186,7 +186,8 @@ module.exports = class extends Generator {
         store: true
       },
       {
-        when: ({ apiInfrastructure }) => apiInfrastructure !== null,
+        when: ({ includeApi, apiInfrastructure }) =>
+          includeApi && apiInfrastructure !== null,
         name: "terraformBackendBucketName",
         message: ({ apiInfrastructure }) =>
           `${mainMessage(
