@@ -64,13 +64,14 @@ repos:
     stages: [ commit ]
 <% } -%>
 <% if (includeDvc) { -%>
-- repo: https://github.com/iterative/dvc
-  rev: v2.58.1
-  hooks:
-    - id: dvc-pre-push
-      <% if (dvcRemoteType !== null) { -%>
-      additional_dependencies: [ '.[<%= dvcRemoteType %>]' ]
-      <% } -%>
-      language_version: python3
-      stages: [push]
+  - id: dvc-pre-push
+    name: DVC pre-push
+    entry: dvc
+    args:
+      - git-hook
+      - pre-push
+    require_serial: true
+    verbose: true
+    language: system
+    stages: [push]
 <% } -%>
