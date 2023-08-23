@@ -92,11 +92,11 @@ module.exports = class extends Generator {
           "If the chosen version is not installed on your machine, it will be automatically installed by PyEnv."
         )}`,
         type: "list",
-        default: "3.11.3",
+        default: "3.11.4",
         choices: [
           {
-            name: "3.11.3",
-            value: "3.11.3"
+            name: "3.11.4",
+            value: "3.11.4"
           },
           {
             name: "3.10.11 (not recommended)",
