@@ -5,7 +5,7 @@ const helpers = require("yeoman-test");
 
 jest.setTimeout(60000); // 1 minute timeout for poetry lock command
 
-const PYTHON_VERSION = "3.11.3"; // Should match the version used in the CI (see .circleci/config.yml)
+const PYTHON_VERSION = "3.11.4"; // Should match the version used in the CI (see .circleci/config.yml)
 
 const COMMON_FILES_PATHS = [
   "src",
