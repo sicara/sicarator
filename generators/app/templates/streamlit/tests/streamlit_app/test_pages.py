@@ -1,22 +1,18 @@
 """Test that each Streamlit page can be imported and run."""
 from importlib import import_module
-from pathlib import Path
 
 import pytest
-
-PROJECT_ROOT_PATH = Path(__file__).parent.parent.parent
+from src.constants import PROJECT_ROOT_PATH
 
 STREAMLIT_PAGES = [
-    f"src.streamlit_app.pages.{page.stem}"
-    for page in (PROJECT_ROOT_PATH / "src" / "streamlit_app" / "pages").iterdir()
-    if page.name.endswith(".py")
+    f"src.streamlit_app.pages.{page_path.stem}"
+    for page_path in (PROJECT_ROOT_PATH / "src" / "streamlit_app" / "pages").iterdir()
+    if page_path.name.endswith(".py") and page_path.name != "__init__.py"
 ]
 
 
-@pytest.mark.parametrize("page", STREAMLIT_PAGES)
-def test_streamlit_page(page: str) -> None:
+@pytest.mark.parametrize("page_dotted_path", STREAMLIT_PAGES)
+def test_streamlit_page(page_dotted_path: str) -> None:
     """Test that each page can be imported and run."""
-    if page.endswith("__init__"):
-        return
-    page_module = import_module(page)
+    page_module = import_module(page_dotted_path)
     page_module.main()
