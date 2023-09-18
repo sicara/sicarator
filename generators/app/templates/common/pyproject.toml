@@ -97,7 +97,7 @@ runtime-evaluated-base-classes = ["pydantic.BaseModel"]
 
 [tool.ruff.per-file-ignores]
 # Allow missing docstrings for tests
-"tests/**/*.py" = ["D100", "D101", "D102", "D103", "D104", "D105", "D106", "D107"]
+"tests/**/*.py" = ["D1"]
 
 ## mypy
 
