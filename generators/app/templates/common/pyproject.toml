@@ -51,7 +51,7 @@ target-version = ['py<%= pythonMajorVersionShortcut %>']
 [tool.ruff]
 target-version = 'py<%= pythonMajorVersionShortcut %>'
 
-# See all rules at https://beta.ruff.rs/docs/rules/
+# See all rules at https://docs.astral.sh/ruff/rules/
 select = [
     "E",   # pycodestyle
     "W",   # pycodestyle
