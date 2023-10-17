@@ -53,20 +53,20 @@ target-version = 'py<%= pythonMajorVersionShortcut %>'
 
 # See all rules at https://docs.astral.sh/ruff/rules/
 select = [
-    "E",   # pycodestyle
-    "W",   # pycodestyle
-    "F",   # Pyflakes
-    "B",   # flake8-bugbear
-    "C4",  # flake8-comprehensions
-    "D",   # pydocstyle
-    "I",   # isort
-    "SIM", # flake8-simplify
-    "TCH", # flake8-type-checking
-    "TID", # flake8-tidy-imports
-    "Q",   # flake8-quotes
-    "UP",  # pyupgrade
-    "PT",  # flake8-pytest-style
-    "RUF", # Ruff-specific rules
+    "E",      # pycodestyle
+    "W",      # pycodestyle
+    "F",      # Pyflakes
+    "B",      # flake8-bugbear
+    "C4",     # flake8-comprehensions
+    "D",      # pydocstyle
+    "I",      # isort
+    "SIM",    # flake8-simplify
+    "TCH",    # flake8-type-checking
+    "TID",    # flake8-tidy-imports
+    "Q",      # flake8-quotes
+    "UP",     # pyupgrade
+    "PT",     # flake8-pytest-style
+    "RUF",    # Ruff-specific rules
     "FBT001", # flake8-boolean-trap
 ]
 
