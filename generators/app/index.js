@@ -118,19 +118,19 @@ module.exports = class extends Generator {
           "Which CI (Continuous Integration) tool do you want to use?"
         ),
         type: "list",
-        default: ".circleci",
+        default: ".github",
         choices: [
           {
-            name: "CircleCI",
-            value: ".circleci"
+            name: "GitHub Actions",
+            value: ".github"
           },
           {
             name: "Gitlab CI/CD",
             value: ".gitlab-ci.yml"
           },
           {
-            name: "GitHub Actions",
-            value: ".github"
+            name: "CircleCI",
+            value: ".circleci"
           },
           {
             name: "Azure Pipelines",
