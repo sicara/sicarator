@@ -87,7 +87,9 @@ module.exports = class extends Generator {
         )}${warningMessage(
           "Older versions are not recommended unless your project has some specific requirements"
         )}${infoMessage(
-          "You can check their compatibility with the main Python packages on https://pyreadiness.org/."
+          `You can check their compatibility with the main Python packages on ${chalk.underline(
+            "https://pyreadiness.org/"
+          )}.`
         )}${infoMessage(
           "If the chosen version is not installed on your machine, it will be automatically installed by PyEnv."
         )}`,
@@ -266,7 +268,9 @@ module.exports = class extends Generator {
       {
         name: "includeDvc",
         message: `${mainMessage("Include DVC on the project?")}${infoMessage(
-          "This tool allows to version data files and create data pipelines (see https://dvc.org/)."
+          `This tool allows to version data files and create data pipelines (see ${chalk.underline(
+            "https://dvc.org/"
+          )}).`
         )}${infoMessage("Strongly recommended for ML projects!")}`,
         type: "confirm",
         default: false,
@@ -317,7 +321,9 @@ module.exports = class extends Generator {
         message: `${mainMessage(
           "Include Streamlit on the project?"
         )}${infoMessage(
-          "This Python package allows to easily build interactive web apps for ML projects (see https://streamlit.io/)."
+          `This Python package allows to easily build interactive web apps for ML projects (see ${chalk.underline(
+            "https://streamlit.io/"
+          )}).`
         )}${infoMessage(
           "Very useful to analyze data and model results, and to share them with non-technical people."
         )}`,
