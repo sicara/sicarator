@@ -2,6 +2,7 @@
 from importlib import import_module
 
 import pytest
+
 from src.constants import PROJECT_ROOT_PATH
 
 STREAMLIT_PAGES_DOTTED_PATHS = [

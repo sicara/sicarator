@@ -1,1 +1,1 @@
-"""Tests for <%= projectName %>."""
+"""Unit tests for <%= projectName %>."""
