@@ -1,5 +1,6 @@
 "use strict";
 const assert = require("yeoman-assert");
+const { exec } = require("child_process");
 const helpers = require("yeoman-test");
 const path = require("path");
 
@@ -147,8 +148,8 @@ describe("generator-sicarator:app", () => {
       awsAccountId,
       terraformBackendBucketName
     }) => {
-      beforeAll(() => {
-        return helpers
+      beforeAll(done => {
+        helpers
           .run(path.join(__dirname, "../generators/app"))
           .withPrompts({
             projectName: PROJECT_NAME,
@@ -162,7 +163,45 @@ describe("generator-sicarator:app", () => {
             awsAccountId,
             terraformBackendBucketName
           })
-          .withLocalConfig({});
+          .withLocalConfig({})
+          .on("end", () => {
+            exec("make install", (error, stdout, stderr) => {
+              if (stdout) {
+                console.log(`stdout:\n ${stdout}`);
+              }
+
+              if (stderr) {
+                console.log(`stderr:\n ${stderr}`);
+              }
+
+              if (error) {
+                done(error);
+              } else {
+                done();
+              }
+            });
+          });
+      });
+
+      afterAll(done => {
+        exec(
+          `pyenv virtualenv-delete --force ${PROJECT_SLUG}`,
+          (error, stdout, stderr) => {
+            if (stdout) {
+              console.log(`stdout:\n ${stdout}`);
+            }
+
+            if (stderr) {
+              console.log(`stderr:\n ${stderr}`);
+            }
+
+            if (error) {
+              done(error);
+            } else {
+              done();
+            }
+          }
+        );
       });
 
       it("creates common files", () => {
@@ -259,6 +298,83 @@ describe("generator-sicarator:app", () => {
             `default     = "${GCP_PROJECT_ID}"`
           );
         }
+      });
+
+      it("runs unit tests successfully", done => {
+        if (includeHelloWorld || includeApi) {
+          exec("make test", (error, stdout, stderr) => {
+            if (stdout) {
+              console.log(`stdout:\n ${stdout}`);
+            }
+
+            if (stderr) {
+              console.log(`stderr:\n ${stderr}`);
+            }
+
+            if (error) {
+              done(error);
+            } else {
+              done();
+            }
+          });
+        } else {
+          // No tests to run
+          done();
+        }
+      });
+
+      it("runs linter successfully", done => {
+        exec("make ruff", (error, stdout, stderr) => {
+          if (stdout) {
+            console.log(`stdout:\n ${stdout}`);
+          }
+
+          if (stderr) {
+            console.log(`stderr:\n ${stderr}`);
+          }
+
+          if (error) {
+            done(error);
+          } else {
+            done();
+          }
+        });
+      });
+
+      it("runs type checking successfully", done => {
+        exec("make mypy", (error, stdout, stderr) => {
+          if (stdout) {
+            console.log(`stdout:\n ${stdout}`);
+          }
+
+          if (stderr) {
+            console.log(`stderr:\n ${stderr}`);
+          }
+
+          if (error) {
+            done(error);
+          } else {
+            done();
+          }
+        });
+      });
+
+      it("runs formatting check successfully", done => {
+        exec("make black", (error, stdout, stderr) => {
+          if (stdout) {
+            console.log(`stdout:\n ${stdout}`);
+          }
+
+          if (stderr) {
+            console.log(`stderr:\n ${stderr}`);
+          }
+
+          if (error) {
+            done(error);
+          } else {
+            done();
+          }
+        });
       });
     }
   );
