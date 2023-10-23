@@ -456,7 +456,11 @@ module.exports = class extends Generator {
       "--skip-existing"
     ]);
 
-    this.log("Generating Poetry lock file in a temporary virtual environment");
+    this.log(
+      `Generating Poetry lock file in a ${chalk.cyan.italic(
+        "temporary"
+      )} virtual environment ${chalk.cyan(this.answers.projectSlug)}`
+    );
     this.spawnCommandSync("poetry", ["lock"], {
       env: {
         ...process.env,
@@ -465,7 +469,20 @@ module.exports = class extends Generator {
       }
     });
     // Delete Poetry environment, because the developer will create its own Pyenv environment when installing the project
-    this.log("Deleting temporary virtual environment");
+    this.log(
+      `Deleting ${chalk.cyan.italic(
+        "temporary"
+      )} virtual environment ${chalk.cyan(this.answers.projectSlug)}`
+    );
+    this.log(
+      infoMessage(
+        `You will create a new ${chalk.bold.italic(
+          "pyenv"
+        )} environment during project installation (see generated README.md).`,
+        0,
+        false
+      )
+    );
     this.spawnCommandSync("rm", ["-rf", ".venv"]);
   }
 
