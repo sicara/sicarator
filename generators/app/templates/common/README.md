@@ -62,20 +62,24 @@ To manage the project infrastructure, you will need to install:
 <% } -%>
 ## Installation
 
-### Create a virtual environment
+### Python virtual environment and dependencies
 
-Create your virtual environment and link it to your project folder:
+1. Create a `pyenv` virtual environment and link it to your project folder:
+    ```bash
+    pyenv virtualenv <%= pythonVersion %> <%= projectSlug %>
+    pyenv local <%= projectSlug %>
+    ```
+    *Now, every time you are in your project directory your virtualenv will be activated!*
 
+
+2. Install dependencies with `Poetry`:
+    ```bash
+    poetry install --no-root
+    ```
+
+Steps 1. and 2. can also be done in one command:
 ```bash
-pyenv virtualenv <%= pythonVersion %> <%= projectSlug %>
-pyenv local <%= projectSlug %>
-```
-Now, every time you are in your project directory your virtualenv will be activated thanks to `pyenv`!
-
-### Install Python dependencies through poetry
-
-```bash
-poetry install --no-root
+make install
 ```
 
 <% if (includeApi && apiInfrastructure === "aws") { -%>
