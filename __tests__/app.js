@@ -4,7 +4,7 @@ const { exec } = require("child_process");
 const helpers = require("yeoman-test");
 const path = require("path");
 
-jest.setTimeout(60000); // 1 minute timeout for poetry lock command
+jest.setTimeout(180000); // 3 minutes timeout for poetry lock command
 
 const COMMON_FILES_PATHS = [
   "src",
