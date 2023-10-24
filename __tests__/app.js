@@ -301,7 +301,7 @@ describe("generator-sicarator:app", () => {
       });
 
       it("runs unit tests successfully", done => {
-        if (includeHelloWorld || includeApi) {
+        if (includeHelloWorld || includeApi || includeStreamlit) {
           exec("make test", (error, stdout, stderr) => {
             if (stdout) {
               console.log(`stdout:\n ${stdout}`);
