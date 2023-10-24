@@ -302,7 +302,7 @@ describe("generator-sicarator:app", () => {
 
       it("runs unit tests successfully", done => {
         if (includeHelloWorld || includeApi || includeStreamlit) {
-          exec("make test", (error, stdout, stderr) => {
+          execInPyenvVenv("make test", (error, stdout, stderr) => {
             if (stdout) {
               console.log(`stdout:\n ${stdout}`);
             }
@@ -324,7 +324,7 @@ describe("generator-sicarator:app", () => {
       });
 
       it("runs linter successfully", done => {
-        exec("make ruff", (error, stdout, stderr) => {
+        execInPyenvVenv("make ruff", (error, stdout, stderr) => {
           if (stdout) {
             console.log(`stdout:\n ${stdout}`);
           }
@@ -342,7 +342,7 @@ describe("generator-sicarator:app", () => {
       });
 
       it("runs type checking successfully", done => {
-        exec("make mypy", (error, stdout, stderr) => {
+        execInPyenvVenv("make mypy", (error, stdout, stderr) => {
           if (stdout) {
             console.log(`stdout:\n ${stdout}`);
           }
@@ -360,7 +360,7 @@ describe("generator-sicarator:app", () => {
       });
 
       it("runs formatting check successfully", done => {
-        exec("make black", (error, stdout, stderr) => {
+        execInPyenvVenv("make black", (error, stdout, stderr) => {
           if (stdout) {
             console.log(`stdout:\n ${stdout}`);
           }
@@ -379,3 +379,35 @@ describe("generator-sicarator:app", () => {
     }
   );
 });
+
+function execInPyenvVenv(command, callback) {
+  // Execute 'pyenv prefix' command to get the venv path
+  exec("pyenv prefix", (error, stdout, stderr) => {
+    if (error) {
+      console.error(`Error executing pyenv prefix: ${error}`);
+      return callback(error, null, null);
+    }
+
+    if (stderr) {
+      console.error(`stderr: ${stderr}`);
+      return callback(new Error(stderr), null, null);
+    }
+
+    // Trim the new line or white space from the end of the output
+    const pyenvPrefix = stdout.trim();
+
+    // Set the VIRTUAL_ENV environment variable to the pyenv prefix and execute the provided command
+    exec(
+      command,
+      {
+        env: {
+          ...process.env,
+          VIRTUAL_ENV: pyenvPrefix
+        }
+      },
+      (error, stdout, stderr) => {
+        callback(error, stdout, stderr);
+      }
+    );
+  });
+}
