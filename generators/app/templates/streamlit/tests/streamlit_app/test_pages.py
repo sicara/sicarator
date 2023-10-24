@@ -5,7 +5,7 @@ import pytest
 
 from src.constants import PROJECT_ROOT_PATH
 
-STREAMLIT_PAGES_DOTTED_PATHS = [
+STREAMLIT_PAGES_DOTTED_PATHS = ["src.streamlit_app.🏠_Home_page"] + [
     f"src.streamlit_app.pages.{page_path.stem}"
     for page_path in (PROJECT_ROOT_PATH / "src" / "streamlit_app" / "pages").iterdir()
     if page_path.name.endswith(".py") and page_path.name != "__init__.py"
