@@ -1,1 +1,1 @@
-"""Tests for <%= projectName %>."""
+"""Automated tests for <%= projectName %>."""

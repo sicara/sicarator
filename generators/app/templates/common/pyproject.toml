@@ -38,6 +38,7 @@ branch = true
 
 [tool.coverage.report]
 skip_empty = true
+omit = ["src/constants.py"]
 fail_under = 70.00
 precision = 2
 
