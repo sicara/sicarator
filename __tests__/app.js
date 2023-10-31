@@ -30,7 +30,7 @@ const STREAMLIT_FILES_PATHS = ["src/streamlit_app"];
 
 const PROJECT_NAME = "Sicarator Test";
 const PROJECT_SLUG = "sicarator-test";
-const LAST_PYTHON_VERSION = "3.11.4";
+const LAST_PYTHON_VERSION = "3.11.6";
 const TERRAFORM_BACKEND_BUCKET_NAME = "terraform-backend-bucket-name";
 const AWS_ACCOUNT_ID = "1234567890";
 const AWS_REGION = "us-east-1";
@@ -126,14 +126,14 @@ describe("generator-sicarator:app", () => {
       ...DEFAULT_ANSWERS,
       ...ALL_OPTIONS_EXCEPT_INFRA_ANSWERS,
       ...AWS_INFRA_ANSWERS,
-      pythonVersion: "3.9.16"
+      pythonVersion: "3.9.18"
     },
     {
       description: "Python 3.8 (all options & AWS infra)",
       ...DEFAULT_ANSWERS,
       ...ALL_OPTIONS_EXCEPT_INFRA_ANSWERS,
       ...AWS_INFRA_ANSWERS,
-      pythonVersion: "3.8.16"
+      pythonVersion: "3.8.18"
     }
   ])(
     "Generate project with $description",
