@@ -15,15 +15,15 @@ repos:
 
 - repo: local
   hooks:
-  - id: black
-    name: Formatting (black)
-    entry: black
+  - id: ruff-format
+    name: Formatting (ruff)
+    entry: ruff format
     language: system
     types: [python]
     stages: [commit]
-  - id: ruff
-    name: Linter (ruff)
-    entry: ruff
+  - id: ruff-check
+    name: Linting (ruff)
+    entry: ruff check
     language: system
     types: [python]
     stages: [commit]
@@ -35,7 +35,7 @@ repos:
     types: [python]
     stages: [commit]
   - id: test
-    name: Unit tests (pytest)
+    name: Unit testing (pytest)
     entry: make test
     pass_filenames: false
     language: system

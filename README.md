@@ -10,8 +10,7 @@
 - **Python** development environment with:
   - [Poetry](https://python-poetry.org/) for dependency management
   - [Pytest](https://docs.pytest.org/) for testing
-  - [Black](https://black.readthedocs.io/) for code formatting
-  - [Ruff](https://beta.ruff.rs/) for static analysis
+  - [Ruff](https://docs.astral.sh/ruff/) for static analysis & code formatting
   - [Mypy](https://mypy.readthedocs.io/) for type checking
   - [Pre-commit](https://pre-commit.com/) for git hooks
 - **Continuous Integration** of your choice:

@@ -60,21 +60,21 @@ jobs:
       - store_artifacts:
           path: htmlcov
 
-  black:
+  ruff-format:
     executor: base-python
     steps:
       - get_code_and_cache
       - run:
-          name: run black
-          command: make black
+          name: run ruff-format
+          command: make ruff-format
 
-  ruff:
+  ruff-check:
     executor: base-python
     steps:
       - get_code_and_cache
       - run:
-          name: run ruff
-          command: make ruff
+          name: run ruff-check
+          command: make ruff-check
 
   mypy:
     executor: base-python
@@ -92,10 +92,10 @@ workflows:
       - test:
           requires:
             - install
-      - ruff:
+      - ruff-check:
           requires:
             - install
-      - black:
+      - ruff-format:
           requires:
             - install
       - mypy:

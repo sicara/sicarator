@@ -12,7 +12,6 @@ loguru = "^0.7.0"
 <% } -%>
 
 [tool.poetry.group.dev.dependencies]
-black = "^22"
 <% if (includeDvc) { -%>
 dvc = {extras = ["<%= dvcRemoteType %>"], version = "^2.58.1"}
 <% } -%>
@@ -20,7 +19,7 @@ mypy = "^1.2"
 pre-commit = "^2"
 pytest = "^7"
 pytest-cov = "^3"
-ruff = "^0"
+ruff = "^0.1.3"
 <% if (includeStreamlit) { -%>
 streamlit = "^1.16.0"
 <% } -%>
@@ -42,11 +41,6 @@ omit = ["src/constants.py"]
 fail_under = 70.00
 precision = 2
 
-## black
-
-[tool.black]
-target-version = ['py<%= pythonMajorVersionShortcut %>']
-
 ## ruff
 # Recommended ruff config for now, to be updated as we go along.
 [tool.ruff]
@@ -64,7 +58,6 @@ select = [
     "SIM",    # flake8-simplify
     "TCH",    # flake8-type-checking
     "TID",    # flake8-tidy-imports
-    "Q",      # flake8-quotes
     "UP",     # pyupgrade
     "PT",     # flake8-pytest-style
     "RUF",    # Ruff-specific rules
@@ -73,7 +66,7 @@ select = [
 
 ignore = [
     "E501", # "Line too long"
-    # -> line length already regulated by black
+    # -> line length already regulated by the formatter
     "PT011", # "pytest.raises() should specify expected exception"
     # -> would imply to update tests every time you update exception message
     "SIM102", # "Use a single `if` statement instead of nested `if` statements"

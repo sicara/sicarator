@@ -324,7 +324,7 @@ describe("generator-sicarator:app", () => {
       });
 
       it("runs linter successfully", done => {
-        execInPyenvVenv("make ruff", (error, stdout, stderr) => {
+        execInPyenvVenv("make ruff-check", (error, stdout, stderr) => {
           if (stdout) {
             console.log(`stdout:\n ${stdout}`);
           }
@@ -360,7 +360,7 @@ describe("generator-sicarator:app", () => {
       });
 
       it("runs formatting check successfully", done => {
-        execInPyenvVenv("make black", (error, stdout, stderr) => {
+        execInPyenvVenv("make ruff-format", (error, stdout, stderr) => {
           if (stdout) {
             console.log(`stdout:\n ${stdout}`);
           }

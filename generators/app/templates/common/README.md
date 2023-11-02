@@ -165,18 +165,18 @@ make test
 
 ## Formatting and static analysis
 
-### Code formatting with `black`
+### Code formatting with `ruff`
 
-To check code formatting, run `black` with:
+To check code formatting, run `ruff format` with:
 ```bash
-black . --check
+ruff format --check .
 ```
 or
 ```bash
-make black
+make ruff-format
 ```
 
-You can also [integrate it to your IDE](https://black.readthedocs.io/en/stable/integrations/editors.html) to reformat
+You can also [integrate it to your IDE](https://docs.astral.sh/ruff/integrations/) to reformat
 your code each time you save a file.
 
 ### Static analysis with `ruff`
@@ -187,12 +187,12 @@ ruff check src tests
 ```
 or
 ```bash
-make ruff
+make ruff-check
 ```
 
 To run static analysis and to apply auto-fixes, run `ruff` with:
 ```bash
-make fix-ruff
+make ruff-fix
 ```
 ### Type checking with `mypy`
 

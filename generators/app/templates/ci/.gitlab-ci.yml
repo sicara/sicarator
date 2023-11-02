@@ -37,15 +37,15 @@ install:
     - curl -sSL https://install.python-poetry.org | python - --version 1.5.1
     - export PATH="/root/.local/bin:$PATH"
 
-black:
+ruff-format:
   extends: .job_template
   script:
-    - make black
+    - make ruff-format
 
-ruff:
+ruff-check:
   extends: .job_template
   script:
-    - make ruff
+    - make ruff-check
 
 mypy:
   extends: .job_template
