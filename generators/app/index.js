@@ -267,7 +267,7 @@ module.exports = class extends Generator {
       // DVC
       {
         name: "includeDvc",
-        message: `${mainMessage("Include DVC on the project?")}${infoMessage(
+        message: `${mainMessage("Include DVC?")}${infoMessage(
           `This tool allows to version data files and create data pipelines (see ${chalk.underline(
             "https://dvc.org/"
           )}).`
@@ -318,9 +318,7 @@ module.exports = class extends Generator {
       // Streamlit
       {
         name: "includeStreamlit",
-        message: `${mainMessage(
-          "Include Streamlit on the project?"
-        )}${infoMessage(
+        message: `${mainMessage("Include Streamlit?")}${infoMessage(
           `This Python package allows to easily build interactive web apps for ML projects (see ${chalk.underline(
             "https://streamlit.io/"
           )}).`
@@ -329,6 +327,23 @@ module.exports = class extends Generator {
         )}`,
         type: "confirm",
         default: false,
+        store: true
+      },
+
+      // DVC + Streamlit utils
+      {
+        when: ({ includeDvc, includeStreamlit }) =>
+          includeDvc && includeStreamlit,
+        name: "includeDvcStreamlitUtils",
+        message: `${mainMessage("Include DVC + Streamlit utils?")}${infoMessage(
+          `These utils allow to build Streamlit dashboards to compare and analyze DVC experiments (see this article: ${chalk.underline(
+            "https://www.sicara.fr/blog-technique/dvc-streamlit-webui-ml"
+          )} ).`
+        )}${infoMessage(
+          "A fully customizable alternative to experiment tracking tools like MLFlow."
+        )}`,
+        type: "confirm",
+        default: true,
         store: true
       }
     ]);
@@ -447,6 +462,16 @@ module.exports = class extends Generator {
     if (this.answers.includeStreamlit) {
       this.fs.copyTpl(
         this.templatePath("streamlit"),
+        this.destinationPath(),
+        this.answers,
+        TEMPLATE_OPTIONS,
+        COPY_OPTIONS
+      );
+    }
+
+    if (this.answers.includeDvcStreamlitUtils) {
+      this.fs.copyTpl(
+        this.templatePath("dvc_streamlit_utils"),
         this.destinationPath(),
         this.answers,
         TEMPLATE_OPTIONS,
