@@ -1,4 +1,7 @@
-"""Hello world! page of the Streamlit app."""
+"""Hello world! page of the Streamlit app.
+
+TODO: replace this page with your own.
+"""
 
 import streamlit as st
 
