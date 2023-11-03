@@ -250,20 +250,6 @@ module.exports = class extends Generator {
         filter: awsAccountId => awsAccountId || "*your-gcp-project-id*"
       },
 
-      // Hello world code
-      {
-        when: ({ includeApi }) => !includeApi,
-        name: "includeHelloWorld",
-        message: `${mainMessage(
-          "Include 'hello world' function and unit test?"
-        )}${warningMessage(
-          "If 'no', CI testing step will fail due to empty tests."
-        )}`,
-        type: "confirm",
-        default: true,
-        store: true
-      },
-
       // DVC
       {
         name: "includeDvc",
@@ -341,6 +327,37 @@ module.exports = class extends Generator {
           )} ).`
         )}${infoMessage(
           "A fully customizable alternative to experiment tracking tools like MLFlow."
+        )}`,
+        type: "confirm",
+        default: true,
+        store: true
+      },
+
+      // DVC + Streamlit example
+      {
+        when: ({ includeDvcStreamlitUtils }) => includeDvcStreamlitUtils,
+        name: "includeDvcStreamlitExample",
+        message: `${mainMessage(
+          "Include DVC + Streamlit example?"
+        )}${infoMessage(
+          "A minimal example showing how to use these DVC + Streamlit utils."
+        )}${infoMessage(
+          "It contains a DVC pipeline generating a random number and a Streamlit to compare generated numbers between experiments."
+        )}`,
+        type: "confirm",
+        default: true,
+        store: true
+      },
+
+      // Hello world code
+      {
+        when: ({ includeApi, includeStreamlit }) =>
+          !includeApi && !includeStreamlit,
+        name: "includeHelloWorld",
+        message: `${mainMessage(
+          "Include 'hello world' function and unit test?"
+        )}${warningMessage(
+          "If 'no', CI testing step will fail due to empty tests."
         )}`,
         type: "confirm",
         default: true,
@@ -472,6 +489,29 @@ module.exports = class extends Generator {
     if (this.answers.includeDvcStreamlitUtils) {
       this.fs.copyTpl(
         this.templatePath("dvc_streamlit_utils"),
+        this.destinationPath(),
+        this.answers,
+        TEMPLATE_OPTIONS,
+        COPY_OPTIONS
+      );
+    }
+
+    if (this.answers.includeDvcStreamlitExample) {
+      this.fs.copyTpl(
+        this.templatePath("dvc_streamlit_example"),
+        this.destinationPath(),
+        this.answers,
+        TEMPLATE_OPTIONS,
+        COPY_OPTIONS
+      );
+    }
+
+    if (
+      this.answers.includeStreamlit &&
+      !this.answers.includeDvcStreamlitExample
+    ) {
+      this.fs.copyTpl(
+        this.templatePath("streamlit_hello_world"),
         this.destinationPath(),
         this.answers,
         TEMPLATE_OPTIONS,

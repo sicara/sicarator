@@ -10,6 +10,9 @@ python = "<%= pythonVersion %>"
 fastapi = {extras = ["all"], version = "^0.95.1"}
 loguru = "^0.7.0"
 <% } -%>
+<% if (includeDvc) { -%>
+PyYAML = "^6.0"
+<% } -%>
 
 [tool.poetry.group.dev.dependencies]
 black = "^22"
@@ -23,6 +26,10 @@ pytest-cov = "^3"
 ruff = "^0"
 <% if (includeStreamlit) { -%>
 streamlit = "^1.28.0"
+<% } -%>
+<% if (includeDvc) { -%>
+typer = "^0.9.0"
+types-PyYAML = "^6.0"
 <% } -%>
 
 [build-system]
@@ -38,7 +45,12 @@ branch = true
 
 [tool.coverage.report]
 skip_empty = true
-omit = ["src/constants.py"]
+omit = [
+    "src/constants.py",
+<% if (includeDvc) { -%>
+    "src/params.py",
+<% } -%>
+]
 exclude_also = [
     "if __name__ == .__main__.:",
 ]

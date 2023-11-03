@@ -28,8 +28,9 @@
     - *more to come...*
   - provisioned with [Terraform](https://www.terraform.io/)
   - testable with a [Postman](https://www.postman.com/) collection
-- *(optional)* **Data Versioning and Pipelines** with [DVC](https://dvc.org/)
+- *(optional)* **Data Versioning and Pipelines** with [DVC](https://dvc.org/) and [Typer](https://typer.tiangolo.com/)
 - *(optional)* **Data Visualization** with [Streamlit](https://streamlit.io/)
+- *(optional)* **Experiment Tracking** with [DVC + Streamlit](https://www.sicara.fr/blog-technique/dvc-streamlit-webui-ml)
 
 ## Requirements
 

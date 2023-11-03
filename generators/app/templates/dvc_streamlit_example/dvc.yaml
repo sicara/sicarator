@@ -1,0 +1,11 @@
+# Example pipeline used for the DVC + Streamlit example page
+# TODO: replace this pipeline with your own.
+stages:
+  generate_random_number:
+    cmd: python src/scripts/generate_random_number.py --output-path data/generate_random_number/random_number.yaml
+    params:
+      - random_seed
+    deps:
+      - src/scripts/generate_random_number.py
+    metrics:
+      - data/generate_random_number/random_number.yaml

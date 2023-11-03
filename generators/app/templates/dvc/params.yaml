@@ -1,0 +1,5 @@
+<% if (includeStreamlit && includeDvcStreamlitUtils && includeDvcStreamlitExample) { -%>
+# Used as an example param for the DVC pipeline and the DVC + Streamlit example page.
+# TODO: remove this parameter if you don't need it.
+random_seed: 0
+<% } -%>
