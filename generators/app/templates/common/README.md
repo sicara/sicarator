@@ -34,32 +34,36 @@
     ```bash
     pyenv global <%= pythonVersion %>
     ```
-
 <% if (includeApi) { -%>
-### Docker Engine
-Install [Docker Engine](https://docs.docker.com/engine/install/) to build and run the API's Docker image locally.
 
+### Docker Engine
+
+Install [Docker Engine](https://docs.docker.com/engine/install/) to build and run the API's Docker image locally.
 <% } -%>
 <% if (includeApi && apiInfrastructure === "aws") { -%>
+
 ### AWS Command Line Interface
+
 Install [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) to be able to interact
 with AWS services from your terminal.
-
 <% } -%>
 <% if (includeApi && apiInfrastructure === "gcp") { -%>
+
 ### Google Cloud SDK
+
 Install [Google Cloud SDK](https://cloud.google.com/sdk/docs/install) to be able to interact with GCP services from your
 terminal.
-
 <% } -%>
 <% if (includeApi && apiInfrastructure !== null) { -%>
+
 ### Terraform and associated tools
+
 To manage the project infrastructure, you will need to install:
 - [Terraform](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli#install-terraform)
 - [TFlint](https://github.com/terraform-linters/tflint#installation)
 - [terraform-docs](https://github.com/terraform-docs/terraform-docs#installation)
-
 <% } -%>
+
 ## Installation
 
 ### Python virtual environment and dependencies
@@ -81,9 +85,10 @@ Steps 1. and 2. can also be done in one command:
 ```bash
 make install
 ```
-
 <% if (includeApi && apiInfrastructure === "aws") { -%>
+
 ### Setup AWS for your project
+
 Set up your AWS account locally to be able to access the different resources:
 - Get your AWS credentials from the AWS console, or ask an administrator to provide them to you.
 - If you are managing only this AWS account in your computer
@@ -98,20 +103,22 @@ Set up your AWS account locally to be able to access the different resources:
     ```
   - *(Optional)* In your IDE, modify the default terminal env variables of your project to add `AWS_PROFILE=<%= projectSlug %>`.
   It allows you to use the right AWS profile when calling Python files.
-
 <% } -%>
 <% if (includeApi && apiInfrastructure === "gcp") { -%>
+
 ### Setup GCP for your project
+
 Set up your GCP account locally to be able to access the different resources:
 - Run `gcloud auth login` and follow the instructions to log in to your GCP account.
 - Set the GCP project ID:
   ```bash
   gcloud config set project <%= gcpProjectId %>
   ```
-
 <% } -%>
 <% if (includeApi && apiInfrastructure !== null) { -%>
+
 ### Set-up Terraform
+
 *All commands below are to be run from `terraform` folder.*
 
 - Init the project locally:
@@ -128,30 +135,31 @@ Set up your GCP account locally to be able to access the different resources:
   ```bash
   terraform workspace select dev
   ```
-
 <% if (includeApi && apiInfrastructure === "gcp") { -%>
+
 - Set up your gcloud application default credentials (which will be used by Terraform):
   ```bash
   gcloud auth application-default login
   ```
+<% } -%>
+<% } -%>
 
-<% } -%>
-<% } -%>
 ### Install git hooks (running before commit and push commands)
 
 ```bash
 poetry run pre-commit install
 ```
-
 <% if (includeDvc && dvcRemoteType) { -%>
+
 ### Pull data from DVC remote
+
 - Make sure you have access to the DVC remote bucket (see bucket URL in `.dvc/config` file). If not, ask an administrator to give you access.
 - Pull the data:
   ```bash
   dvc pull
   ```
-
 <% } -%>
+
 ## Testing
 
 To run unit tests, run `pytest` with:
@@ -204,9 +212,10 @@ or
 ```bash
 make mypy
 ```
-
 <% if (includeApi) { -%>
+
 ## API
+
 The project includes an API built with [FastAPI](https://fastapi.tiangolo.com/). Its code can be found at `src/api`.
 
 The API is containerized using a [Docker](https://docs.docker.com/get-started/) image, built from the `Dockerfile` and `docker-compose.yml` at the root.
@@ -218,10 +227,11 @@ make start-api
 You can test the `hello_world` route by [importing the Postman collection](https://learning.postman.com/docs/getting-started/importing-and-exporting-data/#importing-postman-data) at `postman`.
 
 For more details on the API routes, check the automatically generated [swagger](https://learning.postman.com/docs/getting-started/importing-and-exporting-data/#importing-postman-data) at the `/docs` url.
-
 <% } -%>
 <% if (includeApi && apiInfrastructure !== null) { -%>
+
 ### Deploy the API
+
 To deploy the API, run (depending on your computer's architecture):
 ```bash
 make deploy-api-from-x86 # E.g. Linux or Mac intel
@@ -230,9 +240,9 @@ or
 ```bash
 make deploy-api-from-arm # E.g. Mac M1 or M2
 ```
-
 <% } -%>
 <% if (includeApi && apiInfrastructure !== null) { -%>
+
 ## Infrastructure
 
 <% if (apiInfrastructure === "aws") { -%>
@@ -242,13 +252,15 @@ The infrastructure of the project consists of AWS resources, provisioned with Te
 The infrastructure of the project consists of GCP resources, provisioned with Terraform.
 <% } -%>
 The Terraform code for all resources can be found in the `terraform` folder.
-
 <% if (apiInfrastructure === "aws") { -%>
-### Architecture and communication between the components
-![Architecture and communication between the components](docs/architecture.png)
 
+### Architecture and communication between the components
+
+![Architecture and communication between the components](docs/architecture.png)
 <% } -%>
+
 ### Pricing of the infrastructure
+
 <% if (apiInfrastructure === "aws") { -%>
 - EC2: ~38$ per month. ([see official doc](https://aws.amazon.com/ec2/pricing/on-demand/))
 <% if (includeNatGateway) { -%>
@@ -281,18 +293,17 @@ If the plan suits what you were expecting, provision the development environment
   ```bash
   terraform apply
   ```
-
 <% if (apiInfrastructure === "gcp") { -%>
+
 ### Access the API
 
 If you try to reach the API with the URL given by Terraform, you should have an error. See [this guide](https://cloud.google.com/run/docs/authenticating/developers?hl=en) to connect to your API in Cloud Run.
-
 <% } -%>
 <% } -%>
 <% if (includeStreamlit) { -%>
+
 ## Streamlit
 
 The project includes a Streamlit app.
 See its documentation in the [specific README](src/streamlit_app/README.md).
-
 <% } -%>

@@ -25,22 +25,22 @@ fix-ruff:
 
 mypy:
 	poetry run mypy src
-
 <% if (includeApi) { -%>
+
 ########################################################################################################################
 # Api
 ########################################################################################################################
 
 start-api:
 	docker compose up -d
-
 <% } -%>
 <% if (includeApi && apiInfrastructure !== null) { -%>
+
 ########################################################################################################################
 # Deployment
 ########################################################################################################################
-
 <% if (apiInfrastructure === "aws") { -%>
+
 AWS_ACCOUNT_URL=<%= awsAccountId %>.dkr.ecr.<%= awsRegion %>.amazonaws.com
 AWS_REGION=<%= awsRegion %>
 ECR_REPOSITORY_NAME=dev_api_image
@@ -54,9 +54,9 @@ ecr-login:
 # Redeployment of ECS service to take into account the new image
 redeploy-ecs-service:
 	aws ecs update-service --cluster ${ECS_CLUSTER_NAME} --service ${ECS_SERVICE_NAME} --force-new-deployment --no-cli-pager
-
 <% } -%>
 <% if (apiInfrastructure === "gcp") { -%>
+
 GCP_PROJECT_ID=<%= gcpProjectId %>
 GCP_REGION=<%= gcpRegion %>
 ARTIFACT_REGISTRY_NAME=dev-api-docker-registry
@@ -71,8 +71,8 @@ redeploy-cloud-run-service:
 	gcloud run deploy ${CLOUD_RUN_SERVICE_NAME} \
 	--image=${IMAGE_URL}:latest \
 	--region=${GCP_REGION}
-
 <% } -%>
+
 deploy-api-from-x86:
 <% if (apiInfrastructure === "aws") { -%>	make ecr-login<% } -%>
 <% if (apiInfrastructure === "gcp") { -%>	make artifact-registry-login<% } -%>
@@ -101,11 +101,11 @@ deploy-api-from-arm:
 
 <% } -%>
 <% if (includeStreamlit) { -%>
+
 ########################################################################################################################
 # Streamlit
 ########################################################################################################################
 
 start-streamlit-app:
 	poetry run streamlit run "src/streamlit_app/🏠_Home_page.py"
-
 <% } -%>
