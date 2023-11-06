@@ -128,3 +128,15 @@ check_untyped_defs = true
 
 # Make __init__.py file optional for package definitions; if missing, mypy requires __init__.py at packages roots, see https://mypy.readthedocs.io/en/stable/running_mypy.html#mapping-file-paths-to-modules
 explicit_package_bases = true
+
+
+[[tool.mypy.overrides]]
+module = [
+# Ignore missing library stubs for the following packages;
+# see https://mypy.readthedocs.io/en/stable/running_mypy.html#missing-library-stubs-or-py-typed-marker
+# and https://mypy.readthedocs.io/en/stable/config_file.html#using-a-pyproject-toml-file
+<% if (includeDvc) { -%>
+    "dvc.*",
+<% } -%>
+]
+ignore_missing_imports = true
