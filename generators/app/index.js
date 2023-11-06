@@ -172,14 +172,16 @@ module.exports = class extends Generator {
           },
           {
             name: `AWS auto-scaled infrastructure (API Gateway, ASG, ECS, EC2)${costMessage(
-              " AWS costs: ~16$/month + price of the EC2 instances (~38$/month for one t2.medium instance).",
+              "AWS costs: ~16$/month + price of the EC2 instances (~38$/month for one t2.medium instance).",
+              true,
               4
             )}`,
             value: "aws"
           },
           {
             name: `GCP serverless infrastructure (Cloud Run, Artifact Registry)${costMessage(
-              " GCP costs: depend on the number of requests since Cloud Run is a serverless service.",
+              "GCP costs: depend on the number of requests since Cloud Run is a serverless service.",
+              true,
               4
             )}`,
             value: "gcp"
