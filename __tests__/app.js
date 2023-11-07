@@ -139,20 +139,6 @@ describe("generator-sicarator:app", () => {
       ...ALL_OPTIONS_EXCEPT_INFRA_ANSWERS,
       ...AWS_INFRA_ANSWERS,
       pythonVersion: "3.10.11"
-    },
-    {
-      description: "Python 3.9 (all options & AWS infra)",
-      ...DEFAULT_ANSWERS,
-      ...ALL_OPTIONS_EXCEPT_INFRA_ANSWERS,
-      ...AWS_INFRA_ANSWERS,
-      pythonVersion: "3.9.18"
-    },
-    {
-      description: "Python 3.8 (all options & AWS infra)",
-      ...DEFAULT_ANSWERS,
-      ...ALL_OPTIONS_EXCEPT_INFRA_ANSWERS,
-      ...AWS_INFRA_ANSWERS,
-      pythonVersion: "3.8.18"
     }
   ])(
     "Generate project with $description",

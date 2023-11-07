@@ -103,14 +103,6 @@ module.exports = class extends Generator {
           {
             name: "3.10.13 (not recommended)",
             value: "3.10.11"
-          },
-          {
-            name: "3.9.18 (not recommended)",
-            value: "3.9.18"
-          },
-          {
-            name: "3.8.18 (not recommended)",
-            value: "3.8.18"
           }
         ]
       },
