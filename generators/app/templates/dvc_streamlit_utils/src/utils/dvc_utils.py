@@ -29,7 +29,8 @@ def dvc_open(
     """Open a file from DVC using the dvc.api.open function.
 
     This function is a wrapper around dvc.api.open that:
-     - allows using relative and absolute paths
+     - allows using relative and absolute paths (the original `dvc.api.open` only allows
+        relative paths, see https://github.com/iterative/dvc/issues/8038).
      - takes a Path object as input instead of a string.
 
     Args:
