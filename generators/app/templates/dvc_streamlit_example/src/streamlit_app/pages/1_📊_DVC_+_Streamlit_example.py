@@ -21,12 +21,14 @@ def main() -> None:
     set_page_config()
     st.title("DVC + Streamlit example")
     st.info(
-        "This example shows how to use DVC utils (`src/streamlit_app/utils/dvc_utils.py`) to compare and analyse "
-        "results of different DVC experiments or Git revisions.\n"
-        "- Run `dvc repro` to reproduce the example pipeline; then, select empty revision (current workspace) in the"
-        "  sidebar to see the results.\n"
-        "- Run `dvc exp run --name test_seed_42 --set-param random_seed=42` to generate a new experiment, and "
-        "select the experiment in the sidebar to see the results.",
+        "This example shows how to use DVC + Streamlit utils (`src/utils/dvc_utils.py` "
+        "and `src/streamlit_app/utils/selectors.py`) to compare and analyse results of "
+        "different DVC experiments or Git revisions.\n"
+        "- Run `dvc repro` to reproduce the example pipeline; then, select empty "
+        "revision (= current workspace) in the sidebar to see the results.\n"
+        "- Run `dvc exp run --name test_seed_42 --set-param random_seed=42` to "
+        "generate a new experiment, refresh this page and select the experiment in the"
+        "sidebar to see the results.",
         icon="ℹ️",  # noqa: RUF001 (false positive with emoji)
     )
     with st.expander(
