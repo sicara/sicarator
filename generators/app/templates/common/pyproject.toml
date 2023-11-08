@@ -52,7 +52,8 @@ omit = [
 <% } -%>
 ]
 exclude_also = [
-    "if __name__ == .__main__.:",
+    # Such code branches cannot be easily tested; that's OK since they should only contain 1 function call
+    "if __name__ == \"__main__\":",
 ]
 fail_under = 70.00
 precision = 2
