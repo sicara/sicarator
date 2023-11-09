@@ -25,12 +25,29 @@ const API_FILES_PATHS = [
   "docker-compose.yml"
 ];
 const TERRAFORM_FILES_PATHS = ["terraform/main.tf", "terraform/variables.tf"]; // Not exhaustive
-const DVC_FILES_PATHS = [".dvcignore", ".dvc/config", ".dvc/.gitignore"];
+const DVC_FILES_PATHS = [
+  ".dvcignore",
+  ".dvc/config",
+  ".dvc/.gitignore",
+  "params.yaml",
+  "src/params.py"
+];
 const STREAMLIT_FILES_PATHS = ["src/streamlit_app"];
+const DVC_STREAMLIT_UTILS_FILES_PATHS = [
+  "src/utils/dvc_utils.py",
+  "src/streamlit_app/utils/selectors.py",
+  "tests/utils/test_dvc_utils.py",
+  "tests/streamlit_app/utils/test_selectors.py"
+];
+const DVC_STREAMLIT_EXAMPLE_FILES_PATHS = [
+  "src/scripts/generate_random_number.py",
+  "dvc.yaml",
+  "src/streamlit_app/pages/1_📊_DVC_+_Streamlit_example.py"
+];
 
 const PROJECT_NAME = "Sicarator Test";
 const PROJECT_SLUG = "sicarator-test";
-const LAST_PYTHON_VERSION = "3.11.4";
+const LAST_PYTHON_VERSION = "3.11.6";
 const TERRAFORM_BACKEND_BUCKET_NAME = "terraform-backend-bucket-name";
 const AWS_ACCOUNT_ID = "1234567890";
 const AWS_REGION = "us-east-1";
@@ -51,7 +68,9 @@ const DEFAULT_ANSWERS = {
 const ALL_OPTIONS_EXCEPT_INFRA_ANSWERS = {
   includeApi: true,
   includeDvc: true,
-  includeStreamlit: true
+  includeStreamlit: true,
+  includeDvcStreamlitUtils: true,
+  includeDvcStreamlitExample: true
 };
 const AWS_INFRA_ANSWERS = {
   terraformBackendBucketName: TERRAFORM_BACKEND_BUCKET_NAME,
@@ -120,20 +139,6 @@ describe("generator-sicarator:app", () => {
       ...ALL_OPTIONS_EXCEPT_INFRA_ANSWERS,
       ...AWS_INFRA_ANSWERS,
       pythonVersion: "3.10.11"
-    },
-    {
-      description: "Python 3.9 (all options & AWS infra)",
-      ...DEFAULT_ANSWERS,
-      ...ALL_OPTIONS_EXCEPT_INFRA_ANSWERS,
-      ...AWS_INFRA_ANSWERS,
-      pythonVersion: "3.9.16"
-    },
-    {
-      description: "Python 3.8 (all options & AWS infra)",
-      ...DEFAULT_ANSWERS,
-      ...ALL_OPTIONS_EXCEPT_INFRA_ANSWERS,
-      ...AWS_INFRA_ANSWERS,
-      pythonVersion: "3.8.16"
     }
   ])(
     "Generate project with $description",
@@ -143,6 +148,8 @@ describe("generator-sicarator:app", () => {
       apiInfrastructure,
       includeDvc,
       includeStreamlit,
+      includeDvcStreamlitUtils,
+      includeDvcStreamlitExample,
       includeHelloWorld,
       awsRegion,
       awsAccountId,
@@ -158,6 +165,8 @@ describe("generator-sicarator:app", () => {
             apiInfrastructure,
             includeDvc,
             includeStreamlit,
+            includeDvcStreamlitUtils,
+            includeDvcStreamlitExample,
             includeHelloWorld,
             awsRegion,
             awsAccountId,
@@ -224,14 +233,6 @@ describe("generator-sicarator:app", () => {
         assert.file(".yo-rc.json");
       });
 
-      it("creates hello-world files when needed", () => {
-        if (includeHelloWorld) {
-          assert.file(HELLO_WORLD_FILES_PATHS);
-        } else {
-          assert.noFile(HELLO_WORLD_FILES_PATHS);
-        }
-      });
-
       it("creates API files when needed", () => {
         if (includeApi) {
           assert.file(API_FILES_PATHS);
@@ -261,6 +262,30 @@ describe("generator-sicarator:app", () => {
           assert.file(STREAMLIT_FILES_PATHS);
         } else {
           assert.noFile(STREAMLIT_FILES_PATHS);
+        }
+      });
+
+      it("creates DVC + Streamlit utils files when needed", () => {
+        if (includeDvcStreamlitUtils) {
+          assert.file(DVC_STREAMLIT_UTILS_FILES_PATHS);
+        } else {
+          assert.noFile(DVC_STREAMLIT_UTILS_FILES_PATHS);
+        }
+      });
+
+      it("creates DVC + Streamlit example files when needed", () => {
+        if (includeDvcStreamlitExample) {
+          assert.file(DVC_STREAMLIT_EXAMPLE_FILES_PATHS);
+        } else {
+          assert.noFile(DVC_STREAMLIT_EXAMPLE_FILES_PATHS);
+        }
+      });
+
+      it("creates hello-world files when needed", () => {
+        if (includeHelloWorld) {
+          assert.file(HELLO_WORLD_FILES_PATHS);
+        } else {
+          assert.noFile(HELLO_WORLD_FILES_PATHS);
         }
       });
 

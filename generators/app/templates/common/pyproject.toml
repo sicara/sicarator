@@ -10,11 +10,14 @@ python = "<%= pythonVersion %>"
 fastapi = {extras = ["all"], version = "^0.95.1"}
 loguru = "^0.7.0"
 <% } -%>
+<% if (includeDvc) { -%>
+PyYAML = "^6.0"
+<% } -%>
 
 [tool.poetry.group.dev.dependencies]
 black = "^22"
 <% if (includeDvc) { -%>
-dvc = {extras = ["<%= dvcRemoteType %>"], version = "^2.58.1"}
+dvc = {extras = ["<%= dvcRemoteType %>"], version = "^3.28.0"}
 <% } -%>
 mypy = "^1.2"
 pre-commit = "^2"
@@ -22,7 +25,11 @@ pytest = "^7"
 pytest-cov = "^3"
 ruff = "^0"
 <% if (includeStreamlit) { -%>
-streamlit = "^1.16.0"
+streamlit = "^1.28.0"
+<% } -%>
+<% if (includeDvc) { -%>
+typer = "^0.9.0"
+types-PyYAML = "^6.0"
 <% } -%>
 
 [build-system]
@@ -38,7 +45,16 @@ branch = true
 
 [tool.coverage.report]
 skip_empty = true
-omit = ["src/constants.py"]
+omit = [
+    "src/constants.py",
+<% if (includeDvc) { -%>
+    "src/params.py",
+<% } -%>
+]
+exclude_also = [
+    # Such code branches cannot be easily tested; that's OK since they should only contain 1 function call
+    "if __name__ == \"__main__\":",
+]
 fail_under = 70.00
 precision = 2
 
@@ -113,3 +129,15 @@ check_untyped_defs = true
 
 # Make __init__.py file optional for package definitions; if missing, mypy requires __init__.py at packages roots, see https://mypy.readthedocs.io/en/stable/running_mypy.html#mapping-file-paths-to-modules
 explicit_package_bases = true
+
+
+[[tool.mypy.overrides]]
+module = [
+# Ignore missing library stubs for the following packages;
+# see https://mypy.readthedocs.io/en/stable/running_mypy.html#missing-library-stubs-or-py-typed-marker
+# and https://mypy.readthedocs.io/en/stable/config_file.html#using-a-pyproject-toml-file
+<% if (includeDvc) { -%>
+    "dvc.*",
+<% } -%>
+]
+ignore_missing_imports = true

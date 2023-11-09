@@ -6,7 +6,7 @@ jobs:
   install:
     working_directory: ~/generator-sicarator
     docker:
-      - image: cimg/python:3.11.4-node
+      - image: cimg/python:3.11.6-node
     steps:
       - checkout
       # Download and cache dependencies
@@ -27,7 +27,7 @@ jobs:
   test:
     working_directory: ~/generator-sicarator
     docker:
-      - image: cimg/python:3.11.4-node
+      - image: cimg/python:3.11.6-node
     steps:
       - checkout
       - restore_cache:

@@ -94,23 +94,15 @@ module.exports = class extends Generator {
           "If the chosen version is not installed on your machine, it will be automatically installed by PyEnv."
         )}`,
         type: "list",
-        default: "3.11.4",
+        default: "3.11.6",
         choices: [
           {
-            name: "3.11.4",
-            value: "3.11.4"
+            name: "3.11.6",
+            value: "3.11.6"
           },
           {
-            name: "3.10.11 (not recommended)",
+            name: "3.10.13 (not recommended)",
             value: "3.10.11"
-          },
-          {
-            name: "3.9.16 (not recommended)",
-            value: "3.9.16"
-          },
-          {
-            name: "3.8.16 (not recommended)",
-            value: "3.8.16"
           }
         ]
       },
@@ -172,14 +164,16 @@ module.exports = class extends Generator {
           },
           {
             name: `AWS auto-scaled infrastructure (API Gateway, ASG, ECS, EC2)${costMessage(
-              " AWS costs: ~16$/month + price of the EC2 instances (~38$/month for one t2.medium instance).",
+              "AWS costs: ~16$/month + price of the EC2 instances (~38$/month for one t2.medium instance).",
+              true,
               4
             )}`,
             value: "aws"
           },
           {
             name: `GCP serverless infrastructure (Cloud Run, Artifact Registry)${costMessage(
-              " GCP costs: depend on the number of requests since Cloud Run is a serverless service.",
+              "GCP costs: depend on the number of requests since Cloud Run is a serverless service.",
+              true,
               4
             )}`,
             value: "gcp"
@@ -250,24 +244,10 @@ module.exports = class extends Generator {
         filter: awsAccountId => awsAccountId || "*your-gcp-project-id*"
       },
 
-      // Hello world code
-      {
-        when: ({ includeApi }) => !includeApi,
-        name: "includeHelloWorld",
-        message: `${mainMessage(
-          "Include 'hello world' function and unit test?"
-        )}${warningMessage(
-          "If 'no', CI testing step will fail due to empty tests."
-        )}`,
-        type: "confirm",
-        default: true,
-        store: true
-      },
-
       // DVC
       {
         name: "includeDvc",
-        message: `${mainMessage("Include DVC on the project?")}${infoMessage(
+        message: `${mainMessage("Include DVC?")}${infoMessage(
           `This tool allows to version data files and create data pipelines (see ${chalk.underline(
             "https://dvc.org/"
           )}).`
@@ -318,9 +298,7 @@ module.exports = class extends Generator {
       // Streamlit
       {
         name: "includeStreamlit",
-        message: `${mainMessage(
-          "Include Streamlit on the project?"
-        )}${infoMessage(
+        message: `${mainMessage("Include Streamlit?")}${infoMessage(
           `This Python package allows to easily build interactive web apps for ML projects (see ${chalk.underline(
             "https://streamlit.io/"
           )}).`
@@ -329,6 +307,54 @@ module.exports = class extends Generator {
         )}`,
         type: "confirm",
         default: false,
+        store: true
+      },
+
+      // DVC + Streamlit utils
+      {
+        when: ({ includeDvc, includeStreamlit }) =>
+          includeDvc && includeStreamlit,
+        name: "includeDvcStreamlitUtils",
+        message: `${mainMessage("Include DVC + Streamlit utils?")}${infoMessage(
+          `These utils allow to build Streamlit dashboards to compare and analyze DVC experiments (see this article: ${chalk.underline(
+            "https://www.sicara.fr/blog-technique/dvc-streamlit-webui-ml"
+          )} ).`
+        )}${infoMessage(
+          "A fully customizable alternative to experiment tracking tools like MLFlow."
+        )}`,
+        type: "confirm",
+        default: true,
+        store: true
+      },
+
+      // DVC + Streamlit example
+      {
+        when: ({ includeDvcStreamlitUtils }) => includeDvcStreamlitUtils,
+        name: "includeDvcStreamlitExample",
+        message: `${mainMessage(
+          "Include DVC + Streamlit example?"
+        )}${infoMessage(
+          "A minimal example showing how to use these DVC + Streamlit utils."
+        )}${infoMessage(
+          "It contains a DVC pipeline generating a random number and a Streamlit to compare generated numbers between experiments."
+        )}`,
+        type: "confirm",
+        default: true,
+        store: true
+      },
+
+      // Hello world code
+      {
+        when: ({ includeApi, includeStreamlit }) =>
+          !includeApi && !includeStreamlit,
+        name: "includeHelloWorld",
+        message: `${mainMessage(
+          "Include 'hello world' function and unit test?"
+        )}${warningMessage(
+          "If 'no', CI testing step will fail due to empty tests."
+        )}`,
+        type: "confirm",
+        default: true,
         store: true
       }
     ]);
@@ -447,6 +473,39 @@ module.exports = class extends Generator {
     if (this.answers.includeStreamlit) {
       this.fs.copyTpl(
         this.templatePath("streamlit"),
+        this.destinationPath(),
+        this.answers,
+        TEMPLATE_OPTIONS,
+        COPY_OPTIONS
+      );
+    }
+
+    if (this.answers.includeDvcStreamlitUtils) {
+      this.fs.copyTpl(
+        this.templatePath("dvc_streamlit_utils"),
+        this.destinationPath(),
+        this.answers,
+        TEMPLATE_OPTIONS,
+        COPY_OPTIONS
+      );
+    }
+
+    if (this.answers.includeDvcStreamlitExample) {
+      this.fs.copyTpl(
+        this.templatePath("dvc_streamlit_example"),
+        this.destinationPath(),
+        this.answers,
+        TEMPLATE_OPTIONS,
+        COPY_OPTIONS
+      );
+    }
+
+    if (
+      this.answers.includeStreamlit &&
+      !this.answers.includeDvcStreamlitExample
+    ) {
+      this.fs.copyTpl(
+        this.templatePath("streamlit_hello_world"),
         this.destinationPath(),
         this.answers,
         TEMPLATE_OPTIONS,

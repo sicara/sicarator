@@ -21,8 +21,6 @@ The file name should contain:
 - an emoji to make the sidebar more visual
 - the name of the page (with underscores instead of spaces)
 
-Each streamlit page must implement a `main` function that will be called when the page is loaded.
-
 Here is a template to start a new page:
 
 ```python
@@ -34,10 +32,10 @@ from src.streamlit_app.utils.set_page_config import set_page_config
 
 def main() -> None:
     """Main function of the page."""
+    set_page_config()
     st.title("Page title")
 
 
 if __name__ == "__main__":
-    set_page_config()
     main()
 ```
