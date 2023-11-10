@@ -12,7 +12,7 @@ steps:
       versionSpec: "<%= pythonVersion %>"
 
   - script: |
-      curl -sSL https://install.python-poetry.org | python - --version 1.5.1
+      curl -sSL https://install.python-poetry.org | python - --version 1.7.0
       export PATH="/root/.local/bin:$PATH"
     displayName: "Install poetry"
 

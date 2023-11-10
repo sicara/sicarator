@@ -9,7 +9,7 @@ install:
   stage: build
   script:
     - echo "Update poetry to right version"
-    - curl -sSL https://install.python-poetry.org | python - --version 1.5.1
+    - curl -sSL https://install.python-poetry.org | python - --version 1.7.0
     - export PATH="/root/.local/bin:$PATH"
 
     # create virtualenv in working directory to enable storage in cache with gitlab
@@ -34,7 +34,7 @@ install:
       - .venv
   before_script:
     - echo "Install poetry"
-    - curl -sSL https://install.python-poetry.org | python - --version 1.5.1
+    - curl -sSL https://install.python-poetry.org | python - --version 1.7.0
     - export PATH="/root/.local/bin:$PATH"
 
 black:
