@@ -13,7 +13,7 @@ ENV HOME /root
 ENV PATH=${PATH}:$HOME/.local/bin
 
 # Install poetry
-RUN curl -sSL https://install.python-poetry.org | POETRY_VERSION=1.6.1 python3 -
+RUN curl -sSL https://install.python-poetry.org | POETRY_VERSION=1.7.0 python3 -
 
 # Export requirements.txt
 COPY ./pyproject.toml ./poetry.lock* /tmp/
