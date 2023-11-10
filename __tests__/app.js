@@ -324,7 +324,7 @@ describe("generator-sicarator:app", () => {
       });
 
       it("runs linter successfully", done => {
-        execInPyenvVenv("make ruff-check", (error, stdout, stderr) => {
+        execInPyenvVenv("make ruff-lint-check", (error, stdout, stderr) => {
           if (stdout) {
             console.log(`stdout:\n ${stdout}`);
           }

@@ -45,7 +45,7 @@ ruff-format:
 ruff-check:
   extends: .job_template
   script:
-    - make ruff-check
+    - make ruff-lint-check
 
 mypy:
   extends: .job_template
