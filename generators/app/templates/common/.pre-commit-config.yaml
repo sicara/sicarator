@@ -21,7 +21,7 @@ repos:
     language: system
     types: [python]
     stages: [commit]
-  - id: ruff-check
+  - id: ruff-lint
     name: Linting (ruff)
     entry: ruff check
     language: system

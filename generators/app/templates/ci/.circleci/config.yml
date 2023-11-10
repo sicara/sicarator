@@ -65,16 +65,16 @@ jobs:
     steps:
       - get_code_and_cache
       - run:
-          name: run ruff-format
+          name: run ruff formatter
           command: make ruff-format
 
-  ruff-check:
+  ruff-lint:
     executor: base-python
     steps:
       - get_code_and_cache
       - run:
-          name: run ruff-check
-          command: make ruff-check
+          name: run ruff linter
+          command: make ruff-lint
 
   mypy:
     executor: base-python
