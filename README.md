@@ -50,8 +50,8 @@ Install [Poetry](https://python-poetry.org) to manage your dependencies and tool
 *If you have not previously installed any Python version, you may need to install one and set it as your default Python version before installing Poetry:*
   ```bash
   pyenv update  # fetch the latest list of Python versions
-  pyenv install 3.11  # install the latest Python 3.11
-  pyenv global 3.11  # set this as the default version for your shell (and ignore the system Python)
+  pyenv install 3.11  # install the latest Python 3.11.x
+  pyenv global 3.11  # set your new global default Python version
   ```
 
 ### Node.js
