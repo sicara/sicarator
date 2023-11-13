@@ -23,7 +23,7 @@ jobs:
     strategy:
       matrix:
         quality-command:
-          - format-fix
+          - format-check
           - lint-check
           - type-check
     steps:

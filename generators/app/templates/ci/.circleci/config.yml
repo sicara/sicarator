@@ -60,15 +60,15 @@ jobs:
       - store_artifacts:
           path: htmlcov
 
-  format:
+  format-check:
     executor: base-python
     steps:
       - get_code_and_cache
       - run:
           name: run formatter
-          command: make format-fix
+          command: make format-check
 
-  lint:
+  lint-check:
     executor: base-python
     steps:
       - get_code_and_cache
@@ -92,10 +92,10 @@ workflows:
       - test:
           requires:
             - install
-      - lint:
+      - lint-check:
           requires:
             - install
-      - format:
+      - format-check:
           requires:
             - install
       - type-check:

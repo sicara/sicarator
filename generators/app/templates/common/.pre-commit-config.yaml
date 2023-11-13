@@ -15,19 +15,19 @@ repos:
 
 - repo: local
   hooks:
-  - id: ruff-format
+  - id: format-fix
     name: Formatting (ruff)
     entry: ruff format
     language: system
     types: [python]
     stages: [commit]
-  - id: ruff-lint
+  - id: lint-check
     name: Linting (ruff)
     entry: ruff check
     language: system
     types: [python]
     stages: [commit]
-  - id: mypy
+  - id: type-check
     name: Type checking (mypy)
     entry: make type-check
     pass_filenames: false

@@ -37,12 +37,12 @@ install:
     - curl -sSL https://install.python-poetry.org | python - --version 1.5.1
     - export PATH="/root/.local/bin:$PATH"
 
-format:
+format-check:
   extends: .job_template
   script:
-    - make format-fix
+    - make format-check
 
-lint:
+lint-check:
   extends: .job_template
   script:
     - make lint-check

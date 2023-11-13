@@ -30,7 +30,7 @@ steps:
       path: $(Agent.HomeDirectory)/../../.cache/pypoetry
     displayName: "Cache poetry dependencies"
 
-  - script: make format-fix
+  - script: make format-check
     displayName: "Run formatter"
 
   - script: make lint-check
