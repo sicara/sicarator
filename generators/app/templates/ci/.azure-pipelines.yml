@@ -30,14 +30,14 @@ steps:
       path: $(Agent.HomeDirectory)/../../.cache/pypoetry
     displayName: "Cache poetry dependencies"
 
-  - script: make ruff-format
-    displayName: "Run ruff-format"
+  - script: make format-fix
+    displayName: "Run formatter"
 
-  - script: make ruff-lint-check
-    displayName: "Run ruff-lint-check"
+  - script: make lint-check
+    displayName: "Run linter"
 
-  - script: make mypy
-    displayName: "Run mypy"
+  - script: make type-check
+    displayName: "Run type checker"
 
   - script: make test
     displayName: "Run tests"

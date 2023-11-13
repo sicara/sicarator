@@ -173,7 +173,7 @@ ruff format --check .
 ```
 or
 ```bash
-make ruff-format
+make format-check
 ```
 
 You can also [integrate it to your IDE](https://docs.astral.sh/ruff/integrations/) to reformat
@@ -187,12 +187,12 @@ ruff check src tests
 ```
 or
 ```bash
-make ruff-check
+make lint-check
 ```
 
 To run static analysis and to apply auto-fixes, run `ruff` with:
 ```bash
-make ruff-fix
+make lint-fix
 ```
 ### Type checking with `mypy`
 
@@ -202,7 +202,7 @@ mypy src --explicit-package-bases --namespace-packages
 ```
 or
 ```bash
-make mypy
+make type-check
 ```
 
 <% if (includeApi) { -%>

@@ -29,7 +29,7 @@ repos:
     stages: [commit]
   - id: mypy
     name: Type checking (mypy)
-    entry: make mypy
+    entry: make type-check
     pass_filenames: false
     language: system
     types: [python]

@@ -14,19 +14,19 @@ install:
 test:
 	poetry run pytest tests --cov src --cov-report term --cov-report=html --cov-report xml --junit-xml=tests-results.xml
 
-ruff-format-check:
+format-check:
 	poetry run ruff format --check .
 
-ruff-lint-check:
+format-fix:
+	poetry run ruff format src tests
+
+lint-check:
 	poetry run ruff check src tests
 
-ruff-format:
-	poetry run ruff format
-
-ruff-lint-fix:
+lint-fix:
 	poetry run ruff check src tests --fix
 
-mypy:
+type-check:
 	poetry run mypy src
 
 <% if (includeApi) { -%>

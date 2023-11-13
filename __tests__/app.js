@@ -324,7 +324,7 @@ describe("generator-sicarator:app", () => {
       });
 
       it("runs linter successfully", done => {
-        execInPyenvVenv("make ruff-lint-check", (error, stdout, stderr) => {
+        execInPyenvVenv("make lint-check", (error, stdout, stderr) => {
           if (stdout) {
             console.log(`stdout:\n ${stdout}`);
           }
@@ -342,7 +342,7 @@ describe("generator-sicarator:app", () => {
       });
 
       it("runs type checking successfully", done => {
-        execInPyenvVenv("make mypy", (error, stdout, stderr) => {
+        execInPyenvVenv("make type-check", (error, stdout, stderr) => {
           if (stdout) {
             console.log(`stdout:\n ${stdout}`);
           }
@@ -360,7 +360,7 @@ describe("generator-sicarator:app", () => {
       });
 
       it("runs formatting check successfully", done => {
-        execInPyenvVenv("make ruff-format", (error, stdout, stderr) => {
+        execInPyenvVenv("make format-check", (error, stdout, stderr) => {
           if (stdout) {
             console.log(`stdout:\n ${stdout}`);
           }
