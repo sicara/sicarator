@@ -37,20 +37,20 @@ install:
     - curl -sSL https://install.python-poetry.org | python - --version 1.7.0
     - export PATH="/root/.local/bin:$PATH"
 
-black:
+format-check:
   extends: .job_template
   script:
-    - make black
+    - make format-check
 
-ruff:
+lint-check:
   extends: .job_template
   script:
-    - make ruff
+    - make lint-check
 
-mypy:
+type-check:
   extends: .job_template
   script:
-    - make mypy
+    - make type-check
 
 test:
   extends: .job_template
