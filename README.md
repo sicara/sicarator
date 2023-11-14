@@ -5,6 +5,8 @@
 
 ![Demo GIF](./demo.gif)
 
+To know more about the story behind Sicarator and its philosophy, you can read [this blog article](https://www.sicara.fr/blog-technique/sicarator).
+
 ## Main components of the generated project
 
 - **Python** development environment with:
