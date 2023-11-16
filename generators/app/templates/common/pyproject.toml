@@ -7,28 +7,28 @@ authors = ["<%= authorName %> <<%= authorEmail %>>"]
 [tool.poetry.dependencies]
 python = "<%= pythonVersion %>"
 <% if (includeApi) { -%>
-fastapi = {extras = ["all"], version = "^0.95.1"}
-loguru = "^0.7.0"
+fastapi = {extras = ["all"], version = ">=0.95.1"}
+loguru = ">=0.7.0"
 <% } -%>
 <% if (includeDvc) { -%>
-PyYAML = "^6.0"
+PyYAML = ">=6.0"
 <% } -%>
 
 [tool.poetry.group.dev.dependencies]
 <% if (includeDvc) { -%>
-dvc = {extras = ["<%= dvcRemoteType %>"], version = "^3.28.0"}
+dvc = {extras = ["<%= dvcRemoteType %>"], version = ">=3.28.0"}
 <% } -%>
-mypy = "^1.2"
-pre-commit = "^2"
-pytest = "^7"
-pytest-cov = "^3"
-ruff = "^0.1.5"
+mypy = ">=1.2"
+pre-commit = ">=2"
+pytest = ">=7"
+pytest-cov = ">=3"
+ruff = ">=0.1.5"
 <% if (includeStreamlit) { -%>
-streamlit = "^1.28.0"
+streamlit = ">=1.28.0"
 <% } -%>
 <% if (includeDvc) { -%>
-typer = "^0.9.0"
-types-PyYAML = "^6.0"
+typer = ">=0.9.0"
+types-PyYAML = ">=6.0"
 <% } -%>
 
 [build-system]
