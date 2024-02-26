@@ -5,6 +5,7 @@
 install:
 	pyenv virtualenv --force <%= pythonVersion %> <%= projectSlug %>
 	pyenv local <%= projectSlug %>
+	# Running poetry install inside a Make command requires a VIRTUAL_ENV variable
 	VIRTUAL_ENV=$$(pyenv prefix) poetry install --no-root --sync
 
 ########################################################################################################################
