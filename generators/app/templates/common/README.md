@@ -120,6 +120,13 @@ Set up your GCP account locally to be able to access the different resources:
 ### Set-up Terraform
 
 *All commands below are to be run from `terraform` folder.*
+<% if (includeApi && apiInfrastructure === "gcp") { -%>
+
+- Set up your gcloud application default credentials (which will be used by Terraform):
+  ```bash
+  gcloud auth application-default login
+  ```
+<% } -%>
 
 - Init the project locally:
   ```bash
@@ -135,13 +142,6 @@ Set up your GCP account locally to be able to access the different resources:
   ```bash
   terraform workspace select dev
   ```
-<% if (includeApi && apiInfrastructure === "gcp") { -%>
-
-- Set up your gcloud application default credentials (which will be used by Terraform):
-  ```bash
-  gcloud auth application-default login
-  ```
-<% } -%>
 <% } -%>
 
 ### Install git hooks (running before commit and push commands)
