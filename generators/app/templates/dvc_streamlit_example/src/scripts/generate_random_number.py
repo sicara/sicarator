@@ -10,7 +10,6 @@ from typing import Annotated
 
 import typer
 import yaml
-from loguru import logger
 
 from src.params import RANDOM_SEED
 
@@ -25,8 +24,8 @@ def generate_random_number(
     """
     random.seed(RANDOM_SEED)
     random_number = random.random()
-    logger.info(f"Random number: {random_number}")
-    logger.info(f"Saving random number to {output_path}")
+    print(f"Random number: {random_number}")
+    print(f"Saving random number to {output_path}")
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
     with open(output_path, "w") as output_file:
