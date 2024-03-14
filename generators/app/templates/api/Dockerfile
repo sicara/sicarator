@@ -2,7 +2,7 @@
 FROM python:<%= pythonVersion %>-slim-bookworm as curl-stage
 
 # Install curl ; remove apt cache to reduce image size
-RUN apt-get -y update && apt-get -y install curl  && rm -rf /var/lib/apt/lists/*
+RUN apt-get -y update && apt-get -y install curl gcc && rm -rf /var/lib/apt/lists/*
 
 
 FROM curl-stage as poetry-requirements-stage
