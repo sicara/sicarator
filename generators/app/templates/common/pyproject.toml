@@ -110,6 +110,13 @@ runtime-evaluated-base-classes = ["pydantic.BaseModel"]
 # Allow missing docstrings for tests
 "tests/**/*.py" = ["D1"]
 
+<% if (pythonVersion[0:3] == "3.9") { -%>
+[tool.ruff.lint.pyupgrade]
+# Preserve types, even if a file imports `from __future__ import annotations`.
+# see https://docs.astral.sh/ruff/settings/#lintpyupgrade
+keep-runtime-typing = true
+<% } -%>
+
 ## mypy
 
 [tool.mypy]
