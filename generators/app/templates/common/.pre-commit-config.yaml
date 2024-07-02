@@ -23,7 +23,7 @@ repos:
     stages: [commit]
   - id: lint-check
     name: Linting (ruff)
-    entry: ruff check
+    entry: make lint-check
     language: system
     types: [python]
     stages: [commit]
