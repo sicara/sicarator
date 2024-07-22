@@ -87,6 +87,17 @@ make install
 ```
 <% if (includeApi && apiInfrastructure === "aws") { -%>
 
+### Setup environment variables
+
+Duplicate the `.env.example` file and rename it to `.env`. Fill in the environment variables with the right values.
+
+Make sure to install [direnv](https://github.com/direnv/direnv/tree/master) to load the environment variables automatically whenever you enter the project directory.
+On MacOS, you can install it with Homebrew:
+```bash
+brew install direnv
+```
+
+
 ### Setup AWS for your project
 
 Set up your AWS account locally to be able to access the different resources:
