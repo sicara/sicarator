@@ -7,19 +7,24 @@
 ### Pyenv and `Python <%= pythonVersion %>`
 
 - Install [pyenv](https://github.com/pyenv/pyenv) to manage your Python versions and virtual environments:
+
   ```bash
   curl -sSL https://pyenv.run | bash
   ```
+
   - If you are on MacOS and experiencing errors on python install with pyenv, follow this [comment](https://github.com/pyenv/pyenv/issues/1740#issuecomment-738749988)
   - Add these lines to your `~/.bashrc` or `~/.zshrc` to be able to activate `pyenv virtualenv`:
+
       ```bash
       eval "$(pyenv init -)"
       eval "$(pyenv virtualenv-init -)"
       eval "$(pyenv init --path)"
       ```
+
   - Restart your shell
 
 - Install the right version of `Python` with `pyenv`:
+
   ```bash
   pyenv install <%= pythonVersion %>
   ```
@@ -27,13 +32,17 @@
 ### Poetry
 
 - Install [Poetry](https://python-poetry.org) to manage your dependencies and tooling configs:
+
   ```bash
   curl -sSL https://install.python-poetry.org | python - --version 1.7.0
   ```
+
   *If you have not previously installed any Python version, you may need to set your global Python version before installing Poetry:*
+
     ```bash
     pyenv global <%= pythonVersion %>
     ```
+
 <% if (includeApi) { -%>
 
 ### Docker Engine
@@ -59,6 +68,7 @@ terminal.
 ### Terraform and associated tools
 
 To manage the project infrastructure, you will need to install:
+
 - [Terraform](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli#install-terraform)
 - [TFlint](https://github.com/terraform-linters/tflint#installation)
 - [terraform-docs](https://github.com/terraform-docs/terraform-docs#installation)
@@ -69,38 +79,56 @@ To manage the project infrastructure, you will need to install:
 ### Python virtual environment and dependencies
 
 1. Create a `pyenv` virtual environment and link it to your project folder:
+
     ```bash
     pyenv virtualenv <%= pythonVersion %> <%= projectSlug %>
     pyenv local <%= projectSlug %>
     ```
+
     *Now, every time you are in your project directory your virtualenv will be activated!*
 
-
 2. Install dependencies with `Poetry`:
+
     ```bash
     poetry install --no-root
     ```
 
 Steps 1. and 2. can also be done in one command:
+
 ```bash
 make install
 ```
+
 <% if (includeApi && apiInfrastructure === "aws") { -%>
+
+### Setup environment variables
+
+Duplicate the `.env.example` file and rename it to `.env`. Fill in the environment variables with the right values.
+
+Make sure to install [direnv](https://github.com/direnv/direnv/tree/master) to load the environment variables automatically whenever you enter the project directory.
+On MacOS, you can install it with Homebrew:
+
+```bash
+brew install direnv
+```
 
 ### Setup AWS for your project
 
 Set up your AWS account locally to be able to access the different resources:
+
 - Get your AWS credentials from the AWS console, or ask an administrator to provide them to you.
 - If you are managing only this AWS account in your computer
   - Run `aws configure` and specify your ACCESS_KEY_ID and SECRET_ACCESS_KEY
 - If you are managing several AWS accounts in your computer
   - Modify your local file located in `~/.aws/credentials` to add:
+
     ```bash
     [<%= projectSlug %>]
     aws_access_key_id=XXXXXX
     aws_secret_access_key=XXXXXXXX
     region=<%= awsRegion %>
     ```
+
   - *(Optional)* In your IDE, modify the default terminal env variables of your project to add `AWS_PROFILE=<%= projectSlug %>`.
   It allows you to use the right AWS profile when calling Python files.
 <% } -%>
@@ -109,11 +137,14 @@ Set up your AWS account locally to be able to access the different resources:
 ### Setup GCP for your project
 
 Set up your GCP account locally to be able to access the different resources:
+
 - Run `gcloud auth login` and follow the instructions to log in to your GCP account.
 - Set the GCP project ID:
+
   ```bash
   gcloud config set project <%= gcpProjectId %>
   ```
+
 <% } -%>
 <% if (includeApi && apiInfrastructure !== null) { -%>
 
@@ -123,25 +154,31 @@ Set up your GCP account locally to be able to access the different resources:
 <% if (includeApi && apiInfrastructure === "gcp") { -%>
 
 - Set up your gcloud application default credentials (which will be used by Terraform):
+
   ```bash
   gcloud auth application-default login
   ```
+
 <% } -%>
 
 - Init the project locally:
+
   ```bash
   terraform init
   ```
 
 - Install TFlint plugins:
+
   ```bash
   tflint --init
   ```
 
 - Select the development workspace:
+
   ```bash
   terraform workspace select dev
   ```
+
 <% } -%>
 
 ### Install git hooks (running before commit and push commands)
@@ -149,24 +186,30 @@ Set up your GCP account locally to be able to access the different resources:
 ```bash
 poetry run pre-commit install
 ```
+
 <% if (includeDvc && dvcRemoteType) { -%>
 
 ### Pull data from DVC remote
 
 - Make sure you have access to the DVC remote bucket (see bucket URL in `.dvc/config` file). If not, ask an administrator to give you access.
 - Pull the data:
+
   ```bash
   dvc pull
   ```
+
 <% } -%>
 
 ## Testing
 
 To run unit tests, run `pytest` with:
+
 ```bash
 pytest tests --cov src
 ```
+
 or
+
 ```bash
 make test
 ```
@@ -176,10 +219,13 @@ make test
 ### Code formatting with `ruff`
 
 To check code formatting, run `ruff format` with:
+
 ```bash
 ruff format --check .
 ```
+
 or
+
 ```bash
 make format-check
 ```
@@ -190,28 +236,37 @@ your code each time you save a file.
 ### Static analysis with `ruff`
 
 To run static analysis, run `ruff` with:
+
 ```bash
 ruff check src tests
 ```
+
 or
+
 ```bash
 make lint-check
 ```
 
 To run static analysis and to apply auto-fixes, run `ruff` with:
+
 ```bash
 make lint-fix
 ```
+
 ### Type checking with `mypy`
 
 To type check your code, run `mypy` with:
+
 ```bash
 mypy src --explicit-package-bases --namespace-packages
 ```
+
 or
+
 ```bash
 make type-check
 ```
+
 <% if (includeApi) { -%>
 
 ## API
@@ -221,9 +276,11 @@ The project includes an API built with [FastAPI](https://fastapi.tiangolo.com/).
 The API is containerized using a [Docker](https://docs.docker.com/get-started/) image, built from the `Dockerfile` and `docker-compose.yml` at the root.
 
 To build and start the API, use the following Makefile command:
+
 ```bash
 make start-api
 ```
+
 You can test the `hello_world` route by [importing the Postman collection](https://learning.postman.com/docs/getting-started/importing-and-exporting-data/#importing-postman-data) at `postman`.
 
 For more details on the API routes, check the automatically generated [swagger](https://learning.postman.com/docs/getting-started/importing-and-exporting-data/#importing-postman-data) at the `/docs` url.
@@ -233,13 +290,17 @@ For more details on the API routes, check the automatically generated [swagger](
 ### Deploy the API
 
 To deploy the API, run (depending on your computer's architecture):
+
 ```bash
 make deploy-api-from-x86 # E.g. Linux or Mac intel
 ```
+
 or
+
 ```bash
 make deploy-api-from-arm # E.g. Mac M1 or M2
 ```
+
 <% } -%>
 <% if (includeApi && apiInfrastructure !== null) { -%>
 
@@ -262,6 +323,7 @@ The Terraform code for all resources can be found in the `terraform` folder.
 ### Pricing of the infrastructure
 
 <% if (apiInfrastructure === "aws") { -%>
+
 - EC2: ~38$ per month. ([see official doc](https://aws.amazon.com/ec2/pricing/on-demand/))
 <% if (includeNatGateway) { -%>
 - NAT Gateway: ~32$ per month ([see official doc](https://aws.amazon.com/vpc/pricing/))
@@ -280,19 +342,23 @@ The Terraform code for all resources can be found in the `terraform` folder.
 ### Process to add/delete/update resources
 
 Select the environment you want to provision:
+
 ```bash
 terraform workspace select <env_name>
 ```
 
 Then check the module adding/deletion plan
+
   ```bash
   terraform plan
   ```
 
 If the plan suits what you were expecting, provision the development environment by running:
+
   ```bash
   terraform apply
   ```
+
 <% if (apiInfrastructure === "gcp") { -%>
 
 ### Access the API
