@@ -74,4 +74,15 @@ repos:
     verbose: true
     language: system
     stages: [push]
+  - id: dvc-post-checkout
+    name: DVC post-checkout
+    entry: dvc
+    args:
+      - git-hook
+      - post-checkout
+    require_serial: true
+    verbose: true
+    always_run: true
+    language: system
+    stages: [post-checkout]
 <% } -%>
