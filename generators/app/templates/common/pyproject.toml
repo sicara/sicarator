@@ -1,3 +1,4 @@
+<% if (packageManager === "pyenv + poetry") { -%>
 [tool.poetry]
 name = "<%= projectSlug %>"
 version = "0.1.0"
@@ -35,6 +36,44 @@ types-PyYAML = "^6.0"
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+<% } else { -%>
+[project]
+name = "<%= projectSlug %>"
+version = "0.1.0"
+description = "<%- projectDescription %>"
+authors = ["<%= authorName %> <<%= authorEmail %>>"]
+readme = "README.md"
+requires-python = "==<%= pythonVersion %>"
+dependencies = [
+<% if (includeApi) { -%>
+    "fastapi[all]<1.0.0,>=0.95.1",
+    "loguru<1.0.0,>=0.7.0",
+<% } -%>
+<% if (includeDvc) { -%>
+    "PyYAML<7.0,>=6.0",
+<% } -%>
+]
+
+[dependency-groups]
+dev = [
+<% if (includeDvc) { -%>
+    "dvc[<%= dvcRemoteType %>]<4.0.0,>=3.28.0",
+<% } -%>
+    "mypy<2.0,>=1.2",
+    "pre-commit<3,>=2",
+    "pytest<8,>=7",
+    "pytest-cov<4,>=3",
+    "poetry-dotenv-plugin<1.0.0,>=0.2.0",
+    "ruff<1.0.0,>=0.1.5",
+<% if (includeStreamlit) { -%>
+    "streamlit<2.0.0,>=1.28.0",
+<% } -%>
+<% if (includeDvc) { -%>
+    "typer<1.0.0,>=0.9.0",
+    "types-PyYAML<7.0,>=6.0",
+<% } -%>
+]
+<% } -%>
 
 # Packages configs
 
