@@ -1,9 +1,11 @@
+<% let packageManagerRunPrefix = (packageManager === "pyenv + poetry") ? "poetry run" : "uv run"; -%>
 # <%= projectName %>
 
 > <%- projectDescription %>
 
 ## Project requirements
 
+<% if (packageManager === "pyenv + poetry") { -%>
 ### Pyenv and `Python <%= pythonVersion %>`
 
 - Install [pyenv](https://github.com/pyenv/pyenv) to manage your Python versions and virtual environments:
@@ -42,6 +44,12 @@
     ```bash
     pyenv global <%= pythonVersion %>
     ```
+<% } else { -%>
+### Astral/uv
+
+- Install [uv](https://github.com/astral-sh/uv) to manage your Python version, virtual environments, dependencies and
+tooling configs: see [installation docs](https://github.com/astral-sh/uv?tab=readme-ov-file#installation).
+<% } -%>
 
 <% if (includeApi) { -%>
 
@@ -78,6 +86,7 @@ To manage the project infrastructure, you will need to install:
 
 ### Python virtual environment and dependencies
 
+<% if (packageManager === "pyenv + poetry") { -%>
 1. Create a `pyenv` virtual environment and link it to your project folder:
 
     ```bash
@@ -94,6 +103,15 @@ To manage the project infrastructure, you will need to install:
     ```
 
 Steps 1. and 2. can also be done in one command:
+<% } else { -%>
+Run the following command:
+
+```bash
+uv sync
+```
+
+or else:
+<% } -%>
 
 ```bash
 make install
@@ -184,7 +202,7 @@ Set up your GCP account locally to be able to access the different resources:
 ### Install git hooks (running before commit and push commands)
 
 ```bash
-poetry run pre-commit install
+<%= packageManagerRunPrefix %> pre-commit install
 ```
 
 <% if (includeDvc && dvcRemoteType) { -%>
@@ -195,7 +213,7 @@ poetry run pre-commit install
 - Pull the data:
 
   ```bash
-  dvc pull
+  <%= packageManagerRunPrefix %> dvc pull
   ```
 
 <% } -%>
@@ -205,7 +223,7 @@ poetry run pre-commit install
 To run unit tests, run `pytest` with:
 
 ```bash
-pytest tests --cov src
+<%= packageManagerRunPrefix %> pytest tests --cov src
 ```
 
 or
@@ -221,7 +239,7 @@ make test
 To check code formatting, run `ruff format` with:
 
 ```bash
-ruff format --check .
+<%= packageManagerRunPrefix %> ruff format --check .
 ```
 
 or
@@ -238,7 +256,7 @@ your code each time you save a file.
 To run static analysis, run `ruff` with:
 
 ```bash
-ruff check src tests
+<%= packageManagerRunPrefix %> ruff check src tests
 ```
 
 or
@@ -258,7 +276,7 @@ make lint-fix
 To type check your code, run `mypy` with:
 
 ```bash
-mypy src --explicit-package-bases --namespace-packages
+<%= packageManagerRunPrefix %> mypy src --explicit-package-bases --namespace-packages
 ```
 
 or
