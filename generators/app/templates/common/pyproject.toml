@@ -112,7 +112,7 @@ select = [
     "D",      # pydocstyle
     "I",      # isort
     "SIM",    # flake8-simplify
-    "TCH",    # flake8-type-checking
+    "TC",     # flake8-type-checking
     "TID",    # flake8-tidy-imports
     "UP",     # pyupgrade
     "PT",     # flake8-pytest-style
