@@ -2,6 +2,7 @@ stages:
   - build
   - test
 
+<% if (packageManager === "pyenv + poetry") { -%>
 default:
   image: python:<%= pythonVersion %>
 
@@ -36,25 +37,63 @@ install:
     - echo "Install poetry"
     - curl -sSL https://install.python-poetry.org | python - --version 1.7.0
     - export PATH="/root/.local/bin:$PATH"
+<% } else { -%>
+
+variables:
+  UV_VERSION: 0.5
+  PYTHON_VERSION: <%= pythonVersion.slice(0,4) %>
+  BASE_LAYER: bookworm-slim
+
+default:
+  image: ghcr.io/astral-sh/uv:$UV_VERSION-python$PYTHON_VERSION-$BASE_LAYER
+
+.job_template:
+  variables:
+    UV_CACHE_DIR: .uv-cache
+  cache:
+    - key:
+        files:
+          - uv.lock
+      paths:
+        - $UV_CACHE_DIR
+  script:
+    - uv cache prune --ci
+<% } -%>
 
 format-check:
   extends: .job_template
   script:
+<% if (packageManager === "astral/uv") { -%>
+    - apt-get update
+    - apt-get install -y make
+<% } -%>
     - make format-check
 
 lint-check:
   extends: .job_template
   script:
+<% if (packageManager === "astral/uv") { -%>
+    - apt-get update
+    - apt-get install -y make
+<% } -%>
     - make lint-check
 
 type-check:
   extends: .job_template
   script:
+<% if (packageManager === "astral/uv") { -%>
+    - apt-get update
+    - apt-get install -y make
+<% } -%>
     - make type-check
 
 test:
   extends: .job_template
   script:
+<% if (packageManager === "astral/uv") { -%>
+    - apt-get update
+    - apt-get install -y make
+<% } -%>
     - make test
   artifacts:
     reports:
@@ -62,3 +101,4 @@ test:
       coverage_report:
         coverage_format: cobertura
         path: ./coverage.xml
+
