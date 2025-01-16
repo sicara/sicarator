@@ -24,7 +24,7 @@ pre-commit = "^2"
 pytest = "^7"
 pytest-cov = "^3"
 poetry-dotenv-plugin = "^0.2.0"
-ruff = "^0.1.5"
+ruff = "^0.8"
 <% if (includeStreamlit) { -%>
 streamlit = "^1.28.0"
 <% } -%>
@@ -64,7 +64,7 @@ dev = [
     "pytest<8,>=7",
     "pytest-cov<4,>=3",
     "poetry-dotenv-plugin<1.0.0,>=0.2.0",
-    "ruff<1.0.0,>=0.1.5",
+    "ruff<1.0.0,>=0.8.0",
 <% if (includeStreamlit) { -%>
     "streamlit<2.0.0,>=1.28.0",
 <% } -%>
