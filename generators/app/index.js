@@ -562,7 +562,7 @@ module.exports = class extends Generator {
           "temporary"
         )} virtual environment ${chalk.cyan(this.answers.projectSlug)}`
       );
-      this.spawnCommandSync("uv", ["sync"]);
+      this.spawnCommandSync("uv", ["lock"]);
     }
 
     // Delete virtual environment, because the developer will create their own when installing the project
