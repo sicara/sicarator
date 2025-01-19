@@ -1,4 +1,5 @@
 """Selectors to be used in Streamlit pages."""
+
 import re
 
 import streamlit as st
