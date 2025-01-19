@@ -37,6 +37,8 @@ jobs:
       - run:
           name: Run jest
           command: |
+            curl -LsSf https://astral.sh/uv/0.5.5/install.sh | env UV_UNMANAGED_INSTALL="$HOME/uv" sh
+            export PATH=$PATH:$HOME/uv
             npm run test:ci
           environment:
                   JEST_JUNIT_OUTPUT_DIR: ./reports/junit/
