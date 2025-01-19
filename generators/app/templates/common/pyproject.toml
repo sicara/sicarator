@@ -63,7 +63,6 @@ dev = [
     "pre-commit<3,>=2",
     "pytest<8,>=7",
     "pytest-cov<4,>=3",
-    "poetry-dotenv-plugin<1.0.0,>=0.2.0",
     "ruff<1.0.0,>=0.8.0",
 <% if (includeStreamlit) { -%>
     "streamlit<2.0.0,>=1.28.0",
