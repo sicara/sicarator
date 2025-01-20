@@ -1,5 +1,5 @@
 # Docker multi-stage building, as recommended by https://fastapi.tiangolo.com/deployment/docker/#docker-image-with-poetry
-FROM python:<%= pythonVersion %>-slim-bookworm as curl-stage
+FROM python:<%= pythonVersion %>-slim as curl-stage
 
 # Install curl ; remove apt cache to reduce image size
 RUN apt-get -y update && apt-get -y install curl  && rm -rf /var/lib/apt/lists/*
