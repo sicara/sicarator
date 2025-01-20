@@ -2,6 +2,7 @@ version: 2.1
 
 orbs:
 
+<% if (packageManager === "pyenv + poetry") { -%>
 executors:
   base-python:
     docker:
@@ -47,6 +48,41 @@ jobs:
           paths:
             - /home/circleci/.cache/pypoetry/virtualenvs
             - /home/circleci/.poetry/env
+<% } else { -%>
+executors:
+  base-python:
+    docker:
+      - image: ghcr.io/astral-sh/uv:0.5.5-python3.11-bookworm-slim
+
+commands:
+  get_code_and_cache:
+    steps:
+      - checkout
+      - run:
+          name: install make
+          command: apt update && apt install make
+      # Restore cached dependencies
+      - restore_cache:
+          keys:
+            - project-dependencies-uv-0.5.5-{{ checksum "uv.lock" }}-{{ .Environment.CACHE_VERSION }}
+
+jobs:
+  install:
+    executor: base-python
+    steps:
+      - get_code_and_cache
+      - run:
+          name: Install dependencies
+          command: |
+            uv sync
+            uv cache prune --ci
+      - save_cache:
+          key: project-dependencies-uv-0.5.5-{{ checksum "uv.lock" }}-{{ .Environment.CACHE_VERSION }}
+          paths:
+            - /root/project/.venv
+            - /root/.cache/uv
+            - /root/.local/share/uv/python
+<% } -%>
 
   test:
     executor: base-python
