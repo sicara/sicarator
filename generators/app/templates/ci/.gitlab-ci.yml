@@ -56,44 +56,32 @@ default:
           - uv.lock
       paths:
         - $UV_CACHE_DIR
-  script:
+  before_script:
+<% if (packageManager === "astral/uv") { -%>
+    - apt-get update
+    - apt-get install -y make
+<% } -%>
     - uv cache prune --ci
 <% } -%>
 
 format-check:
   extends: .job_template
   script:
-<% if (packageManager === "astral/uv") { -%>
-    - apt-get update
-    - apt-get install -y make
-<% } -%>
     - make format-check
 
 lint-check:
   extends: .job_template
   script:
-<% if (packageManager === "astral/uv") { -%>
-    - apt-get update
-    - apt-get install -y make
-<% } -%>
     - make lint-check
 
 type-check:
   extends: .job_template
   script:
-<% if (packageManager === "astral/uv") { -%>
-    - apt-get update
-    - apt-get install -y make
-<% } -%>
     - make type-check
 
 test:
   extends: .job_template
   script:
-<% if (packageManager === "astral/uv") { -%>
-    - apt-get update
-    - apt-get install -y make
-<% } -%>
     - make test
   artifacts:
     reports:
