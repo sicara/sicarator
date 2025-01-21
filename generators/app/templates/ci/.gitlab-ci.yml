@@ -43,13 +43,23 @@ variables:
   UV_VERSION: 0.5
   PYTHON_VERSION: <%= pythonVersion.slice(0,4) %>
   BASE_LAYER: bookworm-slim
+  UV_CACHE_DIR: .uv-cache
 
 default:
   image: ghcr.io/astral-sh/uv:$UV_VERSION-python$PYTHON_VERSION-$BASE_LAYER
 
+install:
+  stage: build
+  script:
+    - uv sync
+  cache:
+    - key:
+        files:
+          - uv.lock
+      paths:
+        - $UV_CACHE_DIR
+
 .job_template:
-  variables:
-    UV_CACHE_DIR: .uv-cache
   cache:
     - key:
         files:
@@ -57,10 +67,9 @@ default:
       paths:
         - $UV_CACHE_DIR
   before_script:
-<% if (packageManager === "astral/uv") { -%>
     - apt-get update
     - apt-get install -y make
-<% } -%>
+  after_script:
     - uv cache prune --ci
 <% } -%>
 
