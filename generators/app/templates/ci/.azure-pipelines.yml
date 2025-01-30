@@ -12,23 +12,39 @@ steps:
       versionSpec: "<%= pythonVersion %>"
 
   - script: |
+<% if (packageManager === "astral/uv") { -%>
+      curl -LsSf https://astral.sh/uv/install.sh | sh
+<% } else { -%>
       curl -sSL https://install.python-poetry.org | python - --version 1.7.0
       export PATH="/root/.local/bin:$PATH"
-    displayName: "Install poetry"
+<% } -%>
+    displayName: "Install package manager"
 
   - script: |
+<% if (packageManager === "astral/uv") { -%>
+      uv pip install --upgrade pip
+      uv sync
+      echo $(Agent.HomeDirectory)/../../.cache/uv
+<% } else { -%>
       poetry config virtualenvs.in-project true
       poetry run pip install --upgrade pip
       poetry install --no-root
       echo $(Agent.HomeDirectory)/../../.cache/pypoetry
+<% } -%>
     displayName: "Create venv and install dependencies"
 
   - task: Cache@2
     inputs:
+<% if (packageManager === "astral/uv") { -%>
+      key: "uv.lock"
+      restoreKeys: "uv"
+      path: $(Agent.HomeDirectory)/../../.cache/uv
+<% } else { -%>
       key: '"poetry" | poetry.lock'
       restoreKeys: "poetry"
       path: $(Agent.HomeDirectory)/../../.cache/pypoetry
-    displayName: "Cache poetry dependencies"
+<% } -%>
+    displayName: "Caches dependencies"
 
   - script: make format-check
     displayName: "Run formatter"

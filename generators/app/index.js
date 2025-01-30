@@ -81,6 +81,28 @@ module.exports = class extends Generator {
         store: true
       },
       {
+        name: "packageManager",
+        message: `${mainMessage(
+          "Which package manager do you want to use?"
+        )}${infoMessage(
+          `astral/uv (${chalk.underline(
+            "https://github.com/astral-sh/uv"
+          )}) is much more powerful and simple than pyenv + poetry, but has not been tested on a project yet.`
+        )}`,
+        type: "list",
+        default: "pyenv + poetry",
+        choices: [
+          {
+            name: "pyenv + poetry",
+            value: "pyenv + poetry"
+          },
+          {
+            name: "astral/uv",
+            value: "astral/uv"
+          }
+        ]
+      },
+      {
         name: "pythonVersion",
         message: `${mainMessage(
           "Which Python version do yo want to use?"
@@ -91,7 +113,7 @@ module.exports = class extends Generator {
             "https://pyreadiness.org/"
           )}.`
         )}${infoMessage(
-          "If the chosen version is not installed on your machine, it will be automatically installed by PyEnv."
+          "If the chosen version is not installed on your machine, it will be automatically installed by PyEnv or uv."
         )}`,
         type: "list",
         default: "3.11.6",
@@ -515,25 +537,35 @@ module.exports = class extends Generator {
   }
 
   install() {
-    this.spawnCommandSync("pyenv", [
-      "install",
-      this.answers.pythonVersion,
-      "--skip-existing"
-    ]);
+    if (this.answers.packageManager === "pyenv + poetry") {
+      this.spawnCommandSync("pyenv", [
+        "install",
+        this.answers.pythonVersion,
+        "--skip-existing"
+      ]);
 
-    this.log(
-      `Generating Poetry lock file in a ${chalk.cyan.italic(
-        "temporary"
-      )} virtual environment ${chalk.cyan(this.answers.projectSlug)}`
-    );
-    this.spawnCommandSync("poetry", ["lock"], {
-      env: {
-        ...process.env,
-        PYENV_VERSION: this.answers.pythonVersion, // Allow Poetry to find the correct Python version
-        POETRY_VIRTUALENVS_IN_PROJECT: 1 // Allow to easily delete the .venv, see below
-      }
-    });
-    // Delete Poetry environment, because the developer will create its own Pyenv environment when installing the project
+      this.log(
+        `Generating Poetry lock file in a ${chalk.cyan.italic(
+          "temporary"
+        )} virtual environment ${chalk.cyan(this.answers.projectSlug)}`
+      );
+      this.spawnCommandSync("poetry", ["lock"], {
+        env: {
+          ...process.env,
+          PYENV_VERSION: this.answers.pythonVersion, // Allow Poetry to find the correct Python version
+          POETRY_VIRTUALENVS_IN_PROJECT: 1 // Allow to easily delete the .venv, see below
+        }
+      });
+    } else {
+      this.log(
+        `Generating uv lock file in a ${chalk.cyan.italic(
+          "temporary"
+        )} virtual environment ${chalk.cyan(this.answers.projectSlug)}`
+      );
+      this.spawnCommandSync("uv", ["lock"]);
+    }
+
+    // Delete virtual environment, because the developer will create their own when installing the project
     this.log(
       `Deleting ${chalk.cyan.italic(
         "temporary"
@@ -542,8 +574,8 @@ module.exports = class extends Generator {
     this.log(
       infoMessage(
         `You will create a new ${chalk.bold.italic(
-          "pyenv"
-        )} environment during project installation (see generated README.md).`,
+          "virtual environment"
+        )} during project installation (see generated README.md).`,
         0,
         false
       )

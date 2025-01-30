@@ -10,7 +10,8 @@ To know more about the story behind Sicarator and its philosophy, you can read [
 ## Main components of the generated project
 
 - **Python** development environment with:
-  - [Poetry](https://python-poetry.org/) for dependency management
+  - [Astral/uv](https://github.com/astral-sh/uv) (recommended) or [poetry](https://python-poetry.org/) for dependency
+    management
   - [Pytest](https://docs.pytest.org/) for testing
   - [Ruff](https://docs.astral.sh/ruff/) for static analysis & code formatting
   - [Mypy](https://mypy.readthedocs.io/) for type checking
@@ -35,7 +36,15 @@ To know more about the story behind Sicarator and its philosophy, you can read [
 
 ## Requirements
 
-### Pyenv
+### Astral/uv (recommended)
+
+Install [uv](https://github.com/astral-sh/uv) to manage your Python versions, virtual environments, dependencies and
+tooling configs:
+  ```bash
+  curl -LsSf https://astral.sh/uv/install.sh | sh
+  ```
+
+### Pyenv (if not using uv)
 
 Install [pyenv](https://github.com/pyenv/pyenv) to manage your Python versions and virtual environments:
   ```bash
@@ -43,7 +52,7 @@ Install [pyenv](https://github.com/pyenv/pyenv) to manage your Python versions a
   ```
 *If you are on MacOS and experiencing errors on Python install with PyEnv, follow this [comment](https://github.com/pyenv/pyenv/issues/1740#issuecomment-738749988)*
 
-### Poetry
+### Poetry (if not using uv)
 
 Install [Poetry](https://python-poetry.org) to manage your dependencies and tooling configs:
   ```bash

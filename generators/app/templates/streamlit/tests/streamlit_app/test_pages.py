@@ -1,4 +1,5 @@
 """Test that each Streamlit page can be run."""
+
 import pytest
 from streamlit.testing.v1 import AppTest
 

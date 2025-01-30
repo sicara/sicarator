@@ -5,25 +5,38 @@ inputs:
     required: true
     type: string
     default: "<%= pythonVersion %>"
+<% if (packageManager === "pyenv + poetry") { -%>
   poetry_version:
     required: true
     type: string
     default: "1.7.0"
+<% } -%>
 
 runs:
   using: composite
   steps:
+<% if (packageManager === "pyenv + poetry") { -%>
     - name: Install Poetry
       uses: snok/install-poetry@v1
       with:
-        version: ${{ inputs.poetry_version }}
+        version: <%= pythonVersion %>
         virtualenvs-create: true
         virtualenvs-in-project: false
         installer-parallel: true
     - uses: actions/setup-python@v4
       with:
-        python-version: ${{ inputs.python_version }}
+        python-version: <%= pythonVersion %>
         cache: "poetry"
     - name: Install Dependencies
       run: poetry install --no-root
       shell: bash
+<% } else { -%>
+    - uses: actions/checkout@v4
+    - name: Install uv and set the python version
+      uses: astral-sh/setup-uv@v5
+      with:
+        python-version: <%= pythonVersion %>
+    - name: Install the project
+      run: uv sync --all-extras --dev
+      shell: bash
+<% } -%>

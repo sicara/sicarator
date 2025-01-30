@@ -55,6 +55,7 @@ const GCP_PROJECT_ID = "gcp-project-id";
 const GCP_REGION = "us-west1";
 
 const DEFAULT_ANSWERS = {
+  packageManager: "pyenv + poetry",
   pythonVersion: LAST_PYTHON_VERSION,
   includeApi: false,
   apiInfrastructure: null,
@@ -81,6 +82,9 @@ const GCP_INFRA_ANSWERS = {
   terraformBackendBucketName: TERRAFORM_BACKEND_BUCKET_NAME,
   gcpProjectId: GCP_PROJECT_ID,
   gcpRegion: GCP_REGION
+};
+const UV_PACKAGE_MANAGER_ANSWERS = {
+  packageManager: "astral/uv"
 };
 
 describe("generator-sicarator:app", () => {
@@ -134,6 +138,11 @@ describe("generator-sicarator:app", () => {
       ...GCP_INFRA_ANSWERS
     },
     {
+      description: "uv package manager",
+      ...DEFAULT_ANSWERS,
+      ...UV_PACKAGE_MANAGER_ANSWERS
+    },
+    {
       description: "Python 3.10 (all options & AWS infra)",
       ...DEFAULT_ANSWERS,
       ...ALL_OPTIONS_EXCEPT_INFRA_ANSWERS,
@@ -143,6 +152,7 @@ describe("generator-sicarator:app", () => {
   ])(
     "Generate project with $description",
     ({
+      packageManager,
       pythonVersion,
       includeApi,
       apiInfrastructure,
@@ -160,6 +170,7 @@ describe("generator-sicarator:app", () => {
           .run(path.join(__dirname, "../generators/app"))
           .withPrompts({
             projectName: PROJECT_NAME,
+            packageManager,
             pythonVersion,
             includeApi,
             apiInfrastructure,
@@ -174,51 +185,26 @@ describe("generator-sicarator:app", () => {
           })
           .withLocalConfig({})
           .on("end", () => {
-            exec("make install", (error, stdout, stderr) => {
-              if (stdout) {
-                console.log(`stdout:\n ${stdout}`);
-              }
-
-              if (stderr) {
-                console.log(`stderr:\n ${stderr}`);
-              }
-
-              if (error) {
-                done(error);
-              } else {
-                done();
-              }
-            });
+            exec("make install", defaultCallback(done));
           });
       });
 
       afterAll(done => {
-        exec(
-          `pyenv virtualenv-delete --force ${PROJECT_SLUG}`,
-          (error, stdout, stderr) => {
-            if (stdout) {
-              console.log(`stdout:\n ${stdout}`);
-            }
-
-            if (stderr) {
-              console.log(`stderr:\n ${stderr}`);
-            }
-
-            if (error) {
-              done(error);
-            } else {
-              done();
-            }
-          }
-        );
+        let cleanVirtualenvCommand =
+          packageManager === "pyenv + poetry"
+            ? `pyenv virtualenv-delete --force ${PROJECT_SLUG}`
+            : "rm -rf .venv/";
+        exec(cleanVirtualenvCommand, defaultCallback(done));
       });
 
       it("creates common files", () => {
         assert.file(COMMON_FILES_PATHS);
       });
 
-      it("creates poetry.lock", () => {
-        assert.file("poetry.lock");
+      it("creates lock file", () => {
+        let lockfile =
+          packageManager === "pyenv + poetry" ? "poetry.lock" : "uv.lock";
+        assert.file(lockfile);
       });
 
       it("creates .gitignore", () => {
@@ -294,7 +280,11 @@ describe("generator-sicarator:app", () => {
       });
 
       it("has correct Python version", () => {
-        assert.fileContent("pyproject.toml", `python = "${pythonVersion}"`);
+        if (packageManager === "pyenv + poetry") {
+          assert.fileContent("pyproject.toml", `python = "${pythonVersion}"`);
+        } else {
+          assert.fileContent("pyproject.toml", `python = "==${pythonVersion}"`);
+        }
       });
 
       it("has correct terraform backend bucket name", () => {
@@ -327,21 +317,7 @@ describe("generator-sicarator:app", () => {
 
       it("runs unit tests successfully", done => {
         if (includeHelloWorld || includeApi || includeStreamlit) {
-          execInPyenvVenv("make test", (error, stdout, stderr) => {
-            if (stdout) {
-              console.log(`stdout:\n ${stdout}`);
-            }
-
-            if (stderr) {
-              console.log(`stderr:\n ${stderr}`);
-            }
-
-            if (error) {
-              done(error);
-            } else {
-              done();
-            }
-          });
+          execInVenv("make test", packageManager, defaultCallback(done));
         } else {
           // No tests to run
           done();
@@ -349,61 +325,29 @@ describe("generator-sicarator:app", () => {
       });
 
       it("runs linter successfully", done => {
-        execInPyenvVenv("make lint-check", (error, stdout, stderr) => {
-          if (stdout) {
-            console.log(`stdout:\n ${stdout}`);
-          }
-
-          if (stderr) {
-            console.log(`stderr:\n ${stderr}`);
-          }
-
-          if (error) {
-            done(error);
-          } else {
-            done();
-          }
-        });
+        execInVenv("make lint-check", packageManager, defaultCallback(done));
       });
 
       it("runs type checking successfully", done => {
-        execInPyenvVenv("make type-check", (error, stdout, stderr) => {
-          if (stdout) {
-            console.log(`stdout:\n ${stdout}`);
-          }
-
-          if (stderr) {
-            console.log(`stderr:\n ${stderr}`);
-          }
-
-          if (error) {
-            done(error);
-          } else {
-            done();
-          }
-        });
+        execInVenv("make type-check", packageManager, defaultCallback(done));
       });
 
       it("runs formatting check successfully", done => {
-        execInPyenvVenv("make format-check", (error, stdout, stderr) => {
-          if (stdout) {
-            console.log(`stdout:\n ${stdout}`);
-          }
-
-          if (stderr) {
-            console.log(`stderr:\n ${stderr}`);
-          }
-
-          if (error) {
-            done(error);
-          } else {
-            done();
-          }
-        });
+        execInVenv("make format-check", packageManager, defaultCallback(done));
       });
     }
   );
 });
+
+function execInVenv(command, packageManager, callback) {
+  if (packageManager === "pyenv + poetry") {
+    execInPyenvVenv(command, callback);
+  } else {
+    exec(command, { env: { ...process.env } }, (error, stdout, stderr) => {
+      callback(error, stdout, stderr);
+    });
+  }
+}
 
 function execInPyenvVenv(command, callback) {
   // Execute 'pyenv prefix' command to get the venv path
@@ -435,4 +379,22 @@ function execInPyenvVenv(command, callback) {
       }
     );
   });
+}
+
+function defaultCallback(done) {
+  return (error, stdout, stderr) => {
+    if (stdout) {
+      console.log(`stdout:\n ${stdout}`);
+    }
+
+    if (stderr) {
+      console.log(`stderr:\n ${stderr}`);
+    }
+
+    if (error) {
+      done(error);
+    } else {
+      done();
+    }
+  };
 }

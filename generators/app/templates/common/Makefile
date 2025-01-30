@@ -1,34 +1,39 @@
+<% let packageManagerRunPrefix = (packageManager === "pyenv + poetry") ? "poetry run" : "uv run"; -%>
 ########################################################################################################################
 # Project installation
 ########################################################################################################################
 
 install:
+<% if (packageManager === "pyenv + poetry") { -%>
 	pyenv virtualenv --force <%= pythonVersion %> <%= projectSlug %>
 	pyenv local <%= projectSlug %>
 	# Running poetry install inside a Make command requires a VIRTUAL_ENV variable
 	VIRTUAL_ENV=$$(pyenv prefix) poetry install --no-root --sync
+<% } else { -%>
+	uv sync
+<% } -%>
 
 ########################################################################################################################
 # Quality checks
 ########################################################################################################################
 
 test:
-	poetry run pytest tests --cov src --cov-report term --cov-report=html --cov-report xml --junit-xml=tests-results.xml
+	<%= packageManagerRunPrefix %> pytest tests --cov src --cov-report term --cov-report=html --cov-report xml --junit-xml=tests-results.xml
 
 format-check:
-	poetry run ruff format --check src tests
+	<%= packageManagerRunPrefix %> ruff format --check src tests
 
 format-fix:
-	poetry run ruff format src tests
+	<%= packageManagerRunPrefix %> ruff format src tests
 
 lint-check:
-	poetry run ruff check src tests
+	<%= packageManagerRunPrefix %> ruff check src tests
 
 lint-fix:
-	poetry run ruff check src tests --fix
+	<%= packageManagerRunPrefix %> ruff check src tests --fix
 
 type-check:
-	poetry run mypy src
+	<%= packageManagerRunPrefix %> mypy src
 <% if (includeApi) { -%>
 
 ########################################################################################################################
@@ -111,5 +116,5 @@ deploy-api-from-arm:
 ########################################################################################################################
 
 start-streamlit-app:
-	poetry run streamlit run "src/streamlit_app/🏠_Home_page.py"
+	<%= packageManagerRunPrefix %> streamlit run "src/streamlit_app/🏠_Home_page.py"
 <% } -%>

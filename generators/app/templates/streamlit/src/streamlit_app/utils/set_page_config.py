@@ -1,4 +1,5 @@
 """Util to set common page config to all streamlit pages."""
+
 import streamlit as st
 
 STREAMLIT_TITLE = "<%= projectName %>"

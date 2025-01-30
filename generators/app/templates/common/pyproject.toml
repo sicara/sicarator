@@ -1,3 +1,4 @@
+<% if (packageManager === "pyenv + poetry") { -%>
 [tool.poetry]
 name = "<%= projectSlug %>"
 version = "0.1.0"
@@ -23,7 +24,7 @@ pre-commit = "^2"
 pytest = "^7"
 pytest-cov = "^3"
 poetry-dotenv-plugin = "^0.2.0"
-ruff = "^0.1.5"
+ruff = "^0.8"
 <% if (includeStreamlit) { -%>
 streamlit = "^1.28.0"
 <% } -%>
@@ -35,6 +36,43 @@ types-PyYAML = "^6.0"
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+<% } else { -%>
+[project]
+name = "<%= projectSlug %>"
+version = "0.1.0"
+description = "<%- projectDescription %>"
+authors = ["<%= authorName %> <<%= authorEmail %>>"]
+readme = "README.md"
+requires-python = "==<%= pythonVersion %>"
+dependencies = [
+<% if (includeApi) { -%>
+    "fastapi[all]<1.0.0,>=0.95.1",
+    "loguru<1.0.0,>=0.7.0",
+<% } -%>
+<% if (includeDvc) { -%>
+    "PyYAML<7.0,>=6.0",
+<% } -%>
+]
+
+[dependency-groups]
+dev = [
+<% if (includeDvc) { -%>
+    "dvc[<%= dvcRemoteType %>]<4.0.0,>=3.28.0",
+<% } -%>
+    "mypy<2.0,>=1.2",
+    "pre-commit<3,>=2",
+    "pytest<8,>=7",
+    "pytest-cov<4,>=3",
+    "ruff<1.0.0,>=0.8.0",
+<% if (includeStreamlit) { -%>
+    "streamlit<2.0.0,>=1.28.0",
+<% } -%>
+<% if (includeDvc) { -%>
+    "typer<1.0.0,>=0.9.0",
+    "types-PyYAML<7.0,>=6.0",
+<% } -%>
+]
+<% } -%>
 
 # Packages configs
 
@@ -63,6 +101,7 @@ precision = 2
 [tool.ruff]
 target-version = 'py<%= pythonMajorVersionShortcut %>'
 
+[tool.ruff.lint]
 # See all rules at https://docs.astral.sh/ruff/rules/
 select = [
     "E",      # pycodestyle
@@ -73,7 +112,7 @@ select = [
     "D",      # pydocstyle
     "I",      # isort
     "SIM",    # flake8-simplify
-    "TCH",    # flake8-type-checking
+    "TC",     # flake8-type-checking
     "TID",    # flake8-tidy-imports
     "UP",     # pyupgrade
     "PT",     # flake8-pytest-style

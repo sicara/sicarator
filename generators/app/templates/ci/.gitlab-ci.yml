@@ -2,6 +2,7 @@ stages:
   - build
   - test
 
+<% if (packageManager === "pyenv + poetry") { -%>
 default:
   image: python:<%= pythonVersion %>
 
@@ -36,6 +37,41 @@ install:
     - echo "Install poetry"
     - curl -sSL https://install.python-poetry.org | python - --version 1.7.0
     - export PATH="/root/.local/bin:$PATH"
+<% } else { -%>
+
+variables:
+  UV_VERSION: 0.5
+  PYTHON_VERSION: <%= pythonVersion.slice(0,4) %>
+  BASE_LAYER: bookworm-slim
+  UV_CACHE_DIR: .uv-cache
+
+default:
+  image: ghcr.io/astral-sh/uv:$UV_VERSION-python$PYTHON_VERSION-$BASE_LAYER
+
+install:
+  stage: build
+  script:
+    - uv sync
+  cache:
+    - key:
+        files:
+          - uv.lock
+      paths:
+        - $UV_CACHE_DIR
+
+.job_template:
+  cache:
+    - key:
+        files:
+          - uv.lock
+      paths:
+        - $UV_CACHE_DIR
+  before_script:
+    - apt-get update
+    - apt-get install -y make
+  after_script:
+    - uv cache prune --ci
+<% } -%>
 
 format-check:
   extends: .job_template
@@ -62,3 +98,4 @@ test:
       coverage_report:
         coverage_format: cobertura
         path: ./coverage.xml
+
